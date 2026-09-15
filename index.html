@@ -4,317 +4,169 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Control de Asistencia - Escáner</title>
-
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
   <style>
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f3f6fa;
       color: #1f2937;
     }
-
-    .contenedor {
-      width: min(94%, 430px);
-      margin: 20px auto;
-    }
-
+    .contenedor { width: min(94%, 430px); margin: 20px auto; }
     .tarjeta {
       background: white;
       border-radius: 18px;
       padding: 22px;
       box-shadow: 0 8px 25px rgba(0,0,0,.10);
     }
-
-    h1 {
-      text-align: center;
-      font-size: 23px;
-      margin: 0 0 6px;
-    }
-
-    .subtitulo {
-      text-align: center;
-      color: #6b7280;
-      margin-bottom: 22px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin: 12px 0 7px;
-    }
-
+    h1 { text-align:center; font-size:23px; margin:0 0 6px; }
+    .subtitulo { text-align:center; color:#6b7280; margin-bottom:22px; }
+    label { display:block; font-weight:bold; margin:12px 0 7px; }
     input {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 17px;
+      width:100%; padding:14px; border:1px solid #d1d5db;
+      border-radius:10px; font-size:17px;
     }
-
     button {
-      width: 100%;
-      border: 0;
-      border-radius: 11px;
-      padding: 14px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 12px;
+      width:100%; border:0; border-radius:11px; padding:14px;
+      font-size:17px; font-weight:bold; cursor:pointer; margin-top:12px;
     }
-
-    .btn-principal { background: #2563eb; color: white; }
-    .btn-escanear { background: #16a34a; color: white; }
-    .btn-detener { background: #6b7280; color: white; }
-    .btn-salir { background: #dc2626; color: white; }
-
-    .oculto { display: none !important; }
-
+    .btn-principal { background:#2563eb; color:white; }
+    .btn-escanear { background:#16a34a; color:white; }
+    .btn-detener { background:#6b7280; color:white; }
+    .btn-salir { background:#dc2626; color:white; }
+    .oculto { display:none !important; }
     .datos {
-      background: #eff6ff;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 15px;
+      background:#eff6ff; border-radius:12px; padding:14px; margin-bottom:15px;
     }
-
-    .dato {
-      margin: 5px 0;
-    }
-
-    #reader {
-      width: 100%;
-      margin-top: 15px;
-      overflow: hidden;
-      border-radius: 12px;
-    }
-
+    .dato { margin:5px 0; }
+    #reader { width:100%; margin-top:15px; overflow:hidden; border-radius:12px; }
     .mensaje {
-      text-align: center;
-      padding: 13px;
-      border-radius: 10px;
-      margin-top: 14px;
-      font-weight: bold;
+      text-align:center; padding:13px; border-radius:10px;
+      margin-top:14px; font-weight:bold;
     }
-
-    .info { background: #e0f2fe; color: #075985; }
-    .ok { background: #dcfce7; color: #166534; }
-    .error { background: #fee2e2; color: #991b1b; }
-    .advertencia { background: #fef3c7; color: #92400e; }
-
-    .estado {
-      text-align: center;
-      font-size: 14px;
-      color: #6b7280;
-      margin-top: 12px;
-    }
-
-    #bridge {
-      display: none;
-    }
+    .info { background:#e0f2fe; color:#075985; }
+    .ok { background:#dcfce7; color:#166534; }
+    .error { background:#fee2e2; color:#991b1b; }
+    .advertencia { background:#fef3c7; color:#92400e; }
+    .estado { text-align:center; font-size:14px; color:#6b7280; margin-top:12px; }
   </style>
 </head>
 
 <body>
 
-  <!-- Puente invisible hacia Apps Script -->
-  <iframe
-    id="bridge"
-    src="https://script.google.com/macros/s/AKfycbycq_OmaBLaxeF0lPohYnS4e62XVE-X74pA3fpZCxnBWcH3fgLp2zYauXi5CHqa61DY/exec?page=bridge">
-  </iframe>
+<div class="contenedor">
 
-  <div class="contenedor">
+  <div id="pantallaLogin" class="tarjeta">
+    <h1>Control de Asistencia</h1>
+    <div class="subtitulo">Acceso de escáner</div>
 
-    <!-- LOGIN -->
-    <div id="pantallaLogin" class="tarjeta">
-      <h1>Control de Asistencia</h1>
-      <div class="subtitulo">Acceso de escáner</div>
+    <label for="codigoAcceso">Código de acceso</label>
+    <input id="codigoAcceso" type="password" autocomplete="off"
+           placeholder="Ingresa tu código">
 
-      <label for="codigoAcceso">Código de acceso</label>
-      <input
-        id="codigoAcceso"
-        type="password"
-        autocomplete="off"
-        placeholder="Ingresa tu código">
+    <button class="btn-principal" onclick="iniciarSesion()">
+      INGRESAR
+    </button>
 
-      <button class="btn-principal" onclick="iniciarSesion()">
-        INGRESAR
-      </button>
-
-      <div id="mensajeLogin"></div>
-    </div>
-
-
-    <!-- ESCÁNER -->
-    <div id="pantallaEscaner" class="tarjeta oculto">
-
-      <h1>Escáner de Asistencia</h1>
-
-      <div class="datos">
-        <div class="dato"><strong>Escáner:</strong> <span id="nombreEscaner">-</span></div>
-        <div class="dato"><strong>Foro:</strong> <span id="foroEscaner">-</span></div>
-      </div>
-
-      <button id="btnEscanear" class="btn-escanear" onclick="iniciarCamara()">
-        📷 ESCANEAR QR
-      </button>
-
-      <div id="zonaCamara" class="oculto">
-        <div id="reader"></div>
-
-        <button class="btn-detener" onclick="detenerCamara()">
-          CERRAR CÁMARA
-        </button>
-      </div>
-
-      <div id="mensajeResultado"></div>
-
-      <div id="estado" class="estado">
-        Listo para registrar asistencia.
-      </div>
-
-      <button class="btn-salir" onclick="cerrarSesion()">
-        CERRAR SESIÓN
-      </button>
-
-    </div>
-
+    <div id="mensajeLogin"></div>
   </div>
 
+  <div id="pantallaEscaner" class="tarjeta oculto">
+
+    <h1>Escáner de Asistencia</h1>
+
+    <div class="datos">
+      <div class="dato"><strong>Escáner:</strong>
+        <span id="nombreEscaner">-</span>
+      </div>
+      <div class="dato"><strong>Foro:</strong>
+        <span id="foroEscaner">-</span>
+      </div>
+    </div>
+
+    <button id="btnEscanear" class="btn-escanear" onclick="iniciarCamara()">
+      📷 ESCANEAR QR
+    </button>
+
+    <div id="zonaCamara" class="oculto">
+      <div id="reader"></div>
+      <button class="btn-detener" onclick="detenerCamara()">
+        CERRAR CÁMARA
+      </button>
+    </div>
+
+    <div id="mensajeResultado"></div>
+
+    <div id="estado" class="estado">
+      Listo para registrar asistencia.
+    </div>
+
+    <button class="btn-salir" onclick="cerrarSesion()">
+      CERRAR SESIÓN
+    </button>
+  </div>
+
+</div>
 
 <script>
-  // ==========================================================
-  // CONFIGURACIÓN
-  // ==========================================================
+  const URL_APPS_SCRIPT =
+    "https://script.google.com/macros/s/AKfycbycq_OmaBLaxeF0lPohYnS4e62XVE-X74pA3fpZCxnBWcH3fgLp2zYauXi5CHqa61DY/exec";
 
   let tokenSesion = null;
   let lectorQR = null;
   let camaraActiva = false;
-
-  const bridge = document.getElementById("bridge");
+  let solicitudEnCurso = false;
+  let contadorCallback = 0;
 
 
   // ==========================================================
   // COMUNICACIÓN CON APPS SCRIPT
+  // Se usa JSONP para evitar el problema de CORS/iframe.
   // ==========================================================
 
-  window.addEventListener("message", function(event) {
+  function llamarAPI(api, parametros, manejarResultado) {
 
-    const datos = event.data;
+    const nombreCallback =
+      "respuestaAPI_" + Date.now() + "_" + (++contadorCallback);
 
-    if (!datos || !datos.tipo) {
-      return;
-    }
+    window[nombreCallback] = function(resultado) {
 
-
-    // --------------------------
-    // Resultado del LOGIN
-    // --------------------------
-
-    if (datos.tipo === "LOGIN_RESULTADO") {
-
-      const resultado = datos.resultado;
-
-      if (resultado.exito) {
-
-        tokenSesion = resultado.token;
-
-        document.getElementById("pantallaLogin")
-          .classList.add("oculto");
-
-        document.getElementById("pantallaEscaner")
-          .classList.remove("oculto");
-
-        document.getElementById("nombreEscaner").textContent =
-          resultado.nombre;
-
-        document.getElementById("foroEscaner").textContent =
-          resultado.foro;
-
-        mostrarMensaje(
-          "mensajeResultado",
-          "Acceso autorizado. Ya puedes escanear.",
-          "ok"
-        );
-
-      } else {
-
-        mostrarMensaje(
-          "mensajeLogin",
-          resultado.mensaje || "No se pudo iniciar sesión.",
-          "error"
-        );
-
+      try {
+        manejarResultado(resultado);
+      } finally {
+        delete window[nombreCallback];
+        const script = document.getElementById(nombreCallback);
+        if (script) script.remove();
       }
+    };
 
-      return;
-    }
+    const query = new URLSearchParams();
 
+    query.set("api", api);
+    query.set("callback", nombreCallback);
 
-    // --------------------------
-    // Resultado del QR
-    // --------------------------
+    Object.keys(parametros || {}).forEach(function(clave) {
+      query.set(clave, parametros[clave]);
+    });
 
-    if (datos.tipo === "REGISTRO_RESULTADO") {
+    const script = document.createElement("script");
+    script.id = nombreCallback;
+    script.src = URL_APPS_SCRIPT + "?" + query.toString();
 
-      const resultado = datos.resultado;
+    script.onerror = function() {
+      delete window[nombreCallback];
+      script.remove();
 
-      if (resultado.exito) {
+      manejarResultado({
+        exito: false,
+        mensaje: "❌ No se pudo comunicar con el servidor."
+      });
+    };
 
-        mostrarMensaje(
-          "mensajeResultado",
-          "✅ ASISTENCIA REGISTRADA<br>" +
-          (resultado.estudiante || ""),
-          "ok"
-        );
-
-      } else {
-
-        mostrarMensaje(
-          "mensajeResultado",
-          resultado.mensaje || "No se pudo registrar.",
-          resultado.mensaje &&
-          resultado.mensaje.includes("YA REGISTRADO")
-            ? "advertencia"
-            : "error"
-        );
-
-      }
-
-      document.getElementById("estado").textContent =
-        "Listo para el siguiente estudiante.";
-
-      return;
-    }
-
-
-    // --------------------------
-    // Resultado cierre
-    // --------------------------
-
-    if (datos.tipo === "CIERRE_RESULTADO") {
-
-      tokenSesion = null;
-
-      document.getElementById("pantallaEscaner")
-        .classList.add("oculto");
-
-      document.getElementById("pantallaLogin")
-        .classList.remove("oculto");
-
-      document.getElementById("codigoAcceso").value = "";
-
-      mostrarMensaje(
-        "mensajeLogin",
-        "Sesión cerrada.",
-        "info"
-      );
-
-    }
-
-  });
+    document.body.appendChild(script);
+  }
 
 
   // ==========================================================
@@ -323,21 +175,21 @@
 
   function iniciarSesion() {
 
-    const codigo = document
-      .getElementById("codigoAcceso")
-      .value
-      .trim();
+    if (solicitudEnCurso) return;
+
+    const codigo =
+      document.getElementById("codigoAcceso").value.trim();
 
     if (!codigo) {
-
       mostrarMensaje(
         "mensajeLogin",
         "Ingresa tu código de acceso.",
         "advertencia"
       );
-
       return;
     }
+
+    solicitudEnCurso = true;
 
     mostrarMensaje(
       "mensajeLogin",
@@ -345,10 +197,45 @@
       "info"
     );
 
-    bridge.contentWindow.postMessage({
-      tipo: "LOGIN",
-      codigo: codigo
-    }, "*");
+    llamarAPI(
+      "login",
+      { codigo: codigo },
+      function(resultado) {
+
+        solicitudEnCurso = false;
+
+        if (resultado.exito) {
+
+          tokenSesion = resultado.token;
+
+          document.getElementById("pantallaLogin")
+            .classList.add("oculto");
+
+          document.getElementById("pantallaEscaner")
+            .classList.remove("oculto");
+
+          document.getElementById("nombreEscaner").textContent =
+            resultado.nombre;
+
+          document.getElementById("foroEscaner").textContent =
+            resultado.foro;
+
+          mostrarMensaje(
+            "mensajeResultado",
+            "✅ Acceso autorizado. Ya puedes escanear.",
+            "ok"
+          );
+
+        } else {
+
+          mostrarMensaje(
+            "mensajeLogin",
+            resultado.mensaje || "No se pudo iniciar sesión.",
+            "error"
+          );
+        }
+      }
+    );
   }
 
 
@@ -367,12 +254,10 @@
       return;
     }
 
-    document
-      .getElementById("zonaCamara")
+    document.getElementById("zonaCamara")
       .classList.remove("oculto");
 
-    document
-      .getElementById("btnEscanear")
+    document.getElementById("btnEscanear")
       .classList.add("oculto");
 
     mostrarMensaje(
@@ -388,41 +273,32 @@
       { facingMode: "environment" },
       {
         fps: 10,
-        qrbox: {
-          width: 250,
-          height: 250
-        }
+        qrbox: { width: 250, height: 250 }
       },
 
       function(codigoQR) {
 
-        // Detenemos inmediatamente para evitar
-        // múltiples lecturas del mismo QR.
         detenerCamara();
-
         procesarQR(codigoQR);
       },
 
       function(errorMessage) {
-        // Errores normales de lectura:
-        // no hacemos nada.
+        // Errores normales mientras busca un QR.
       }
 
     ).catch(function(error) {
 
       camaraActiva = false;
 
-      document
-        .getElementById("zonaCamara")
+      document.getElementById("zonaCamara")
         .classList.add("oculto");
 
-      document
-        .getElementById("btnEscanear")
+      document.getElementById("btnEscanear")
         .classList.remove("oculto");
 
       mostrarMensaje(
         "mensajeResultado",
-        "❌ No se pudo abrir la cámara. Verifica que hayas dado permiso al navegador.",
+        "❌ No se pudo abrir la cámara. Verifica el permiso del navegador.",
         "error"
       );
     });
@@ -430,14 +306,14 @@
 
 
   // ==========================================================
-  // PROCESAR QR
+  // REGISTRAR QR
   // ==========================================================
 
   function procesarQR(codigoQR) {
 
-    if (!tokenSesion) {
-      return;
-    }
+    if (!tokenSesion || solicitudEnCurso) return;
+
+    solicitudEnCurso = true;
 
     document.getElementById("estado").textContent =
       "Registrando asistencia...";
@@ -448,11 +324,44 @@
       "info"
     );
 
-    bridge.contentWindow.postMessage({
-      tipo: "REGISTRAR_QR",
-      token: tokenSesion,
-      codigoQR: String(codigoQR).trim()
-    }, "*");
+    llamarAPI(
+      "registro",
+      {
+        token: tokenSesion,
+        codigoQR: String(codigoQR).trim()
+      },
+      function(resultado) {
+
+        solicitudEnCurso = false;
+
+        if (resultado.exito) {
+
+          mostrarMensaje(
+            "mensajeResultado",
+            "✅ ASISTENCIA REGISTRADA<br>" +
+            (resultado.estudiante || ""),
+            "ok"
+          );
+
+        } else {
+
+          const tipo =
+            resultado.mensaje &&
+            resultado.mensaje.includes("YA REGISTRADO")
+              ? "advertencia"
+              : "error";
+
+          mostrarMensaje(
+            "mensajeResultado",
+            resultado.mensaje || "No se pudo registrar.",
+            tipo
+          );
+        }
+
+        document.getElementById("estado").textContent =
+          "Listo para el siguiente estudiante.";
+      }
+    );
   }
 
 
@@ -466,27 +375,23 @@
 
       lectorQR.stop()
         .then(function() {
-
           lectorQR.clear();
           lectorQR = null;
           camaraActiva = false;
-
         })
         .catch(function() {
-
           lectorQR = null;
           camaraActiva = false;
-
         });
 
+    } else {
+      camaraActiva = false;
     }
 
-    document
-      .getElementById("zonaCamara")
+    document.getElementById("zonaCamara")
       .classList.add("oculto");
 
-    document
-      .getElementById("btnEscanear")
+    document.getElementById("btnEscanear")
       .classList.remove("oculto");
   }
 
@@ -499,14 +404,32 @@
 
     detenerCamara();
 
-    if (!tokenSesion) {
-      return;
-    }
+    if (!tokenSesion) return;
 
-    bridge.contentWindow.postMessage({
-      tipo: "CERRAR",
-      token: tokenSesion
-    }, "*");
+    const token = tokenSesion;
+
+    llamarAPI(
+      "cerrar",
+      { token: token },
+      function(resultado) {
+
+        tokenSesion = null;
+
+        document.getElementById("pantallaEscaner")
+          .classList.add("oculto");
+
+        document.getElementById("pantallaLogin")
+          .classList.remove("oculto");
+
+        document.getElementById("codigoAcceso").value = "";
+
+        mostrarMensaje(
+          "mensajeLogin",
+          "Sesión cerrada.",
+          "info"
+        );
+      }
+    );
   }
 
 
