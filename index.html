@@ -111,63 +111,48 @@
 </div>
 
 <script>
-  const URL_APPS_SCRIPT =
-    "https://script.google.com/macros/s/AKfycbycq_OmaBLaxeF0lPohYnS4e62XVE-X74pA3fpZCxnBWcH3fgLp2zYauXi5CHqa61DY/exec";
-
-  let tokenSesion = null;
-  let lectorQR = null;
-  let camaraActiva = false;
-  let solicitudEnCurso = false;
-  let contadorCallback = 0;
-
-
   // ==========================================================
-  // COMUNICACIÓN CON APPS SCRIPT
-  // Se usa JSONP para evitar el problema de CORS/iframe.
-  // ==========================================================
+// COMUNICACIÓN CON EL SERVIDOR
+// GitHub Pages → Cloudflare Worker → Apps Script
+// ==========================================================
 
-  function llamarAPI(api, parametros, manejarResultado) {
+const URL_WORKER =
+  "https://quiet-lab-973a.cristimi1232.workers.dev";
 
-    const nombreCallback =
-      "respuestaAPI_" + Date.now() + "_" + (++contadorCallback);
+async function llamarAPI(api, parametros, manejarResultado) {
 
-    window[nombreCallback] = function(resultado) {
+  try {
 
-      try {
-        manejarResultado(resultado);
-      } finally {
-        delete window[nombreCallback];
-        const script = document.getElementById(nombreCallback);
-        if (script) script.remove();
-      }
-    };
-
-    const query = new URLSearchParams();
-
-    query.set("api", api);
-    query.set("callback", nombreCallback);
-
-    Object.keys(parametros || {}).forEach(function(clave) {
-      query.set(clave, parametros[clave]);
+    const respuesta = await fetch(URL_WORKER, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        api: api,
+        ...parametros
+      })
     });
 
-    const script = document.createElement("script");
-    script.id = nombreCallback;
-    script.src = URL_APPS_SCRIPT + "?" + query.toString();
+    if (!respuesta.ok) {
+      throw new Error("HTTP " + respuesta.status);
+    }
 
-    script.onerror = function() {
-      delete window[nombreCallback];
-      script.remove();
+    const resultado = await respuesta.json();
 
-      manejarResultado({
-        exito: false,
-        mensaje: "❌ No se pudo comunicar con el servidor."
-      });
-    };
+    manejarResultado(resultado);
 
-    document.body.appendChild(script);
+  } catch (error) {
+
+    console.error("Error de comunicación:", error);
+
+    manejarResultado({
+      exito: false,
+      mensaje: "❌ No se pudo comunicar con el servidor."
+    });
+
   }
-
+}
 
   // ==========================================================
   // LOGIN
