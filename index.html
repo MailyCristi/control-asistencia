@@ -119,6 +119,11 @@
 const URL_WORKER =
   "https://quiet-lab-973a.cristimi1232.workers.dev";
 
+let solicitudEnCurso = false;
+let tokenSesion = null;
+let lectorQR = null;
+let camaraActiva = false;
+
 async function llamarAPI(api, parametros, manejarResultado) {
 
   try {
