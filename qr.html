@@ -42,7 +42,7 @@
       margin: 15px 0 5px;
     }
 
-    .codigo {
+    .foro {
       color: #64748b;
       margin-bottom: 10px;
     }
@@ -96,12 +96,14 @@
 
     <div id="contenido">
 
-      <div id="nombre" class="nombre"></div>
+      <div id="nombre" class="nombre">
+        Cargando...
+      </div>
 
-      <div id="codigo" class="codigo"></div>
+      <div id="foro" class="foro"></div>
 
       <div id="temporizador" class="temporizador">
-        Generando código...
+        Verificando acceso...
       </div>
 
       <div id="qrcode"></div>
@@ -133,30 +135,28 @@
 
 
     // =====================================================
-    // OBTENER DATOS DEL ESTUDIANTE
+    // OBTENER TOKEN PERSONAL DE LA URL
     // =====================================================
 
     const parametros =
-      new URLSearchParams(window.location.search);
+      new URLSearchParams(
+        window.location.search
+      );
 
 
-    const codigo =
-      parametros.get("codigo");
-
-
-    const nombre =
-      parametros.get("nombre");
+    const tokenAcceso =
+      parametros.get("acceso");
 
 
     // =====================================================
-    // ELEMENTOS DE LA PÁGINA
+    // ELEMENTOS
     // =====================================================
 
     const elementoNombre =
       document.getElementById("nombre");
 
-    const elementoCodigo =
-      document.getElementById("codigo");
+    const elementoForo =
+      document.getElementById("foro");
 
     const elementoQR =
       document.getElementById("qrcode");
@@ -166,72 +166,70 @@
 
 
     // =====================================================
-    // VALIDAR ESTUDIANTE
+    // DATOS DEL ESTUDIANTE
     // =====================================================
 
-    if (!codigo) {
+    let codigoEstudiante = null;
 
-      document.getElementById("contenido").innerHTML = `
-        <div class="error">
-          ❌ No se proporcionó un código de estudiante.
-        </div>
-      `;
+
+    // =====================================================
+    // INICIO
+    // =====================================================
+
+    if (!tokenAcceso) {
+
+      mostrarError(
+        "❌ Enlace de estudiante no válido."
+      );
 
     } else {
 
-      elementoNombre.textContent =
-        nombre || "Estudiante";
-
-      elementoCodigo.textContent =
-        "Código: " + codigo;
-
-
-      // Generar primer QR
-      generarQRTemporal();
-
-
-      // Renovar automáticamente
-      setInterval(
-        generarQRTemporal,
-        DURACION_QR * 1000
-      );
+      obtenerEstudiante();
 
     }
 
 
     // =====================================================
-    // SOLICITAR QR TEMPORAL AL SERVIDOR
+    // OBTENER ESTUDIANTE
     // =====================================================
 
-    async function generarQRTemporal() {
+    async function obtenerEstudiante() {
 
       try {
 
         elementoTemporizador.textContent =
-          "Generando nuevo código...";
+          "Verificando acceso...";
 
 
-        const respuesta = await fetch(
-          URL_WORKER,
-          {
-            method: "POST",
+        const respuesta =
+          await fetch(
+            URL_WORKER,
+            {
+              method: "POST",
 
-            headers: {
-              "Content-Type": "application/json"
-            },
+              headers: {
+                "Content-Type": "application/json"
+              },
 
-            body: JSON.stringify({
-              api: "generarQRTemporal",
-              codigoEstudiante: codigo
-            })
-          }
-        );
+              body: JSON.stringify({
+
+                api: "obtenerEstudiante",
+
+                tokenAcceso:
+                  tokenAcceso
+
+              })
+
+            }
+          );
 
 
         if (!respuesta.ok) {
+
           throw new Error(
             "HTTP " + respuesta.status
           );
+
         }
 
 
@@ -243,20 +241,35 @@
 
           mostrarError(
             resultado.mensaje ||
-            "No se pudo generar el QR."
+            "❌ Enlace no válido."
           );
 
           return;
         }
 
 
-        // Mostrar QR temporal
-        mostrarQR(resultado.token);
+        // Guardamos el código internamente
+        codigoEstudiante =
+          resultado.codigo;
 
 
-        // Iniciar contador
-        iniciarTemporizador(
-          resultado.segundos || DURACION_QR
+        // Mostramos los datos
+        elementoNombre.textContent =
+          resultado.nombre;
+
+
+        elementoForo.textContent =
+          "Foro: " + resultado.foro;
+
+
+        // Generar primer QR
+        generarQRTemporal();
+
+
+        // Renovar cada 30 segundos
+        setInterval(
+          generarQRTemporal,
+          DURACION_QR * 1000
         );
 
 
@@ -267,8 +280,99 @@
           error
         );
 
+
         mostrarError(
           "❌ No se pudo comunicar con el servidor."
+        );
+
+      }
+
+    }
+
+
+    // =====================================================
+    // GENERAR QR TEMPORAL
+    // =====================================================
+
+    async function generarQRTemporal() {
+
+      try {
+
+        elementoTemporizador.textContent =
+          "Generando nuevo código...";
+
+
+        const respuesta =
+          await fetch(
+            URL_WORKER,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type": "application/json"
+              },
+
+              body: JSON.stringify({
+
+                api:
+                  "generarQRTemporal",
+
+                codigoEstudiante:
+                  codigoEstudiante
+
+              })
+
+            }
+          );
+
+
+        if (!respuesta.ok) {
+
+          throw new Error(
+            "HTTP " + respuesta.status
+          );
+
+        }
+
+
+        const resultado =
+          await respuesta.json();
+
+
+        if (!resultado.exito) {
+
+          mostrarError(
+            resultado.mensaje ||
+            "❌ No se pudo generar el QR."
+          );
+
+          return;
+        }
+
+
+        // Mostrar el nuevo QR
+        mostrarQR(
+          resultado.token
+        );
+
+
+        // Reiniciar contador
+        iniciarTemporizador(
+          resultado.segundos ||
+          DURACION_QR
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Error:",
+          error
+        );
+
+
+        mostrarError(
+          "❌ No se pudo generar el código."
         );
 
       }
@@ -282,31 +386,37 @@
 
     function mostrarQR(token) {
 
-      // Limpiar QR anterior
       elementoQR.innerHTML = "";
 
 
-      // Crear nuevo QR
       new QRCode(
+
         elementoQR,
+
         {
           text: token,
+
           width: 280,
+
           height: 280,
-          correctLevel: QRCode.CorrectLevel.H
+
+          correctLevel:
+            QRCode.CorrectLevel.H
         }
+
       );
 
     }
 
 
     // =====================================================
-    // CONTADOR DE 30 SEGUNDOS
+    // CONTADOR
     // =====================================================
 
     function iniciarTemporizador(segundos) {
 
-      let restante = segundos;
+      let restante =
+        segundos;
 
 
       elementoTemporizador.textContent =
@@ -316,39 +426,52 @@
 
 
       const intervalo =
-        setInterval(() => {
+        setInterval(
 
-          restante--;
+          function() {
+
+            restante--;
 
 
-          if (restante <= 0) {
+            if (restante <= 0) {
 
-            clearInterval(intervalo);
+              clearInterval(
+                intervalo
+              );
+
+
+              elementoTemporizador.textContent =
+                "🔄 Generando nuevo código...";
+
+
+              return;
+
+            }
+
 
             elementoTemporizador.textContent =
-              "🔄 Generando nuevo código...";
+              "⏱️ Código válido durante: " +
+              restante +
+              " segundos";
 
-            return;
-          }
+          },
 
+          1000
 
-          elementoTemporizador.textContent =
-            "⏱️ Código válido durante: " +
-            restante +
-            " segundos";
-
-        }, 1000);
+        );
 
     }
 
 
     // =====================================================
-    // MOSTRAR ERROR
+    // ERROR
     // =====================================================
 
     function mostrarError(mensaje) {
 
-      elementoQR.innerHTML = "";
+      elementoNombre.textContent = "";
+
+      elementoForo.textContent = "";
 
       elementoTemporizador.textContent = "";
 
