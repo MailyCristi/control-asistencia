@@ -1,1 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Administración - Control de Asistencia</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .contenedor {
+      width: 92%;
+      max-width: 900px;
+      margin: 50px auto;
+    }
+
+    .tarjeta {
+      background: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 0;
+      color: #1e3a8a;
+    }
+
+    .subtitulo {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 30px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-login {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-login:hover {
+      background: #1d4ed8;
+    }
+
+    .mensaje {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+    }
+
+    .exito {
+      display: block;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    #panel {
+      display: none;
+    }
+
+    .cabecera-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .cabecera-panel h2 {
+      margin: 0;
+      color: #1e3a8a;
+    }
+
+    .btn-salir {
+      width: auto;
+      padding: 10px 18px;
+      background: #dc2626;
+      color: white;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .opcion {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 25px;
+      text-align: center;
+    }
+
+    .icono {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .opcion h3 {
+      margin: 5px 0;
+    }
+
+    .opcion p {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .btn-opcion {
+      background: #2563eb;
+      color: white;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .contenedor {
+        margin: 20px auto;
+      }
+
+      .tarjeta {
+        padding: 20px;
+      }
+
+      .menu {
+        grid-template-columns: 1fr;
+      }
+
+      .cabecera-panel {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-salir {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="contenedor">
+
+    <!-- LOGIN -->
+    <div class="tarjeta" id="login">
+
+      <h1>🔐 Administración</h1>
+
+      <p class="subtitulo">
+        Control de Asistencia
+      </p>
+
+      <input
+        type="password"
+        id="codigoAdmin"
+        placeholder="Código de administrador"
+        autocomplete="off"
+      >
+
+      <button class="btn-login" onclick="iniciarSesionAdmin()">
+        INGRESAR
+      </button>
+
+      <div id="mensajeLogin" class="mensaje"></div>
+
+    </div>
+
+
+    <!-- PANEL -->
+    <div class="tarjeta" id="panel">
+
+      <div class="cabecera-panel">
+
+        <div>
+          <h2>⚙️ Panel de Administración</h2>
+          <small>Control de Asistencia</small>
+        </div>
+
+        <button class="btn-salir" onclick="cerrarSesionAdmin()">
+          CERRAR SESIÓN
+        </button>
+
+      </div>
+
+
+      <div class="menu">
+
+        <div class="opcion">
+          <div class="icono">👥</div>
+          <h3>Estudiantes</h3>
+          <p>Registrar y administrar estudiantes.</p>
+          <button class="btn-opcion" onclick="proximamente()">
+            ADMINISTRAR
+          </button>
+        </div>
+
+
+        <div class="opcion">
+          <div class="icono">🏫</div>
+          <h3>Foros</h3>
+          <p>Administrar los foros o grupos.</p>
+          <button class="btn-opcion" onclick="proximamente()">
+            ADMINISTRAR
+          </button>
+        </div>
+
+
+        <div class="opcion">
+          <div class="icono">📱</div>
+          <h3>Escáneres</h3>
+          <p>Administrar usuarios y escáneres.</p>
+          <button class="btn-opcion" onclick="proximamente()">
+            ADMINISTRAR
+          </button>
+        </div>
+
+
+        <div class="opcion">
+          <div class="icono">📋</div>
+          <h3>Asistencia</h3>
+          <p>Consultar los registros de asistencia.</p>
+          <button class="btn-opcion" onclick="proximamente()">
+            VER ASISTENCIA
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const URL_WORKER =
+      "https://quiet-lab-973a.cristimi1232.workers.dev";
+
+
+    let tokenAdmin = null;
+
+
+    async function llamarAPI(api, parametros = {}) {
+
+      const respuesta = await fetch(URL_WORKER, {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          api: api,
+          ...parametros
+        })
+      });
+
+      if (!respuesta.ok) {
+        throw new Error("HTTP " + respuesta.status);
+      }
+
+      return await respuesta.json();
+    }
+
+
+    async function iniciarSesionAdmin() {
+
+      const codigo = document
+        .getElementById("codigoAdmin")
+        .value
+        .trim();
+
+      const mensaje =
+        document.getElementById("mensajeLogin");
+
+
+      if (!codigo) {
+
+        mensaje.textContent =
+          "❌ Introduce el código de administrador.";
+
+        mensaje.className =
+          "mensaje error";
+
+        return;
+      }
+
+
+      mensaje.textContent =
+        "⏳ Verificando...";
+
+      mensaje.className =
+        "mensaje";
+
+
+      try {
+
+        const resultado = await llamarAPI(
+          "adminLogin",
+          {
+            codigo: codigo
+          }
+        );
+
+
+        if (!resultado.exito) {
+
+          mensaje.textContent =
+            resultado.mensaje;
+
+          mensaje.className =
+            "mensaje error";
+
+          return;
+        }
+
+
+        tokenAdmin = resultado.token;
+
+        document.getElementById("login").style.display =
+          "none";
+
+        document.getElementById("panel").style.display =
+          "block";
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        mensaje.textContent =
+          "❌ No se pudo comunicar con el servidor.";
+
+        mensaje.className =
+          "mensaje error";
+      }
+
+    }
+
+
+    function cerrarSesionAdmin() {
+
+      tokenAdmin = null;
+
+      document.getElementById("panel").style.display =
+        "none";
+
+      document.getElementById("login").style.display =
+        "block";
+
+      document.getElementById("codigoAdmin").value =
+        "";
+
+    }
+
+
+    function proximamente() {
+
+      alert(
+        "Esta sección la construiremos a continuación."
+      );
+
+    }
+
+
+    document
+      .getElementById("codigoAdmin")
+      .addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+          iniciarSesionAdmin();
+        }
+
+      });
+
+  </script>
+
+</body>
+</html>
