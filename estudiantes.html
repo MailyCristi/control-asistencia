@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Estudiantes - Control de Asistencia</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+
+    .contenedor {
+      width: 95%;
+      max-width: 1200px;
+      margin: 30px auto;
+    }
+
+    .tarjeta {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .cabecera {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    h1 {
+      margin: 0;
+      color: #1e3a8a;
+    }
+
+    .subtitulo {
+      color: #64748b;
+      margin: 5px 0 0;
+    }
+
+    button {
+      border: none;
+      border-radius: 9px;
+      padding: 11px 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-volver {
+      background: #64748b;
+      color: white;
+    }
+
+    .btn-nuevo {
+      background: #16a34a;
+      color: white;
+    }
+
+    .barra {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .buscador {
+      flex: 1;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
+      font-size: 15px;
+    }
+
+    .tabla-contenedor {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 750px;
+    }
+
+    th {
+      background: #1e3a8a;
+      color: white;
+      padding: 13px;
+      text-align: left;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    tr:hover {
+      background: #f8fafc;
+    }
+
+    .estado {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .activo {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .inactivo {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .mensaje {
+      text-align: center;
+      padding: 20px;
+      color: #64748b;
+    }
+
+    .contador {
+      margin-bottom: 15px;
+      color: #475569;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+
+      .cabecera {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .cabecera button {
+        width: 100%;
+      }
+
+      .barra {
+        flex-direction: column;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+  <div class="tarjeta">
+
+    <div class="cabecera">
+
+      <div>
+        <h1>👥 Estudiantes</h1>
+        <p class="subtitulo">
+          Administración de estudiantes
+        </p>
+      </div>
+
+      <button
+        class="btn-volver"
+        onclick="volverAdmin()">
+        ← VOLVER
+      </button>
+
+    </div>
+
+
+    <div class="barra">
+
+      <input
+        type="text"
+        id="buscador"
+        class="buscador"
+        placeholder="🔎 Buscar por nombre, CI o código QR..."
+        oninput="filtrarEstudiantes()"
+      >
+
+      <button
+        class="btn-nuevo"
+        onclick="alert('El formulario lo construiremos después.')">
+        ➕ NUEVO ESTUDIANTE
+      </button>
+
+    </div>
+
+
+    <div
+      id="contador"
+      class="contador">
+      Cargando estudiantes...
+    </div>
+
+
+    <div class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Código QR</th>
+            <th>Nombre</th>
+            <th>CI</th>
+            <th>Foro</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+
+        <tbody id="tablaEstudiantes">
+
+          <tr>
+            <td colspan="6" class="mensaje">
+              ⏳ Cargando...
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const URL_WORKER =
+  "https://quiet-lab-973a.cristimi1232.workers.dev";
+
+
+let tokenAdmin = null;
+let estudiantes = [];
+
+
+/* =========================
+   API
+========================= */
+
+async function llamarAPI(api, parametros = {}) {
+
+  const respuesta = await fetch(URL_WORKER, {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+      api: api,
+      ...parametros
+    })
+
+  });
+
+
+  if (!respuesta.ok) {
+    throw new Error("HTTP " + respuesta.status);
+  }
+
+
+  return await respuesta.json();
+}
+
+
+/* =========================
+   CARGAR ESTUDIANTES
+========================= */
+
+async function cargarEstudiantes() {
+
+  const contador =
+    document.getElementById("contador");
+
+  try {
+
+    /*
+      Recuperamos la sesión de administrador
+      guardada temporalmente.
+    */
+
+    tokenAdmin =
+      sessionStorage.getItem("tokenAdmin");
+
+
+    if (!tokenAdmin) {
+
+      alert(
+        "La sesión de administrador no está disponible."
+      );
+
+      volverAdmin();
+
+      return;
+    }
+
+
+    const resultado =
+      await llamarAPI(
+        "listarEstudiantes",
+        {
+          token: tokenAdmin
+        }
+      );
+
+
+    if (!resultado.exito) {
+
+      contador.textContent =
+        resultado.mensaje;
+
+      return;
+    }
+
+
+    estudiantes =
+      resultado.estudiantes || [];
+
+
+    mostrarEstudiantes(estudiantes);
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    contador.textContent =
+      "❌ No se pudo cargar la lista de estudiantes.";
+
+  }
+
+}
+
+
+/* =========================
+   MOSTRAR
+========================= */
+
+function mostrarEstudiantes(lista) {
+
+  const tabla =
+    document.getElementById("tablaEstudiantes");
+
+  const contador =
+    document.getElementById("contador");
+
+
+  contador.textContent =
+    "Total de estudiantes: " + lista.length;
+
+
+  if (lista.length === 0) {
+
+    tabla.innerHTML = `
+      <tr>
+        <td colspan="6" class="mensaje">
+          No hay estudiantes registrados.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tabla.innerHTML =
+    lista.map(estudiante => {
+
+      const estado =
+        estudiante.estado.toUpperCase();
+
+
+      const claseEstado =
+        estado === "ACTIVO"
+          ? "activo"
+          : "inactivo";
+
+
+      return `
+        <tr>
+
+          <td>${escapeHTML(estudiante.id)}</td>
+
+          <td>${escapeHTML(estudiante.codigoQR)}</td>
+
+          <td>${escapeHTML(estudiante.nombre)}</td>
+
+          <td>${escapeHTML(estudiante.ci)}</td>
+
+          <td>${escapeHTML(estudiante.foro)}</td>
+
+          <td>
+            <span class="estado ${claseEstado}">
+              ${escapeHTML(estado)}
+            </span>
+          </td>
+
+        </tr>
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================
+   BUSCAR
+========================= */
+
+function filtrarEstudiantes() {
+
+  const texto =
+    document
+      .getElementById("buscador")
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  if (!texto) {
+
+    mostrarEstudiantes(estudiantes);
+
+    return;
+  }
+
+
+  const filtrados =
+    estudiantes.filter(estudiante => {
+
+      return (
+
+        String(estudiante.id)
+          .toLowerCase()
+          .includes(texto)
+
+        ||
+
+        String(estudiante.codigoQR)
+          .toLowerCase()
+          .includes(texto)
+
+        ||
+
+        String(estudiante.nombre)
+          .toLowerCase()
+          .includes(texto)
+
+        ||
+
+        String(estudiante.ci)
+          .toLowerCase()
+          .includes(texto)
+
+        ||
+
+        String(estudiante.foro)
+          .toLowerCase()
+          .includes(texto)
+
+      );
+
+    });
+
+
+  mostrarEstudiantes(filtrados);
+
+}
+
+
+/* =========================
+   SEGURIDAD
+========================= */
+
+function escapeHTML(valor) {
+
+  return String(valor)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================
+   VOLVER
+========================= */
+
+function volverAdmin() {
+
+  window.location.href =
+    "admin.html";
+
+}
+
+
+/* =========================
+   INICIAR
+========================= */
+
+cargarEstudiantes();
+
+</script>
+
+</body>
+</html>
