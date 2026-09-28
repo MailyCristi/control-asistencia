@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mi Código QR</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+    }
+
+    .tarjeta {
+      width: 90%;
+      max-width: 420px;
+      background: white;
+      padding: 30px 25px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+    }
+
+    h1 {
+      color: #1e3a8a;
+      margin-top: 0;
+    }
+
+    .nombre {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 15px 0 5px;
+    }
+
+    .codigo {
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    #qrcode {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px auto;
+      padding: 15px;
+      background: white;
+    }
+
+    #qrcode img,
+    #qrcode canvas {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .instruccion {
+      color: #475569;
+      font-size: 15px;
+      margin-top: 20px;
+    }
+
+    .error {
+      color: #b91c1c;
+      background: #fee2e2;
+      padding: 12px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="tarjeta">
+
+    <h1>🎓 Código QR</h1>
+
+    <div id="contenido">
+
+      <div id="nombre" class="nombre"></div>
+
+      <div id="codigo" class="codigo"></div>
+
+      <div id="qrcode"></div>
+
+      <div class="instruccion">
+        📱 Muestra este código al escáner para registrar tu asistencia.
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- Librería para generar QR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+
+  <script>
+
+    // Obtener parámetros de la URL
+    const parametros =
+      new URLSearchParams(window.location.search);
+
+
+    const codigo =
+      parametros.get("codigo");
+
+
+    const nombre =
+      parametros.get("nombre");
+
+
+    // Validar código
+    if (!codigo) {
+
+      document.getElementById("contenido").innerHTML = `
+        <div class="error">
+          ❌ No se proporcionó un código QR.
+        </div>
+      `;
+
+    } else {
+
+      // Mostrar nombre si existe
+      document.getElementById("nombre").textContent =
+        nombre || "Estudiante";
+
+
+      // Mostrar código
+      document.getElementById("codigo").textContent =
+        "Código: " + codigo;
+
+
+      // Generar QR
+      new QRCode(
+        document.getElementById("qrcode"),
+        {
+          text: codigo,
+          width: 280,
+          height: 280,
+          correctLevel: QRCode.CorrectLevel.H
+        }
+      );
+
+    }
+
+  </script>
+
+</body>
+</html>
