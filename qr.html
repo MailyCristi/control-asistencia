@@ -44,7 +44,13 @@
 
     .codigo {
       color: #64748b;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+    }
+
+    .temporizador {
+      font-weight: bold;
+      color: #1e3a8a;
+      margin: 10px 0;
     }
 
     #qrcode {
@@ -74,6 +80,11 @@
       padding: 12px;
       border-radius: 10px;
     }
+
+    .cargando {
+      color: #475569;
+      padding: 20px;
+    }
   </style>
 </head>
 
@@ -88,6 +99,10 @@
       <div id="nombre" class="nombre"></div>
 
       <div id="codigo" class="codigo"></div>
+
+      <div id="temporizador" class="temporizador">
+        Generando código...
+      </div>
 
       <div id="qrcode"></div>
 
@@ -106,7 +121,21 @@
 
   <script>
 
-    // Obtener parámetros de la URL
+    // =====================================================
+    // CONFIGURACIÓN
+    // =====================================================
+
+    const URL_WORKER =
+      "https://quiet-lab-973a.cristimi1232.workers.dev";
+
+
+    const DURACION_QR = 30;
+
+
+    // =====================================================
+    // OBTENER DATOS DEL ESTUDIANTE
+    // =====================================================
+
     const parametros =
       new URLSearchParams(window.location.search);
 
@@ -119,37 +148,215 @@
       parametros.get("nombre");
 
 
-    // Validar código
+    // =====================================================
+    // ELEMENTOS DE LA PÁGINA
+    // =====================================================
+
+    const elementoNombre =
+      document.getElementById("nombre");
+
+    const elementoCodigo =
+      document.getElementById("codigo");
+
+    const elementoQR =
+      document.getElementById("qrcode");
+
+    const elementoTemporizador =
+      document.getElementById("temporizador");
+
+
+    // =====================================================
+    // VALIDAR ESTUDIANTE
+    // =====================================================
+
     if (!codigo) {
 
       document.getElementById("contenido").innerHTML = `
         <div class="error">
-          ❌ No se proporcionó un código QR.
+          ❌ No se proporcionó un código de estudiante.
         </div>
       `;
 
     } else {
 
-      // Mostrar nombre si existe
-      document.getElementById("nombre").textContent =
+      elementoNombre.textContent =
         nombre || "Estudiante";
 
-
-      // Mostrar código
-      document.getElementById("codigo").textContent =
+      elementoCodigo.textContent =
         "Código: " + codigo;
 
 
-      // Generar QR
+      // Generar primer QR
+      generarQRTemporal();
+
+
+      // Renovar automáticamente
+      setInterval(
+        generarQRTemporal,
+        DURACION_QR * 1000
+      );
+
+    }
+
+
+    // =====================================================
+    // SOLICITAR QR TEMPORAL AL SERVIDOR
+    // =====================================================
+
+    async function generarQRTemporal() {
+
+      try {
+
+        elementoTemporizador.textContent =
+          "Generando nuevo código...";
+
+
+        const respuesta = await fetch(
+          URL_WORKER,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              api: "generarQRTemporal",
+              codigoEstudiante: codigo
+            })
+          }
+        );
+
+
+        if (!respuesta.ok) {
+          throw new Error(
+            "HTTP " + respuesta.status
+          );
+        }
+
+
+        const resultado =
+          await respuesta.json();
+
+
+        if (!resultado.exito) {
+
+          mostrarError(
+            resultado.mensaje ||
+            "No se pudo generar el QR."
+          );
+
+          return;
+        }
+
+
+        // Mostrar QR temporal
+        mostrarQR(resultado.token);
+
+
+        // Iniciar contador
+        iniciarTemporizador(
+          resultado.segundos || DURACION_QR
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          "Error:",
+          error
+        );
+
+        mostrarError(
+          "❌ No se pudo comunicar con el servidor."
+        );
+
+      }
+
+    }
+
+
+    // =====================================================
+    // MOSTRAR QR
+    // =====================================================
+
+    function mostrarQR(token) {
+
+      // Limpiar QR anterior
+      elementoQR.innerHTML = "";
+
+
+      // Crear nuevo QR
       new QRCode(
-        document.getElementById("qrcode"),
+        elementoQR,
         {
-          text: codigo,
+          text: token,
           width: 280,
           height: 280,
           correctLevel: QRCode.CorrectLevel.H
         }
       );
+
+    }
+
+
+    // =====================================================
+    // CONTADOR DE 30 SEGUNDOS
+    // =====================================================
+
+    function iniciarTemporizador(segundos) {
+
+      let restante = segundos;
+
+
+      elementoTemporizador.textContent =
+        "⏱️ Código válido durante: " +
+        restante +
+        " segundos";
+
+
+      const intervalo =
+        setInterval(() => {
+
+          restante--;
+
+
+          if (restante <= 0) {
+
+            clearInterval(intervalo);
+
+            elementoTemporizador.textContent =
+              "🔄 Generando nuevo código...";
+
+            return;
+          }
+
+
+          elementoTemporizador.textContent =
+            "⏱️ Código válido durante: " +
+            restante +
+            " segundos";
+
+        }, 1000);
+
+    }
+
+
+    // =====================================================
+    // MOSTRAR ERROR
+    // =====================================================
+
+    function mostrarError(mensaje) {
+
+      elementoQR.innerHTML = "";
+
+      elementoTemporizador.textContent = "";
+
+      elementoQR.innerHTML = `
+        <div class="error">
+          ${mensaje}
+        </div>
+      `;
 
     }
 
