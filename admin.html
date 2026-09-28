@@ -354,6 +354,11 @@
 
         tokenAdmin = resultado.token;
 
+        sessionStorage.setItem(
+          "tokenAdmin",
+          tokenAdmin
+        );
+
         document.getElementById("login").style.display =
           "none";
 
