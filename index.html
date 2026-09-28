@@ -1,489 +1,1885 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Mi Código QR</title>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Control de Asistencia</title>
+
+  <!-- Librería para leer códigos QR -->
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript">
+  </script>
+
+  <!-- Librería para generar códigos QR -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+  </script>
+
 
   <style>
+
     * {
       box-sizing: border-box;
     }
 
+
     body {
+
       margin: 0;
+
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
       font-family: Arial, sans-serif;
-      background: #f1f5f9;
+
+      background: #f3f6fa;
+
+      color: #1f2937;
+
     }
+
+
+    .contenedor {
+
+      width: min(94%, 430px);
+
+      margin: 20px auto;
+
+    }
+
 
     .tarjeta {
-      width: 90%;
-      max-width: 420px;
+
       background: white;
-      padding: 30px 25px;
-      border-radius: 20px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+
+      border-radius: 18px;
+
+      padding: 22px;
+
+      box-shadow:
+        0 8px 25px rgba(0,0,0,.10);
+
     }
+
 
     h1 {
-      color: #1e3a8a;
-      margin-top: 0;
+
+      text-align: center;
+
+      font-size: 23px;
+
+      margin: 0 0 6px;
+
     }
 
-    .nombre {
-      font-size: 20px;
+
+    .subtitulo {
+
+      text-align: center;
+
+      color: #6b7280;
+
+      margin-bottom: 22px;
+
+    }
+
+
+    label {
+
+      display: block;
+
       font-weight: bold;
-      margin: 15px 0 5px;
+
+      margin: 12px 0 7px;
+
     }
 
-    .foro {
-      color: #64748b;
-      margin-bottom: 10px;
+
+    input {
+
+      width: 100%;
+
+      padding: 14px;
+
+      border: 1px solid #d1d5db;
+
+      border-radius: 10px;
+
+      font-size: 17px;
+
     }
 
-    .temporizador {
+
+    button {
+
+      width: 100%;
+
+      border: 0;
+
+      border-radius: 11px;
+
+      padding: 14px;
+
+      font-size: 17px;
+
       font-weight: bold;
-      color: #1e3a8a;
-      margin: 10px 0;
+
+      cursor: pointer;
+
+      margin-top: 12px;
+
     }
 
-    #qrcode {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 20px auto;
-      padding: 15px;
-      background: white;
+
+    .btn-principal {
+
+      background: #2563eb;
+
+      color: white;
+
     }
 
-    #qrcode img,
-    #qrcode canvas {
-      max-width: 100%;
-      height: auto;
+
+    .btn-escanear {
+
+      background: #16a34a;
+
+      color: white;
+
     }
 
-    .instruccion {
-      color: #475569;
-      font-size: 15px;
-      margin-top: 20px;
+
+    .btn-detener {
+
+      background: #6b7280;
+
+      color: white;
+
     }
+
+
+    .btn-salir {
+
+      background: #dc2626;
+
+      color: white;
+
+    }
+
+
+    .oculto {
+
+      display: none !important;
+
+    }
+
+
+    .datos {
+
+      background: #eff6ff;
+
+      border-radius: 12px;
+
+      padding: 14px;
+
+      margin-bottom: 15px;
+
+    }
+
+
+    .dato {
+
+      margin: 5px 0;
+
+    }
+
+
+    #reader {
+
+      width: 100%;
+
+      margin-top: 15px;
+
+      overflow: hidden;
+
+      border-radius: 12px;
+
+    }
+
+
+    .mensaje {
+
+      text-align: center;
+
+      padding: 13px;
+
+      border-radius: 10px;
+
+      margin-top: 14px;
+
+      font-weight: bold;
+
+    }
+
+
+    .info {
+
+      background: #e0f2fe;
+
+      color: #075985;
+
+    }
+
+
+    .ok {
+
+      background: #dcfce7;
+
+      color: #166534;
+
+    }
+
 
     .error {
-      color: #b91c1c;
+
       background: #fee2e2;
-      padding: 12px;
-      border-radius: 10px;
+
+      color: #991b1b;
+
     }
 
-    .cargando {
-      color: #475569;
-      padding: 20px;
+
+    .advertencia {
+
+      background: #fef3c7;
+
+      color: #92400e;
+
     }
+
+
+    .estado {
+
+      text-align: center;
+
+      font-size: 14px;
+
+      color: #6b7280;
+
+      margin-top: 12px;
+
+    }
+
+
+    /* =========================
+       ESTUDIANTE
+    ========================= */
+
+    .nombre-estudiante {
+
+      font-size: 21px;
+
+      font-weight: bold;
+
+      text-align: center;
+
+      margin: 15px 0 5px;
+
+    }
+
+
+    .foro-estudiante {
+
+      text-align: center;
+
+      color: #64748b;
+
+      margin-bottom: 10px;
+
+    }
+
+
+    .temporizador {
+
+      text-align: center;
+
+      font-weight: bold;
+
+      color: #1e3a8a;
+
+      margin: 12px 0;
+
+    }
+
+
+    #qrcode {
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      margin: 20px auto;
+
+      padding: 15px;
+
+      background: white;
+
+    }
+
+
+    #qrcode img,
+
+    #qrcode canvas {
+
+      max-width: 100%;
+
+      height: auto;
+
+    }
+
   </style>
+
 </head>
+
 
 <body>
 
-  <div class="tarjeta">
 
-    <h1>🎓 Código QR</h1>
+<div class="contenedor">
 
-    <div id="contenido">
 
-      <div id="nombre" class="nombre">
-        Cargando...
-      </div>
+  <!-- =====================================================
+       LOGIN
+  ====================================================== -->
 
-      <div id="foro" class="foro"></div>
+  <div
+    id="pantallaLogin"
+    class="tarjeta"
+  >
 
-      <div id="temporizador" class="temporizador">
-        Verificando acceso...
-      </div>
+    <h1>
+      Control de Asistencia
+    </h1>
 
-      <div id="qrcode"></div>
 
-      <div class="instruccion">
-        📱 Muestra este código al escáner para registrar tu asistencia.
-      </div>
+    <div class="subtitulo">
+
+      Ingreso al sistema
 
     </div>
+
+
+    <label for="usuario">
+
+      Usuario
+
+    </label>
+
+
+    <input
+      id="usuario"
+      type="text"
+      autocomplete="username"
+      placeholder="Ingresa tu usuario"
+    >
+
+
+    <label for="contrasena">
+
+      Contraseña
+
+    </label>
+
+
+    <input
+      id="contrasena"
+      type="password"
+      autocomplete="current-password"
+      placeholder="Ingresa tu contraseña"
+    >
+
+
+    <button
+      class="btn-principal"
+      onclick="iniciarSesion()"
+    >
+
+      INGRESAR
+
+    </button>
+
+
+    <div id="mensajeLogin"></div>
 
   </div>
 
 
-  <!-- Librería para generar QR -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- =====================================================
+       PANTALLA ESTUDIANTE
+  ====================================================== -->
+
+  <div
+    id="pantallaEstudiante"
+    class="tarjeta oculto"
+  >
+
+    <h1>
+
+      🎓 Mi asistencia
+
+    </h1>
 
 
-  <script>
+    <div
+      id="nombreEstudiante"
+      class="nombre-estudiante"
+    >
 
-    // =====================================================
-    // CONFIGURACIÓN
-    // =====================================================
-
-    const URL_WORKER =
-      "https://quiet-lab-973a.cristimi1232.workers.dev";
+    </div>
 
 
-    const DURACION_QR = 30;
+    <div
+      id="foroEstudiante"
+      class="foro-estudiante"
+    >
+
+    </div>
 
 
-    // =====================================================
-    // OBTENER TOKEN PERSONAL DE LA URL
-    // =====================================================
+    <div
+      id="temporizador"
+      class="temporizador"
+    >
 
-    const parametros =
-      new URLSearchParams(
-        window.location.search
-      );
+      Generando código...
 
-
-    const tokenAcceso =
-      parametros.get("acceso");
+    </div>
 
 
-    // =====================================================
-    // ELEMENTOS
-    // =====================================================
-
-    const elementoNombre =
-      document.getElementById("nombre");
-
-    const elementoForo =
-      document.getElementById("foro");
-
-    const elementoQR =
-      document.getElementById("qrcode");
-
-    const elementoTemporizador =
-      document.getElementById("temporizador");
+    <div id="qrcode"></div>
 
 
-    // =====================================================
-    // DATOS DEL ESTUDIANTE
-    // =====================================================
+    <div class="estado">
 
-    let codigoEstudiante = null;
+      📱 Muestra este código al escáner
+      para registrar tu asistencia.
 
-
-    // =====================================================
-    // INICIO
-    // =====================================================
-
-    if (!tokenAcceso) {
-
-      mostrarError(
-        "❌ Enlace de estudiante no válido."
-      );
-
-    } else {
-
-      obtenerEstudiante();
-
-    }
+    </div>
 
 
-    // =====================================================
-    // OBTENER ESTUDIANTE
-    // =====================================================
+    <button
+      class="btn-salir"
+      onclick="cerrarSesionEstudiante()"
+    >
 
-    async function obtenerEstudiante() {
+      CERRAR SESIÓN
 
-      try {
+    </button>
 
-        elementoTemporizador.textContent =
-          "Verificando acceso...";
-
-
-        const respuesta =
-          await fetch(
-            URL_WORKER,
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type": "application/json"
-              },
-
-              body: JSON.stringify({
-
-                api: "obtenerEstudiante",
-
-                tokenAcceso:
-                  tokenAcceso
-
-              })
-
-            }
-          );
+  </div>
 
 
-        if (!respuesta.ok) {
 
-          throw new Error(
-            "HTTP " + respuesta.status
-          );
+  <!-- =====================================================
+       PANTALLA ESCÁNER
+  ====================================================== -->
 
-        }
+  <div
+    id="pantallaEscaner"
+    class="tarjeta oculto"
+  >
 
+    <h1>
 
-        const resultado =
-          await respuesta.json();
+      Escáner de Asistencia
 
-
-        if (!resultado.exito) {
-
-          mostrarError(
-            resultado.mensaje ||
-            "❌ Enlace no válido."
-          );
-
-          return;
-        }
+    </h1>
 
 
-        // Guardamos el código internamente
-        codigoEstudiante =
-          resultado.codigo;
+    <div class="datos">
+
+      <div class="dato">
+
+        <strong>
+          Escáner:
+        </strong>
+
+        <span id="nombreEscaner">
+          -
+        </span>
+
+      </div>
 
 
-        // Mostramos los datos
-        elementoNombre.textContent =
-          resultado.nombre;
+      <div class="dato">
+
+        <strong>
+          Foro:
+        </strong>
+
+        <span id="foroEscaner">
+          -
+        </span>
+
+      </div>
+
+    </div>
 
 
-        elementoForo.textContent =
-          "Foro: " + resultado.foro;
+    <button
+      id="btnEscanear"
+      class="btn-escanear"
+      onclick="iniciarCamara()"
+    >
+
+      📷 ESCANEAR QR
+
+    </button>
 
 
-        // Generar primer QR
-        generarQRTemporal();
+    <div
+      id="zonaCamara"
+      class="oculto"
+    >
+
+      <div id="reader"></div>
 
 
-        // Renovar cada 30 segundos
-        setInterval(
-          generarQRTemporal,
-          DURACION_QR * 1000
+      <button
+        class="btn-detener"
+        onclick="detenerCamara()"
+      >
+
+        CERRAR CÁMARA
+
+      </button>
+
+    </div>
+
+
+    <div id="mensajeResultado"></div>
+
+
+    <div
+      id="estadoEscaner"
+      class="estado"
+    >
+
+      Listo para registrar asistencia.
+
+    </div>
+
+
+    <button
+      class="btn-salir"
+      onclick="cerrarSesionEscaner()"
+    >
+
+      CERRAR SESIÓN
+
+    </button>
+
+  </div>
+
+
+</div>
+
+
+
+<script>
+
+
+  // ==========================================================
+  // CONFIGURACIÓN
+  // ==========================================================
+
+
+  const URL_WORKER =
+    "https://quiet-lab-973a.cristimi1232.workers.dev";
+
+
+  const DURACION_QR = 30;
+
+
+
+  // ==========================================================
+  // VARIABLES
+  // ==========================================================
+
+
+  let solicitudEnCurso = false;
+
+
+  let tipoUsuario = null;
+
+
+  let tokenSesion = null;
+
+
+  let idEscanerSesion = null;
+
+
+  let codigoEstudiante = null;
+
+
+  let lectorQR = null;
+
+
+  let camaraActiva = false;
+
+
+  let intervaloQR = null;
+
+
+  let intervaloContador = null;
+
+
+
+  // ==========================================================
+  // COMUNICACIÓN CON SERVIDOR
+  // ==========================================================
+
+
+  async function llamarAPI(
+    api,
+    parametros,
+    manejarResultado
+  ) {
+
+
+    try {
+
+
+      const respuesta =
+        await fetch(
+
+          URL_WORKER,
+
+          {
+
+            method: "POST",
+
+            headers: {
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+              api: api,
+
+              ...parametros
+
+            })
+
+          }
+
         );
 
 
-      } catch (error) {
+      if (!respuesta.ok) {
 
-        console.error(
-          "Error:",
-          error
-        );
-
-
-        mostrarError(
-          "❌ No se pudo comunicar con el servidor."
+        throw new Error(
+          "HTTP " + respuesta.status
         );
 
       }
 
+
+      const resultado =
+        await respuesta.json();
+
+
+      manejarResultado(resultado);
+
+
+    }
+
+    catch (error) {
+
+
+      console.error(
+        "Error de comunicación:",
+        error
+      );
+
+
+      manejarResultado({
+
+        exito: false,
+
+        mensaje:
+          "❌ No se pudo comunicar con el servidor."
+
+      });
+
+    }
+
+  }
+
+
+
+  // ==========================================================
+  // LOGIN GENERAL
+  // ==========================================================
+
+
+  function iniciarSesion() {
+
+
+    if (solicitudEnCurso) {
+
+      return;
+
     }
 
 
-    // =====================================================
-    // GENERAR QR TEMPORAL
-    // =====================================================
+    const usuario =
+      document
+        .getElementById("usuario")
+        .value
+        .trim();
 
-    async function generarQRTemporal() {
 
-      try {
+    const contrasena =
+      document
+        .getElementById("contrasena")
+        .value
+        .trim();
 
-        elementoTemporizador.textContent =
+
+    if (!usuario || !contrasena) {
+
+
+      mostrarMensaje(
+
+        "mensajeLogin",
+
+        "Ingresa usuario y contraseña.",
+
+        "advertencia"
+
+      );
+
+
+      return;
+
+    }
+
+
+    solicitudEnCurso = true;
+
+
+    mostrarMensaje(
+
+      "mensajeLogin",
+
+      "Verificando acceso...",
+
+      "info"
+
+    );
+
+
+    llamarAPI(
+
+      "loginGeneral",
+
+      {
+
+        usuario:
+          usuario,
+
+        contrasena:
+          contrasena
+
+      },
+
+
+      function(resultado) {
+
+
+        solicitudEnCurso = false;
+
+
+        if (!resultado.exito) {
+
+
+          mostrarMensaje(
+
+            "mensajeLogin",
+
+            resultado.mensaje ||
+              "No se pudo iniciar sesión.",
+
+            "error"
+
+          );
+
+
+          return;
+
+        }
+
+
+
+        // ==================================================
+        // ESTUDIANTE
+        // ==================================================
+
+
+        if (
+          resultado.tipo ===
+          "ESTUDIANTE"
+        ) {
+
+
+          iniciarPantallaEstudiante(
+            resultado
+          );
+
+
+          return;
+
+        }
+
+
+
+        // ==================================================
+        // ESCÁNER
+        // ==================================================
+
+
+        if (
+          resultado.tipo ===
+          "ESCANER"
+        ) {
+
+
+          iniciarPantallaEscaner(
+            resultado
+          );
+
+
+          return;
+
+        }
+
+
+        mostrarMensaje(
+
+          "mensajeLogin",
+
+          "❌ Tipo de usuario desconocido.",
+
+          "error"
+
+        );
+
+      }
+
+    );
+
+  }
+
+
+
+  // ==========================================================
+  // INICIAR PANTALLA ESTUDIANTE
+  // ==========================================================
+
+
+  function iniciarPantallaEstudiante(
+    resultado
+  ) {
+
+
+    tipoUsuario =
+      "ESTUDIANTE";
+
+
+    codigoEstudiante =
+      resultado.codigo;
+
+
+    document
+      .getElementById("nombreEstudiante")
+      .textContent =
+        resultado.nombre;
+
+
+    document
+      .getElementById("foroEstudiante")
+      .textContent =
+        "Foro: " +
+        resultado.foro;
+
+
+    document
+      .getElementById("pantallaLogin")
+      .classList
+      .add("oculto");
+
+
+    document
+      .getElementById("pantallaEstudiante")
+      .classList
+      .remove("oculto");
+
+
+    generarQRTemporal();
+
+
+    intervaloQR =
+      setInterval(
+
+        generarQRTemporal,
+
+        DURACION_QR * 1000
+
+      );
+
+  }
+
+
+
+  // ==========================================================
+  // GENERAR QR TEMPORAL
+  // ==========================================================
+
+
+  async function generarQRTemporal() {
+
+
+    if (!codigoEstudiante) {
+
+      return;
+
+    }
+
+
+    try {
+
+
+      document
+        .getElementById("temporizador")
+        .textContent =
           "Generando nuevo código...";
 
 
-        const respuesta =
-          await fetch(
-            URL_WORKER,
-            {
-              method: "POST",
+      const respuesta =
+        await fetch(
 
-              headers: {
-                "Content-Type": "application/json"
-              },
+          URL_WORKER,
 
-              body: JSON.stringify({
+          {
 
-                api:
-                  "generarQRTemporal",
+            method: "POST",
 
-                codigoEstudiante:
-                  codigoEstudiante
+            headers: {
 
-              })
+              "Content-Type":
+                "application/json"
 
-            }
-          );
+            },
 
+            body: JSON.stringify({
 
-        if (!respuesta.ok) {
+              api:
+                "generarQRTemporal",
 
-          throw new Error(
-            "HTTP " + respuesta.status
-          );
+              codigoEstudiante:
+                codigoEstudiante
 
-        }
+            })
 
+          }
 
-        const resultado =
-          await respuesta.json();
-
-
-        if (!resultado.exito) {
-
-          mostrarError(
-            resultado.mensaje ||
-            "❌ No se pudo generar el QR."
-          );
-
-          return;
-        }
-
-
-        // Mostrar el nuevo QR
-        mostrarQR(
-          resultado.token
         );
 
 
-        // Reiniciar contador
-        iniciarTemporizador(
-          resultado.segundos ||
-          DURACION_QR
-        );
+      if (!respuesta.ok) {
 
-
-      } catch (error) {
-
-        console.error(
-          "Error:",
-          error
-        );
-
-
-        mostrarError(
-          "❌ No se pudo generar el código."
+        throw new Error(
+          "HTTP " +
+          respuesta.status
         );
 
       }
 
+
+      const resultado =
+        await respuesta.json();
+
+
+      if (!resultado.exito) {
+
+
+        mostrarMensaje(
+
+          "mensajeResultado",
+
+          resultado.mensaje ||
+            "No se pudo generar el QR.",
+
+          "error"
+
+        );
+
+
+        return;
+
+      }
+
+
+      mostrarQR(
+        resultado.token
+      );
+
+
+      iniciarTemporizador(
+
+        resultado.segundos ||
+          DURACION_QR
+
+      );
+
+
     }
 
-
-    // =====================================================
-    // MOSTRAR QR
-    // =====================================================
-
-    function mostrarQR(token) {
-
-      elementoQR.innerHTML = "";
+    catch (error) {
 
 
-      new QRCode(
+      console.error(
+        "Error QR:",
+        error
+      );
 
-        elementoQR,
 
-        {
-          text: token,
+      document
+        .getElementById("temporizador")
+        .textContent =
+          "❌ No se pudo generar el QR.";
 
-          width: 280,
+    }
 
-          height: 280,
+  }
 
-          correctLevel:
-            QRCode.CorrectLevel.H
-        }
 
+
+  // ==========================================================
+  // MOSTRAR QR
+  // ==========================================================
+
+
+  function mostrarQR(token) {
+
+
+    const elementoQR =
+      document.getElementById(
+        "qrcode"
+      );
+
+
+    elementoQR.innerHTML =
+      "";
+
+
+    new QRCode(
+
+      elementoQR,
+
+      {
+
+        text:
+          token,
+
+        width:
+          280,
+
+        height:
+          280,
+
+        correctLevel:
+          QRCode.CorrectLevel.H
+
+      }
+
+    );
+
+  }
+
+
+
+  // ==========================================================
+  // TEMPORIZADOR QR
+  // ==========================================================
+
+
+  function iniciarTemporizador(
+    segundos
+  ) {
+
+
+    if (intervaloContador) {
+
+      clearInterval(
+        intervaloContador
       );
 
     }
 
 
-    // =====================================================
-    // CONTADOR
-    // =====================================================
-
-    function iniciarTemporizador(segundos) {
-
-      let restante =
-        segundos;
+    let restante =
+      segundos;
 
 
-      elementoTemporizador.textContent =
-        "⏱️ Código válido durante: " +
-        restante +
-        " segundos";
+    const elemento =
+      document.getElementById(
+        "temporizador"
+      );
 
 
-      const intervalo =
-        setInterval(
-
-          function() {
-
-            restante--;
+    elemento.textContent =
+      "⏱️ Código válido durante: " +
+      restante +
+      " segundos";
 
 
-            if (restante <= 0) {
+    intervaloContador =
+      setInterval(
 
-              clearInterval(
-                intervalo
-              );
-
-
-              elementoTemporizador.textContent =
-                "🔄 Generando nuevo código...";
+        function() {
 
 
-              return;
-
-            }
+          restante--;
 
 
-            elementoTemporizador.textContent =
-              "⏱️ Código válido durante: " +
-              restante +
-              " segundos";
+          if (restante <= 0) {
 
-          },
 
-          1000
+            clearInterval(
+              intervaloContador
+            );
+
+
+            elemento.textContent =
+              "🔄 Generando nuevo código...";
+
+
+            return;
+
+          }
+
+
+          elemento.textContent =
+            "⏱️ Código válido durante: " +
+            restante +
+            " segundos";
+
+
+        },
+
+        1000
+
+      );
+
+  }
+
+
+
+  // ==========================================================
+  // INICIAR PANTALLA ESCÁNER
+  // ==========================================================
+
+
+  function iniciarPantallaEscaner(
+    resultado
+  ) {
+
+
+    tipoUsuario =
+      "ESCANER";
+
+
+    tokenSesion =
+      resultado.token;
+
+
+    idEscanerSesion =
+      resultado.escaner;
+
+
+    document
+      .getElementById("nombreEscaner")
+      .textContent =
+        resultado.nombre;
+
+
+    document
+      .getElementById("foroEscaner")
+      .textContent =
+        resultado.foro;
+
+
+    document
+      .getElementById("pantallaLogin")
+      .classList
+      .add("oculto");
+
+
+    document
+      .getElementById("pantallaEscaner")
+      .classList
+      .remove("oculto");
+
+
+    mostrarMensaje(
+
+      "mensajeResultado",
+
+      "✅ Acceso autorizado. Ya puedes escanear.",
+
+      "ok"
+
+    );
+
+  }
+
+
+
+  // ==========================================================
+  // CÁMARA
+  // ==========================================================
+
+
+  function iniciarCamara() {
+
+
+    if (
+      !tokenSesion ||
+      !idEscanerSesion
+    ) {
+
+
+      mostrarMensaje(
+
+        "mensajeResultado",
+
+        "❌ La sesión no es válida.",
+
+        "error"
+
+      );
+
+
+      return;
+
+    }
+
+
+    document
+      .getElementById("zonaCamara")
+      .classList
+      .remove("oculto");
+
+
+    document
+      .getElementById("btnEscanear")
+      .classList
+      .add("oculto");
+
+
+    mostrarMensaje(
+
+      "mensajeResultado",
+
+      "Apunta la cámara al código QR.",
+
+      "info"
+
+    );
+
+
+    lectorQR =
+      new Html5Qrcode(
+        "reader"
+      );
+
+
+    camaraActiva =
+      true;
+
+
+    lectorQR.start(
+
+      {
+        facingMode:
+          "environment"
+      },
+
+      {
+
+        fps: 10,
+
+        qrbox: {
+
+          width: 250,
+
+          height: 250
+
+        }
+
+      },
+
+
+      function(codigoQR) {
+
+
+        detenerCamara();
+
+
+        procesarQR(
+          codigoQR
+        );
+
+
+      },
+
+
+      function(errorMessage) {
+
+        // Normal mientras busca el QR.
+
+      }
+
+    )
+
+
+    .catch(
+
+      function(error) {
+
+
+        console.error(
+          "Error cámara:",
+          error
+        );
+
+
+        camaraActiva =
+          false;
+
+
+        document
+          .getElementById("zonaCamara")
+          .classList
+          .add("oculto");
+
+
+        document
+          .getElementById("btnEscanear")
+          .classList
+          .remove("oculto");
+
+
+        mostrarMensaje(
+
+          "mensajeResultado",
+
+          "❌ No se pudo abrir la cámara. Verifica el permiso del navegador.",
+
+          "error"
 
         );
 
+      }
+
+    );
+
+  }
+
+
+
+  // ==========================================================
+  // PROCESAR QR TEMPORAL
+  // ==========================================================
+
+
+  function procesarQR(
+    codigoQR
+  ) {
+
+
+    if (
+
+      !tokenSesion ||
+
+      !idEscanerSesion ||
+
+      solicitudEnCurso
+
+    ) {
+
+      return;
+
     }
 
 
-    // =====================================================
-    // ERROR
-    // =====================================================
+    solicitudEnCurso =
+      true;
 
-    function mostrarError(mensaje) {
 
-      elementoNombre.textContent = "";
+    document
+      .getElementById(
+        "estadoEscaner"
+      )
+      .textContent =
+        "Registrando asistencia...";
 
-      elementoForo.textContent = "";
 
-      elementoTemporizador.textContent = "";
+    mostrarMensaje(
 
-      elementoQR.innerHTML = `
-        <div class="error">
-          ${mensaje}
-        </div>
-      `;
+      "mensajeResultado",
+
+      "Procesando código QR...",
+
+      "info"
+
+    );
+
+
+    llamarAPI(
+
+      "qrTemporal",
+
+      {
+
+        tokenQR:
+          String(
+            codigoQR
+          ).trim(),
+
+        idEscaner:
+          idEscanerSesion
+
+      },
+
+
+      function(resultado) {
+
+
+        solicitudEnCurso =
+          false;
+
+
+        if (resultado.exito) {
+
+
+          mostrarMensaje(
+
+            "mensajeResultado",
+
+            "✅ ASISTENCIA REGISTRADA<br>" +
+            (
+              resultado.estudiante ||
+              ""
+            ),
+
+            "ok"
+
+          );
+
+
+        }
+
+        else {
+
+
+          const tipo =
+
+            resultado.mensaje &&
+
+            resultado.mensaje.includes(
+              "YA REGISTRADO"
+            )
+
+              ? "advertencia"
+
+              : "error";
+
+
+          mostrarMensaje(
+
+            "mensajeResultado",
+
+            resultado.mensaje ||
+              "No se pudo registrar.",
+
+            tipo
+
+          );
+
+        }
+
+
+        document
+          .getElementById(
+            "estadoEscaner"
+          )
+          .textContent =
+            "Listo para el siguiente estudiante.";
+
+      }
+
+    );
+
+  }
+
+
+
+  // ==========================================================
+  // DETENER CÁMARA
+  // ==========================================================
+
+
+  function detenerCamara() {
+
+
+    if (
+      lectorQR &&
+      camaraActiva
+    ) {
+
+
+      lectorQR
+        .stop()
+
+        .then(
+
+          function() {
+
+
+            lectorQR.clear();
+
+
+            lectorQR =
+              null;
+
+
+            camaraActiva =
+              false;
+
+          }
+
+        )
+
+        .catch(
+
+          function() {
+
+
+            lectorQR =
+              null;
+
+
+            camaraActiva =
+              false;
+
+          }
+
+        );
+
 
     }
 
-  </script>
+    else {
+
+
+      camaraActiva =
+        false;
+
+    }
+
+
+    document
+      .getElementById(
+        "zonaCamara"
+      )
+      .classList
+      .add("oculto");
+
+
+    document
+      .getElementById(
+        "btnEscanear"
+      )
+      .classList
+      .remove("oculto");
+
+  }
+
+
+
+  // ==========================================================
+  // CERRAR SESIÓN ESTUDIANTE
+  // ==========================================================
+
+
+  function cerrarSesionEstudiante() {
+
+
+    if (intervaloQR) {
+
+      clearInterval(
+        intervaloQR
+      );
+
+      intervaloQR =
+        null;
+
+    }
+
+
+    if (intervaloContador) {
+
+      clearInterval(
+        intervaloContador
+      );
+
+      intervaloContador =
+        null;
+
+    }
+
+
+    codigoEstudiante =
+      null;
+
+
+    tipoUsuario =
+      null;
+
+
+    document
+      .getElementById(
+        "qrcode"
+      )
+      .innerHTML =
+        "";
+
+
+    document
+      .getElementById(
+        "pantallaEstudiante"
+      )
+      .classList
+      .add("oculto");
+
+
+    document
+      .getElementById(
+        "pantallaLogin"
+      )
+      .classList
+      .remove("oculto");
+
+
+    document
+      .getElementById(
+        "usuario"
+      )
+      .value =
+        "";
+
+
+    document
+      .getElementById(
+        "contrasena"
+      )
+      .value =
+        "";
+
+
+    document
+      .getElementById(
+        "mensajeLogin"
+      )
+      .innerHTML =
+        "";
+
+  }
+
+
+
+  // ==========================================================
+  // CERRAR SESIÓN ESCÁNER
+  // ==========================================================
+
+
+  function cerrarSesionEscaner() {
+
+
+    detenerCamara();
+
+
+    if (!tokenSesion) {
+
+      volverAlLogin();
+
+      return;
+
+    }
+
+
+    const token =
+      tokenSesion;
+
+
+    llamarAPI(
+
+      "cerrar",
+
+      {
+
+        token:
+          token
+
+      },
+
+
+      function(resultado) {
+
+
+        tokenSesion =
+          null;
+
+
+        idEscanerSesion =
+          null;
+
+
+        tipoUsuario =
+          null;
+
+
+        volverAlLogin();
+
+      }
+
+    );
+
+  }
+
+
+
+  // ==========================================================
+  // VOLVER AL LOGIN
+  // ==========================================================
+
+
+  function volverAlLogin() {
+
+
+    document
+      .getElementById(
+        "pantallaEscaner"
+      )
+      .classList
+      .add("oculto");
+
+
+    document
+      .getElementById(
+        "pantallaEstudiante"
+      )
+      .classList
+      .add("oculto");
+
+
+    document
+      .getElementById(
+        "pantallaLogin"
+      )
+      .classList
+      .remove("oculto");
+
+
+    document
+      .getElementById(
+        "usuario"
+      )
+      .value =
+        "";
+
+
+    document
+      .getElementById(
+        "contrasena"
+      )
+      .value =
+        "";
+
+
+    document
+      .getElementById(
+        "mensajeLogin"
+      )
+      .innerHTML =
+        "";
+
+  }
+
+
+
+  // ==========================================================
+  // MENSAJES
+  // ==========================================================
+
+
+  function mostrarMensaje(
+    id,
+    texto,
+    tipo
+  ) {
+
+
+    const elemento =
+      document.getElementById(
+        id
+      );
+
+
+    if (!elemento) {
+
+      return;
+
+    }
+
+
+    elemento.innerHTML =
+
+      '<div class="mensaje ' +
+      tipo +
+      '">' +
+      texto +
+      '</div>';
+
+  }
+
+
+</script>
 
 </body>
 </html>
