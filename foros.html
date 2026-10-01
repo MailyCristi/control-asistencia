@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Gestión de Foros</title>
+
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+
+  margin: 0;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  background: #f4f6f9;
+
+  color: #222;
+
+}
+
+
+/* =========================================
+   ENCABEZADO
+========================================= */
+
+header {
+
+  background: #1f4e78;
+
+  color: white;
+
+  padding: 18px 25px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+}
+
+
+header h1 {
+
+  margin: 0;
+
+  font-size: 22px;
+
+}
+
+
+.btn-volver {
+
+  background: white;
+
+  color: #1f4e78;
+
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+}
+
+
+/* =========================================
+   CONTENEDOR
+========================================= */
+
+.contenedor {
+
+  width: 95%;
+
+  max-width: 1200px;
+
+  margin: 25px auto;
+
+}
+
+
+.panel {
+
+  background: white;
+
+  border-radius: 10px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0,0,0,0.08);
+
+  margin-bottom: 20px;
+
+}
+
+
+/* =========================================
+   PANEL SUPERIOR
+========================================= */
+
+.panel-superior {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  flex-wrap: wrap;
+
+}
+
+
+.panel-superior h2 {
+
+  margin: 0;
+
+}
+
+
+.buscar {
+
+  width: 100%;
+
+  max-width: 400px;
+
+  padding: 11px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 6px;
+
+  font-size: 14px;
+
+}
+
+
+.btn {
+
+  border: none;
+
+  padding: 10px 15px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+}
+
+
+.btn-nuevo {
+
+  background: #198754;
+
+  color: white;
+
+}
+
+
+.btn-guardar {
+
+  background: #1f4e78;
+
+  color: white;
+
+}
+
+
+.btn-cancelar {
+
+  background: #6c757d;
+
+  color: white;
+
+}
+
+
+.btn-editar {
+
+  background: #ffc107;
+
+  color: #222;
+
+  padding: 7px 11px;
+
+  font-size: 12px;
+
+}
+
+
+/* =========================================
+   FORMULARIO
+========================================= */
+
+.formulario {
+
+  display: none;
+
+  margin-top: 20px;
+
+  border-top: 1px solid #ddd;
+
+  padding-top: 20px;
+
+}
+
+
+.formulario h3 {
+
+  margin-top: 0;
+
+}
+
+
+.campo {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+
+  max-width: 600px;
+
+}
+
+
+.campo label {
+
+  font-weight: bold;
+
+  font-size: 14px;
+
+}
+
+
+.campo input,
+.campo select {
+
+  padding: 11px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 6px;
+
+  font-size: 14px;
+
+}
+
+
+.acciones-formulario {
+
+  margin-top: 20px;
+
+  display: flex;
+
+  gap: 10px;
+
+}
+
+
+/* =========================================
+   TABLA
+========================================= */
+
+.tabla-contenedor {
+
+  overflow-x: auto;
+
+}
+
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 650px;
+
+}
+
+
+thead {
+
+  background: #1f4e78;
+
+  color: white;
+
+}
+
+
+th,
+td {
+
+  padding: 12px 10px;
+
+  border-bottom:
+    1px solid #ddd;
+
+  text-align: center;
+
+  font-size: 14px;
+
+}
+
+
+tbody tr:hover {
+
+  background: #f5f5f5;
+
+}
+
+
+.estado-activo {
+
+  color: #198754;
+
+  font-weight: bold;
+
+}
+
+
+.estado-inactivo {
+
+  color: #dc3545;
+
+  font-weight: bold;
+
+}
+
+
+.sin-datos {
+
+  padding: 30px;
+
+  text-align: center;
+
+  color: #777;
+
+}
+
+
+.cargando {
+
+  padding: 30px;
+
+  text-align: center;
+
+  font-weight: bold;
+
+}
+
+
+/* =========================================
+   MENSAJES
+========================================= */
+
+.mensaje {
+
+  padding: 12px;
+
+  border-radius: 6px;
+
+  margin-bottom: 15px;
+
+  display: none;
+
+}
+
+
+.mensaje.info {
+
+  display: block;
+
+  background: #cff4fc;
+
+  color: #055160;
+
+}
+
+
+.mensaje.exito {
+
+  display: block;
+
+  background: #d1e7dd;
+
+  color: #0f5132;
+
+}
+
+
+.mensaje.error {
+
+  display: block;
+
+  background: #f8d7da;
+
+  color: #842029;
+
+}
+
+
+/* =========================================
+   MÓVIL
+========================================= */
+
+@media (max-width: 700px) {
+
+  header {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+  }
+
+
+  .btn-volver {
+
+    width: 100%;
+
+  }
+
+
+  .panel-superior {
+
+    align-items: stretch;
+
+  }
+
+
+  .buscar {
+
+    max-width: none;
+
+  }
+
+
+  .btn-nuevo {
+
+    width: 100%;
+
+  }
+
+
+  .campo {
+
+    max-width: none;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =======================================
+     ENCABEZADO
+======================================= -->
+
+<header>
+
+  <h1>
+    🏛️ Gestión de Foros
+  </h1>
+
+
+  <button
+    class="btn-volver"
+    onclick="volverAdmin()"
+  >
+    ← VOLVER AL PANEL
+  </button>
+
+</header>
+
+
+
+<div class="contenedor">
+
+
+  <!-- =====================================
+       PANEL PRINCIPAL
+  ====================================== -->
+
+  <div class="panel">
+
+
+    <div class="panel-superior">
+
+
+      <h2>
+        Foros registrados
+      </h2>
+
+
+      <input
+        type="text"
+        id="buscar"
+        class="buscar"
+        placeholder="🔎 Buscar foro..."
+        oninput="filtrarForos()"
+      >
+
+
+      <button
+        class="btn btn-nuevo"
+        onclick="mostrarFormularioNuevo()"
+      >
+        ➕ NUEVO FORO
+      </button>
+
+
+    </div>
+
+
+
+    <!-- ===================================
+         FORMULARIO
+    ==================================== -->
+
+    <div
+      id="formulario"
+      class="formulario"
+    >
+
+
+      <h3 id="tituloFormulario">
+        ➕ Registrar nuevo foro
+      </h3>
+
+
+      <div class="campo">
+
+
+        <label for="nombreForo">
+
+          Nombre del foro *
+
+        </label>
+
+
+        <input
+          type="text"
+          id="nombreForo"
+          placeholder="Ej. OMS"
+        >
+
+
+      </div>
+
+
+
+      <!-- Estado -->
+
+      <div
+        class="campo"
+        id="campoEstado"
+        style="
+          margin-top:15px;
+          display:none;
+        "
+      >
+
+
+        <label for="activo">
+
+          Estado
+
+        </label>
+
+
+        <select id="activo">
+
+          <option value="SI">
+            ACTIVO
+          </option>
+
+          <option value="NO">
+            INACTIVO
+          </option>
+
+        </select>
+
+
+      </div>
+
+
+
+      <div class="acciones-formulario">
+
+
+        <button
+          id="btnGuardar"
+          class="btn btn-guardar"
+          onclick="guardarForo()"
+        >
+
+          💾 REGISTRAR FORO
+
+        </button>
+
+
+        <button
+          class="btn btn-cancelar"
+          onclick="cancelarFormulario()"
+        >
+
+          ✖ CANCELAR
+
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  <!-- =====================================
+       MENSAJES
+  ====================================== -->
+
+  <div
+    id="mensaje"
+    class="mensaje"
+  ></div>
+
+
+
+  <!-- =====================================
+       TABLA
+  ====================================== -->
+
+  <div class="panel">
+
+
+    <div class="tabla-contenedor">
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>
+              ID FORO
+            </th>
+
+            <th>
+              NOMBRE DEL FORO
+            </th>
+
+            <th>
+              ESTADO
+            </th>
+
+            <th>
+              ACCIONES
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody
+          id="tablaForos"
+        >
+
+          <tr>
+
+            <td
+              colspan="4"
+              class="cargando"
+            >
+
+              ⏳ Cargando foros...
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================
+   CONFIGURACIÓN
+========================================= */
+
+const API_URL =
+  "https://quiet-lab-973a.cristimi1232.workers.dev/";
+
+
+let tokenAdmin =
+  sessionStorage.getItem(
+    "tokenAdmin"
+  );
+
+
+let foros = [];
+
+
+/*
+ * Guarda el foro que
+ * estamos editando.
+ */
+
+let foroEditando = null;
+
+
+
+/* =========================================
+   LLAMAR API
+========================================= */
+
+async function llamarAPI(
+  api,
+  datos = {}
+) {
+
+
+  const respuesta =
+    await fetch(
+      API_URL,
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "Content-Type":
+            "application/json"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            api:
+              api,
+
+            ...datos
+
+          })
+
+      }
+    );
+
+
+  const texto =
+    await respuesta.text();
+
+
+  let resultado;
+
+
+  try {
+
+    resultado =
+      JSON.parse(texto);
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Respuesta no válida:",
+      texto
+    );
+
+    throw new Error(
+      "El servidor devolvió una respuesta no válida."
+    );
+
+  }
+
+
+  return resultado;
+
+}
+
+
+
+/* =========================================
+   VERIFICAR SESIÓN
+========================================= */
+
+function verificarSesion() {
+
+
+  tokenAdmin =
+    sessionStorage.getItem(
+      "tokenAdmin"
+    );
+
+
+  if (!tokenAdmin) {
+
+    window.location.href =
+      "admin.html";
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+
+/* =========================================
+   MOSTRAR MENSAJE
+========================================= */
+
+function mostrarMensaje(
+  texto,
+  tipo = "info"
+) {
+
+
+  const elemento =
+    document.getElementById(
+      "mensaje"
+    );
+
+
+  elemento.textContent =
+    texto;
+
+
+  elemento.className =
+    "mensaje " + tipo;
+
+}
+
+
+
+/* =========================================
+   CARGAR FOROS
+========================================= */
+
+async function cargarForos() {
+
+
+  if (!verificarSesion()) {
+    return;
+  }
+
+
+  const tabla =
+    document.getElementById(
+      "tablaForos"
+    );
+
+
+  tabla.innerHTML = `
+
+    <tr>
+
+      <td
+        colspan="4"
+        class="cargando"
+      >
+
+        ⏳ Cargando foros...
+
+      </td>
+
+    </tr>
+
+  `;
+
+
+  try {
+
+
+    const resultado =
+      await llamarAPI(
+        "listarForos",
+        {
+
+          token:
+            tokenAdmin
+
+        }
+      );
+
+
+
+    if (!resultado.exito) {
+
+
+      tabla.innerHTML = `
+
+        <tr>
+
+          <td
+            colspan="4"
+            class="sin-datos"
+          >
+
+            ❌ ${
+              resultado.mensaje ||
+              "No se pudieron cargar los foros."
+            }
+
+          </td>
+
+        </tr>
+
+      `;
+
+
+      return;
+
+    }
+
+
+
+    foros =
+      resultado.foros || [];
+
+
+    mostrarForos(
+      foros
+    );
+
+
+  }
+
+  catch (error) {
+
+
+    console.error(error);
+
+
+    tabla.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="4"
+          class="sin-datos"
+        >
+
+          ❌ No se pudo comunicar con el servidor.
+
+        </td>
+
+      </tr>
+
+    `;
+
+  }
+
+}
+
+
+
+/* =========================================
+   MOSTRAR FOROS
+========================================= */
+
+function mostrarForos(
+  lista
+) {
+
+
+  const tabla =
+    document.getElementById(
+      "tablaForos"
+    );
+
+
+  if (
+    !lista ||
+    lista.length === 0
+  ) {
+
+
+    tabla.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="4"
+          class="sin-datos"
+        >
+
+          No existen foros registrados.
+
+        </td>
+
+      </tr>
+
+    `;
+
+
+    return;
+
+  }
+
+
+
+  tabla.innerHTML =
+
+    lista.map(
+      function(foro) {
+
+
+        const estado =
+          String(
+            foro.activo || ""
+          )
+          .trim()
+          .toUpperCase();
+
+
+
+        const claseEstado =
+          estado === "SI"
+            ? "estado-activo"
+            : "estado-inactivo";
+
+
+
+        const textoEstado =
+          estado === "SI"
+            ? "ACTIVO"
+            : "INACTIVO";
+
+
+
+        return `
+
+          <tr>
+
+
+            <td>
+
+              ${escapeHTML(
+                foro.idForo
+              )}
+
+            </td>
+
+
+            <td>
+
+              ${escapeHTML(
+                foro.nombreForo
+              )}
+
+            </td>
+
+
+            <td
+              class="${claseEstado}"
+            >
+
+              ${textoEstado}
+
+            </td>
+
+
+            <td>
+
+
+              <button
+                class="btn btn-editar"
+                onclick="
+                  editarForoWeb(
+                    '${escapeJS(
+                      foro.idForo
+                    )}'
+                  )
+                "
+              >
+
+                ✏️ EDITAR
+
+              </button>
+
+
+            </td>
+
+
+          </tr>
+
+        `;
+
+      }
+    )
+    .join("");
+
+}
+
+
+
+/* =========================================
+   BUSCAR FOROS
+========================================= */
+
+function filtrarForos() {
+
+
+  const texto =
+    document
+      .getElementById(
+        "buscar"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
+
+
+  if (!texto) {
+
+
+    mostrarForos(
+      foros
+    );
+
+
+    return;
+
+  }
+
+
+
+  const filtrados =
+    foros.filter(
+      function(foro) {
+
+
+        const contenido = [
+
+          foro.idForo,
+
+          foro.nombreForo,
+
+          foro.activo
+
+        ]
+        .join(" ")
+        .toLowerCase();
+
+
+
+        return contenido.includes(
+          texto
+        );
+
+      }
+    );
+
+
+
+  mostrarForos(
+    filtrados
+  );
+
+}
+
+
+
+/* =========================================
+   NUEVO FORO
+========================================= */
+
+function mostrarFormularioNuevo() {
+
+
+  foroEditando =
+    null;
+
+
+
+  document.getElementById(
+    "tituloFormulario"
+  ).textContent =
+    "➕ Registrar nuevo foro";
+
+
+
+  document.getElementById(
+    "btnGuardar"
+  ).textContent =
+    "💾 REGISTRAR FORO";
+
+
+
+  document.getElementById(
+    "campoEstado"
+  ).style.display =
+    "none";
+
+
+
+  document.getElementById(
+    "nombreForo"
+  ).value =
+    "";
+
+
+
+  document.getElementById(
+    "activo"
+  ).value =
+    "SI";
+
+
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "block";
+
+
+
+  window.scrollTo({
+
+    top: 0,
+
+    behavior: "smooth"
+
+  });
+
+}
+
+
+
+/* =========================================
+   EDITAR FORO
+========================================= */
+
+function editarForoWeb(
+  idForo
+) {
+
+
+  const foro =
+    foros.find(
+      function(item) {
+
+        return String(
+          item.idForo
+        ) === String(
+          idForo
+        );
+
+      }
+    );
+
+
+
+  if (!foro) {
+
+
+    alert(
+      "❌ No se encontró el foro."
+    );
+
+
+    return;
+
+  }
+
+
+
+  foroEditando =
+    foro;
+
+
+
+  document.getElementById(
+    "tituloFormulario"
+  ).textContent =
+    "✏️ Editar foro";
+
+
+
+  document.getElementById(
+    "btnGuardar"
+  ).textContent =
+    "💾 GUARDAR CAMBIOS";
+
+
+
+  document.getElementById(
+    "campoEstado"
+  ).style.display =
+    "flex";
+
+
+
+  document.getElementById(
+    "nombreForo"
+  ).value =
+    foro.nombreForo || "";
+
+
+
+  document.getElementById(
+    "activo"
+  ).value =
+    String(
+      foro.activo || "SI"
+    )
+    .trim()
+    .toUpperCase();
+
+
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "block";
+
+
+
+  window.scrollTo({
+
+    top: 0,
+
+    behavior: "smooth"
+
+  });
+
+}
+
+
+
+/* =========================================
+   GUARDAR FORO
+========================================= */
+
+async function guardarForo() {
+
+
+  if (!verificarSesion()) {
+    return;
+  }
+
+
+
+  const nombreForo =
+    document.getElementById(
+      "nombreForo"
+    )
+    .value
+    .trim();
+
+
+
+  const activo =
+    document.getElementById(
+      "activo"
+    ).value;
+
+
+
+  if (!nombreForo) {
+
+
+    alert(
+      "❌ El nombre del foro es obligatorio."
+    );
+
+
+    return;
+
+  }
+
+
+
+  const boton =
+    document.getElementById(
+      "btnGuardar"
+    );
+
+
+  boton.disabled =
+    true;
+
+
+
+  try {
+
+
+    let resultado;
+
+
+
+    /* =====================================
+       EDITAR
+    ====================================== */
+
+    if (foroEditando) {
+
+
+      mostrarMensaje(
+        "⏳ Guardando cambios...",
+        "info"
+      );
+
+
+
+      resultado =
+        await llamarAPI(
+          "editarForo",
+          {
+
+            token:
+              tokenAdmin,
+
+            idForo:
+              foroEditando.idForo,
+
+            nombreForo:
+              nombreForo,
+
+            activo:
+              activo
+
+          }
+        );
+
+    }
+
+
+
+    /* =====================================
+       NUEVO
+    ====================================== */
+
+    else {
+
+
+      mostrarMensaje(
+        "⏳ Registrando foro...",
+        "info"
+      );
+
+
+
+      resultado =
+        await llamarAPI(
+          "registrarForo",
+          {
+
+            token:
+              tokenAdmin,
+
+            nombreForo:
+              nombreForo
+
+          }
+        );
+
+    }
+
+
+
+    /* =====================================
+       RESULTADO
+    ====================================== */
+
+    if (!resultado.exito) {
+
+
+      mostrarMensaje(
+        resultado.mensaje ||
+        "❌ No se pudo guardar el foro.",
+        "error"
+      );
+
+
+      return;
+
+    }
+
+
+
+    mostrarMensaje(
+      resultado.mensaje ||
+      "✅ Operación realizada correctamente.",
+      "exito"
+    );
+
+
+
+    cancelarFormulario();
+
+
+
+    await cargarForos();
+
+
+  }
+
+  catch (error) {
+
+
+    console.error(error);
+
+
+    mostrarMensaje(
+      "❌ No se pudo comunicar con el servidor.",
+      "error"
+    );
+
+  }
+
+  finally {
+
+
+    boton.disabled =
+      false;
+
+  }
+
+}
+
+
+
+/* =========================================
+   CANCELAR
+========================================= */
+
+function cancelarFormulario() {
+
+
+  foroEditando =
+    null;
+
+
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "none";
+
+
+
+  document.getElementById(
+    "nombreForo"
+  ).value =
+    "";
+
+
+
+  document.getElementById(
+    "activo"
+  ).value =
+    "SI";
+
+
+
+  document.getElementById(
+    "tituloFormulario"
+  ).textContent =
+    "➕ Registrar nuevo foro";
+
+
+
+  document.getElementById(
+    "btnGuardar"
+  ).textContent =
+    "💾 REGISTRAR FORO";
+
+
+
+  document.getElementById(
+    "campoEstado"
+  ).style.display =
+    "none";
+
+}
+
+
+
+/* =========================================
+   ESCAPAR HTML
+========================================= */
+
+function escapeHTML(
+  valor
+) {
+
+
+  return String(
+    valor ?? ""
+  )
+
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+
+  .replace(
+    /</g,
+    "&lt;"
+  )
+
+  .replace(
+    />/g,
+    "&gt;"
+  )
+
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+
+/* =========================================
+   ESCAPAR JAVASCRIPT
+========================================= */
+
+function escapeJS(
+  valor
+) {
+
+
+  return String(
+    valor ?? ""
+  )
+
+  .replace(
+    /\\/g,
+    "\\\\"
+  )
+
+  .replace(
+    /'/g,
+    "\\'"
+  );
+
+}
+
+
+
+/* =========================================
+   VOLVER AL PANEL
+========================================= */
+
+function volverAdmin() {
+
+
+  window.location.href =
+    "admin.html";
+
+}
+
+
+
+/* =========================================
+   INICIO
+========================================= */
+
+verificarSesion();
+
+cargarForos();
+
+</script>
+
+</body>
+
+</html>
