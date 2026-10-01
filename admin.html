@@ -302,7 +302,8 @@
       "https://quiet-lab-973a.cristimi1232.workers.dev";
 
 
-    let tokenAdmin = null;
+    let tokenAdmin =
+    sessionStorage.getItem("tokenAdmin");
 
     function volverAlInicio() {
       window.location.href = "index.html";
@@ -415,6 +416,8 @@
 
       tokenAdmin = null;
 
+      sessionStorage.removeItem("tokenAdmin");
+
       document.getElementById("panel").style.display =
         "none";
 
@@ -426,6 +429,27 @@
 
     }
 
+    function verificarSesionGuardada() {
+
+      if (tokenAdmin) {
+    
+        document.getElementById("login").style.display =
+          "none";
+    
+        document.getElementById("panel").style.display =
+          "block";
+    
+      } else {
+    
+        document.getElementById("login").style.display =
+          "block";
+    
+        document.getElementById("panel").style.display =
+          "none";
+    
+      }
+    
+    }
 
     function proximamente() {
 
@@ -454,6 +478,8 @@
         }
 
       });
+
+    verificarSesionGuardada();
 
   </script>
 
