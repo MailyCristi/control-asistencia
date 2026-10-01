@@ -1,553 +1,295 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>
-    Estudiantes - Control de Asistencia
-  </title>
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-
-      margin: 0;
-
-      font-family:
-        Arial,
-        sans-serif;
-
-      background: #f1f5f9;
-
-      color: #1e293b;
-
-    }
-
-
-    .contenedor {
-
-      width: 95%;
-
-      max-width: 1200px;
-
-      margin: 30px auto;
-
-    }
-
-
-    .tarjeta {
-
-      background: white;
-
-      border-radius: 18px;
-
-      padding: 25px;
-
-      box-shadow:
-        0 10px 30px
-        rgba(0,0,0,0.08);
-
-    }
-
-
-    .cabecera {
-
-      display: flex;
-
-      justify-content:
-        space-between;
-
-      align-items: center;
-
-      gap: 15px;
-
-      margin-bottom: 25px;
-
-    }
-
-
-    h1 {
-
-      margin: 0;
-
-      color: #1e3a8a;
-
-    }
-
-
-    .subtitulo {
-
-      color: #64748b;
-
-      margin: 5px 0 0;
-
-    }
-
-
-    button {
-
-      border: none;
-
-      border-radius: 9px;
-
-      padding: 11px 16px;
-
-      font-weight: bold;
-
-      cursor: pointer;
-
-    }
-
-
-    button:disabled {
-
-      opacity: 0.6;
-
-      cursor: not-allowed;
-
-    }
-
-
-    .btn-volver {
-
-      background: #64748b;
-
-      color: white;
-
-    }
-
-
-    .btn-nuevo {
-
-      background: #16a34a;
-
-      color: white;
-
-    }
-
-
-    .barra {
-
-      display: flex;
-
-      gap: 10px;
-
-      margin-bottom: 20px;
-
-    }
-
-
-    .buscador {
-
-      flex: 1;
-
-      padding: 13px;
-
-      border:
-        1px solid #cbd5e1;
-
-      border-radius: 9px;
-
-      font-size: 15px;
-
-    }
-
-
-    .tabla-contenedor {
-
-      overflow-x: auto;
-
-    }
-
-
-    table {
-
-      width: 100%;
-
-      border-collapse:
-        collapse;
-
-      min-width: 1100px;
-
-    }
-
-
-    th {
-
-      background: #1e3a8a;
-
-      color: white;
-
-      padding: 13px;
-
-      text-align: left;
-
-      white-space: nowrap;
-
-    }
-
-
-    td {
-
-      padding: 12px;
-
-      border-bottom:
-        1px solid #e2e8f0;
-
-      white-space: nowrap;
-
-    }
-
-
-    tr:hover {
-
-      background: #f8fafc;
-
-    }
-
-
-    .estado {
-
-      display: inline-block;
-
-      padding: 5px 9px;
-
-      border-radius: 20px;
-
-      font-size: 12px;
-
-      font-weight: bold;
-
-    }
-
-
-    .activo {
-
-      background: #dcfce7;
-
-      color: #166534;
-
-    }
-
-
-    .inactivo {
-
-      background: #fee2e2;
-
-      color: #991b1b;
-
-    }
-
-
-    .mensaje {
-
-      text-align: center;
-
-      padding: 20px;
-
-      color: #64748b;
-
-    }
-
-
-    .contador {
-
-      margin-bottom: 15px;
-
-      color: #475569;
-
-      font-weight: bold;
-
-    }
-
-
-    /* =====================================================
-       FORMULARIO
-    ====================================================== */
-
-    .formulario {
-
-      display: none;
-
-      margin-bottom: 25px;
-
-      padding: 20px;
-
-      background: #f8fafc;
-
-      border:
-        1px solid #e2e8f0;
-
-      border-radius: 14px;
-
-    }
-
-
-    .formulario h2 {
-
-      margin-top: 0;
-
-      color: #1e3a8a;
-
-    }
-
-
-    .grid-formulario {
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(2, 1fr);
-
-      gap: 15px;
-
-    }
-
-
-    .campo {
-
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 6px;
-
-    }
-
-
-    .campo label {
-
-      font-size: 14px;
-
-      font-weight: bold;
-
-      color: #475569;
-
-    }
-
-
-    .campo input,
-    .campo select {
-
-      width: 100%;
-
-      padding: 12px;
-
-      border:
-        1px solid #cbd5e1;
-
-      border-radius: 9px;
-
-      font-size: 15px;
-
-      background: white;
-
-    }
-
-
-    .campo-completo {
-
-      grid-column:
-        1 / -1;
-
-    }
-
-
-    .acciones-formulario {
-
-      display: flex;
-
-      gap: 10px;
-
-      margin-top: 20px;
-
-    }
-
-
-    .btn-guardar {
-
-      background: #16a34a;
-
-      color: white;
-
-      flex: 1;
-
-    }
-
-
-    .btn-cancelar {
-
-      background: #64748b;
-
-      color: white;
-
-      flex: 1;
-
-    }
-
-
-    .mensaje-formulario {
-
-      margin-top: 15px;
-
-      padding: 12px;
-
-      border-radius: 9px;
-
-      text-align: center;
-
-      display: none;
-
-    }
-
-
-    .mensaje-formulario.exito {
-
-      display: block;
-
-      background: #dcfce7;
-
-      color: #166534;
-
-    }
-
-
-    .mensaje-formulario.error {
-
-      display: block;
-
-      background: #fee2e2;
-
-      color: #991b1b;
-
-    }
-
-
-    @media (max-width: 600px) {
-
-      .cabecera {
-
-        flex-direction:
-          column;
-
-        align-items:
-          stretch;
-
-      }
-
-
-      .cabecera button {
-
-        width: 100%;
-
-      }
-
-
-      .barra {
-
-        flex-direction:
-          column;
-
-      }
-
-
-      .grid-formulario {
-
-        grid-template-columns:
-          1fr;
-
-      }
-
-
-      .campo-completo {
-
-        grid-column:
-          auto;
-
-      }
-
-
-      .acciones-formulario {
-
-        flex-direction:
-          column;
-
-      }
-
-    }
-
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Gestión de Estudiantes</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  color: #222;
+}
+
+header {
+  background: #1f4e78;
+  color: white;
+  padding: 18px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.btn-volver {
+  background: white;
+  color: #1f4e78;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.contenedor {
+  width: 95%;
+  max-width: 1400px;
+  margin: 25px auto;
+}
+
+.panel {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.panel-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.panel-superior h2 {
+  margin: 0;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.buscar {
+  max-width: 450px;
+}
+
+.btn {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-nuevo {
+  background: #198754;
+  color: white;
+}
+
+.btn-guardar {
+  background: #1f4e78;
+  color: white;
+}
+
+.btn-cancelar {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-editar {
+  background: #ffc107;
+  color: #222;
+  padding: 7px 10px;
+  font-size: 12px;
+}
+
+.formulario {
+  display: none;
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.formulario h3 {
+  margin-top: 0;
+}
+
+.grid-formulario {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.campo label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.acciones-formulario {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1100px;
+}
+
+thead {
+  background: #1f4e78;
+  color: white;
+}
+
+th,
+td {
+  padding: 11px 9px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+  font-size: 13px;
+}
+
+tbody tr:hover {
+  background: #f5f5f5;
+}
+
+.estado-activo {
+  color: #198754;
+  font-weight: bold;
+}
+
+.estado-inactivo {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.mensaje {
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: none;
+}
+
+.mensaje.info {
+  display: block;
+  background: #cff4fc;
+  color: #055160;
+}
+
+.mensaje.exito {
+  display: block;
+  background: #d1e7dd;
+  color: #0f5132;
+}
+
+.mensaje.error {
+  display: block;
+  background: #f8d7da;
+  color: #842029;
+}
+
+.sin-datos {
+  padding: 30px;
+  text-align: center;
+  color: #777;
+}
+
+.cargando {
+  padding: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+
+@media (max-width: 700px) {
+
+  .grid-formulario {
+    grid-template-columns: 1fr;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-volver {
+    width: 100%;
+  }
+
+  .panel-superior {
+    align-items: stretch;
+  }
+
+  .buscar {
+    max-width: none;
+  }
+
+  .btn-nuevo {
+    width: 100%;
+  }
+}
+
+</style>
 </head>
 
-
 <body>
+
+<header>
+
+  <h1>👨‍🎓 Gestión de Estudiantes</h1>
+
+  <button
+    class="btn-volver"
+    onclick="volverAdmin()"
+  >
+    ← VOLVER AL PANEL
+  </button>
+
+</header>
 
 
 <div class="contenedor">
 
+  <!-- PANEL PRINCIPAL -->
 
-  <div class="tarjeta">
+  <div class="panel">
 
+    <div class="panel-superior">
 
-    <!-- =====================================================
-         CABECERA
-    ====================================================== -->
-
-    <div class="cabecera">
-
-      <div>
-
-        <h1>
-          👥 Estudiantes
-        </h1>
-
-        <p class="subtitulo">
-          Administración de estudiantes
-        </p>
-
-      </div>
-
-
-      <button
-        class="btn-volver"
-        onclick="volverAdmin()"
-      >
-        ← VOLVER
-      </button>
-
-    </div>
-
-
-    <!-- =====================================================
-         BARRA
-    ====================================================== -->
-
-    <div class="barra">
+      <h2>Estudiantes registrados</h2>
 
       <input
         type="text"
-        id="buscador"
-        class="buscador"
-        placeholder="🔎 Buscar por nombre, CI, QR, país, foro o curso..."
+        id="buscar"
+        class="buscar"
+        placeholder="🔎 Buscar por nombre, CI, país, foro, curso..."
         oninput="filtrarEstudiantes()"
       >
 
-
       <button
-        class="btn-nuevo"
-        onclick="mostrarFormulario()"
+        class="btn btn-nuevo"
+        onclick="mostrarFormularioNuevo()"
       >
         ➕ NUEVO ESTUDIANTE
       </button>
@@ -555,33 +297,30 @@
     </div>
 
 
-    <!-- =====================================================
-         FORMULARIO
-    ====================================================== -->
+    <!-- FORMULARIO -->
 
     <div
       id="formulario"
       class="formulario"
     >
 
-      <h2>
+      <h3 id="tituloFormulario">
         ➕ Registrar nuevo estudiante
-      </h2>
+      </h3>
 
 
       <div class="grid-formulario">
 
-
         <div class="campo">
 
-          <label>
+          <label for="nuevoNombre">
             Nombre completo *
           </label>
 
           <input
             type="text"
             id="nuevoNombre"
-            placeholder="Ej.: JUAN PÉREZ"
+            placeholder="Ej. JUAN PÉREZ"
           >
 
         </div>
@@ -589,14 +328,14 @@
 
         <div class="campo">
 
-          <label>
+          <label for="nuevoCI">
             CI *
           </label>
 
           <input
             type="text"
             id="nuevoCI"
-            placeholder="Ej.: 123456"
+            placeholder="Ej. 123456"
           >
 
         </div>
@@ -604,14 +343,14 @@
 
         <div class="campo">
 
-          <label>
+          <label for="nuevoPais">
             País
           </label>
 
           <input
             type="text"
             id="nuevoPais"
-            placeholder="Ej.: BOLIVIA"
+            placeholder="Ej. BOLIVIA"
           >
 
         </div>
@@ -619,14 +358,14 @@
 
         <div class="campo">
 
-          <label>
+          <label for="nuevoForo">
             Foro *
           </label>
 
           <input
             type="text"
             id="nuevoForo"
-            placeholder="Ej.: OMS"
+            placeholder="Ej. OMS"
           >
 
         </div>
@@ -634,14 +373,14 @@
 
         <div class="campo">
 
-          <label>
+          <label for="nuevoCurso">
             Curso *
           </label>
 
           <input
             type="text"
             id="nuevoCurso"
-            placeholder="Ej.: 5TO A"
+            placeholder="Ej. 2A"
           >
 
         </div>
@@ -649,14 +388,14 @@
 
         <div class="campo">
 
-          <label>
+          <label for="nuevoUsuario">
             Usuario *
           </label>
 
           <input
             type="text"
             id="nuevoUsuario"
-            placeholder="Ej.: juan"
+            placeholder="Ej. alumno001"
           >
 
         </div>
@@ -664,7 +403,7 @@
 
         <div class="campo">
 
-          <label>
+          <label for="nuevoContrasena" id="labelContrasena">
             Contraseña *
           </label>
 
@@ -676,54 +415,44 @@
 
         </div>
 
-
       </div>
-
-
-      <div
-        id="mensajeFormulario"
-        class="mensaje-formulario"
-      ></div>
 
 
       <div class="acciones-formulario">
 
         <button
-          class="btn-guardar"
           id="btnGuardar"
-          onclick="registrarEstudiante()"
+          class="btn btn-guardar"
+          onclick="guardarEstudiante()"
         >
-          💾 GUARDAR ESTUDIANTE
+          💾 REGISTRAR ESTUDIANTE
         </button>
 
-
         <button
-          class="btn-cancelar"
-          onclick="ocultarFormulario()"
+          class="btn btn-cancelar"
+          onclick="cancelarFormulario()"
         >
-          CANCELAR
+          ✖ CANCELAR
         </button>
 
       </div>
 
     </div>
 
-
-    <!-- =====================================================
-         CONTADOR
-    ====================================================== -->
-
-    <div
-      id="contador"
-      class="contador"
-    >
-      Cargando estudiantes...
-    </div>
+  </div>
 
 
-    <!-- =====================================================
-         TABLA
-    ====================================================== -->
+  <!-- MENSAJES -->
+
+  <div
+    id="mensaje"
+    class="mensaje"
+  ></div>
+
+
+  <!-- TABLA -->
+
+  <div class="panel">
 
     <div class="tabla-contenedor">
 
@@ -734,39 +463,29 @@
           <tr>
 
             <th>ID</th>
-
             <th>Código QR</th>
-
             <th>Nombre</th>
-
             <th>CI</th>
-
             <th>País</th>
-
             <th>Foro</th>
-
             <th>Estado</th>
-
             <th>Curso</th>
-
             <th>Usuario</th>
+            <th>Acciones</th>
 
           </tr>
 
         </thead>
 
-
         <tbody id="tablaEstudiantes">
 
           <tr>
-
             <td
-              colspan="9"
-              class="mensaje"
+              colspan="10"
+              class="cargando"
             >
-              ⏳ Cargando...
+              ⏳ Cargando estudiantes...
             </td>
-
           </tr>
 
         </tbody>
@@ -775,7 +494,6 @@
 
     </div>
 
-
   </div>
 
 </div>
@@ -783,60 +501,115 @@
 
 <script>
 
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
 
-const URL_WORKER =
-  "https://quiet-lab-973a.cristimi1232.workers.dev";
+const API_URL =
+  "https://quiet-lab-973a.cristimi1232.workers.dev/";
 
 
-let tokenAdmin = null;
+let tokenAdmin =
+  sessionStorage.getItem("tokenAdmin");
+
 
 let estudiantes = [];
 
 
+/*
+  Si estamos editando:
+  aquí guardamos el estudiante seleccionado.
+*/
+let estudianteEditando = null;
+
+
 /* =====================================================
-   API
+   LLAMAR API
 ===================================================== */
 
-async function llamarAPI(
-  api,
-  parametros = {}
-) {
+async function llamarAPI(api, datos = {}) {
 
-  const respuesta =
-    await fetch(
-      URL_WORKER,
-      {
+  const respuesta = await fetch(
+    API_URL,
+    {
+      method: "POST",
 
-        method: "POST",
+      headers: {
+        "Content-Type":
+          "application/json"
+      },
 
-        headers: {
-          "Content-Type":
-            "application/json"
-        },
+      body: JSON.stringify({
+        api: api,
+        ...datos
+      })
+    }
+  );
 
-        body: JSON.stringify({
+  const texto =
+    await respuesta.text();
 
-          api: api,
+  let resultado;
 
-          ...parametros
+  try {
 
-        })
+    resultado =
+      JSON.parse(texto);
 
-      }
+  } catch (error) {
+
+    console.error(
+      "Respuesta no válida:",
+      texto
     );
-
-
-  if (!respuesta.ok) {
 
     throw new Error(
-      "HTTP " +
-      respuesta.status
+      "El servidor devolvió una respuesta no válida."
     );
-
   }
 
+  return resultado;
+}
 
-  return await respuesta.json();
+
+/* =====================================================
+   VERIFICAR SESIÓN
+===================================================== */
+
+function verificarSesion() {
+
+  tokenAdmin =
+    sessionStorage.getItem("tokenAdmin");
+
+  if (!tokenAdmin) {
+
+    window.location.href =
+      "admin.html";
+
+    return false;
+  }
+
+  return true;
+}
+
+
+/* =====================================================
+   MOSTRAR MENSAJE
+===================================================== */
+
+function mostrarMensaje(
+  texto,
+  tipo = "info"
+) {
+
+  const elemento =
+    document.getElementById("mensaje");
+
+  elemento.textContent =
+    texto;
+
+  elemento.className =
+    "mensaje " + tipo;
 
 }
 
@@ -847,50 +620,48 @@ async function llamarAPI(
 
 async function cargarEstudiantes() {
 
-  const contador =
+  if (!verificarSesion()) {
+    return;
+  }
+
+  const tabla =
     document.getElementById(
-      "contador"
+      "tablaEstudiantes"
     );
 
+  tabla.innerHTML = `
+    <tr>
+      <td colspan="10" class="cargando">
+        ⏳ Cargando estudiantes...
+      </td>
+    </tr>
+  `;
 
   try {
-
-    tokenAdmin =
-      sessionStorage.getItem(
-        "tokenAdmin"
-      );
-
-
-    if (!tokenAdmin) {
-
-      alert(
-        "La sesión de administrador no está disponible."
-      );
-
-      volverAdmin();
-
-      return;
-
-    }
-
 
     const resultado =
       await llamarAPI(
         "listarEstudiantes",
         {
-          token:
-            tokenAdmin
+          token: tokenAdmin
         }
       );
 
 
     if (!resultado.exito) {
 
-      contador.textContent =
-        resultado.mensaje;
+      tabla.innerHTML = `
+        <tr>
+          <td colspan="10" class="sin-datos">
+            ❌ ${
+              resultado.mensaje ||
+              "No se pudieron cargar los estudiantes."
+            }
+          </td>
+        </tr>
+      `;
 
       return;
-
     }
 
 
@@ -907,8 +678,13 @@ async function cargarEstudiantes() {
 
     console.error(error);
 
-    contador.textContent =
-      "❌ No se pudo cargar la lista de estudiantes.";
+    tabla.innerHTML = `
+      <tr>
+        <td colspan="10" class="sin-datos">
+          ❌ No se pudo comunicar con el servidor.
+        </td>
+      </tr>
+    `;
 
   }
 
@@ -919,9 +695,7 @@ async function cargarEstudiantes() {
    MOSTRAR ESTUDIANTES
 ===================================================== */
 
-function mostrarEstudiantes(
-  lista
-) {
+function mostrarEstudiantes(lista) {
 
   const tabla =
     document.getElementById(
@@ -929,56 +703,37 @@ function mostrarEstudiantes(
     );
 
 
-  const contador =
-    document.getElementById(
-      "contador"
-    );
-
-
-  contador.textContent =
-    "Total de estudiantes: " +
-    lista.length;
-
-
-  if (!lista.length) {
+  if (!lista || lista.length === 0) {
 
     tabla.innerHTML = `
       <tr>
-        <td
-          colspan="9"
-          class="mensaje"
-        >
-          No hay estudiantes registrados.
+        <td colspan="10" class="sin-datos">
+          No existen estudiantes registrados.
         </td>
       </tr>
     `;
 
     return;
-
   }
 
 
   tabla.innerHTML =
     lista.map(
-      estudiante => {
+      function(estudiante) {
 
         const estado =
           String(
-            estudiante.estado ||
-            ""
-          )
-            .trim()
-            .toUpperCase();
+            estudiante.estado || ""
+          ).trim().toUpperCase();
 
 
         const claseEstado =
           estado === "ACTIVO"
-            ? "activo"
-            : "inactivo";
+            ? "estado-activo"
+            : "estado-inactivo";
 
 
         return `
-
           <tr>
 
             <td>
@@ -987,13 +742,11 @@ function mostrarEstudiantes(
               )}
             </td>
 
-
             <td>
               ${escapeHTML(
                 estudiante.codigoQR
               )}
             </td>
-
 
             <td>
               ${escapeHTML(
@@ -1001,13 +754,11 @@ function mostrarEstudiantes(
               )}
             </td>
 
-
             <td>
               ${escapeHTML(
                 estudiante.ci
               )}
             </td>
-
 
             <td>
               ${escapeHTML(
@@ -1015,26 +766,17 @@ function mostrarEstudiantes(
               )}
             </td>
 
-
             <td>
               ${escapeHTML(
                 estudiante.foro
               )}
             </td>
 
-
-            <td>
-
-              <span
-                class="estado ${claseEstado}"
-              >
-                ${escapeHTML(
-                  estado
-                )}
-              </span>
-
+            <td class="${claseEstado}">
+              ${escapeHTML(
+                estudiante.estado
+              )}
             </td>
-
 
             <td>
               ${escapeHTML(
@@ -1042,15 +784,24 @@ function mostrarEstudiantes(
               )}
             </td>
 
-
             <td>
               ${escapeHTML(
                 estudiante.usuario
               )}
             </td>
 
-          </tr>
+            <td>
 
+              <button
+                class="btn btn-editar"
+                onclick="editarEstudianteWeb('${escapeJS(estudiante.id)}')"
+              >
+                ✏️ EDITAR
+              </button>
+
+            </td>
+
+          </tr>
         `;
 
       }
@@ -1060,19 +811,17 @@ function mostrarEstudiantes(
 
 
 /* =====================================================
-   BUSCAR
+   BUSCAR / FILTRAR
 ===================================================== */
 
 function filtrarEstudiantes() {
 
   const texto =
     document
-      .getElementById(
-        "buscador"
-      )
+      .getElementById("buscar")
       .value
-      .toLowerCase()
-      .trim();
+      .trim()
+      .toLowerCase();
 
 
   if (!texto) {
@@ -1082,78 +831,32 @@ function filtrarEstudiantes() {
     );
 
     return;
-
   }
 
 
   const filtrados =
     estudiantes.filter(
-      estudiante => {
+      function(estudiante) {
 
-        return (
+        const contenido = [
 
-          String(
-            estudiante.id || ""
-          )
-            .toLowerCase()
-            .includes(texto)
+          estudiante.id,
+          estudiante.codigoQR,
+          estudiante.nombre,
+          estudiante.ci,
+          estudiante.pais,
+          estudiante.foro,
+          estudiante.estado,
+          estudiante.curso,
+          estudiante.usuario
 
-          ||
+        ]
+        .join(" ")
+        .toLowerCase();
 
-          String(
-            estudiante.codigoQR || ""
-          )
-            .toLowerCase()
-            .includes(texto)
 
-          ||
-
-          String(
-            estudiante.nombre || ""
-          )
-            .toLowerCase()
-            .includes(texto)
-
-          ||
-
-          String(
-            estudiante.ci || ""
-          )
-            .toLowerCase()
-            .includes(texto)
-
-          ||
-
-          String(
-            estudiante.pais || ""
-          )
-            .toLowerCase()
-            .includes(texto)
-
-          ||
-
-          String(
-            estudiante.foro || ""
-          )
-            .toLowerCase()
-            .includes(texto)
-
-          ||
-
-          String(
-            estudiante.curso || ""
-          )
-            .toLowerCase()
-            .includes(texto)
-
-          ||
-
-          String(
-            estudiante.usuario || ""
-          )
-            .toLowerCase()
-            .includes(texto)
-
+        return contenido.includes(
+          texto
         );
 
       }
@@ -1168,10 +871,40 @@ function filtrarEstudiantes() {
 
 
 /* =====================================================
-   MOSTRAR FORMULARIO
+   FORMULARIO NUEVO
 ===================================================== */
 
-function mostrarFormulario() {
+function mostrarFormularioNuevo() {
+
+  estudianteEditando = null;
+
+
+  document.getElementById(
+    "tituloFormulario"
+  ).textContent =
+    "➕ Registrar nuevo estudiante";
+
+
+  document.getElementById(
+    "btnGuardar"
+  ).textContent =
+    "💾 REGISTRAR ESTUDIANTE";
+
+
+  document.getElementById(
+    "labelContrasena"
+  ).textContent =
+    "Contraseña *";
+
+
+  document.getElementById(
+    "nuevoContrasena"
+  ).placeholder =
+    "Contraseña";
+
+
+  limpiarCampos();
+
 
   document.getElementById(
     "formulario"
@@ -1179,90 +912,136 @@ function mostrarFormulario() {
     "block";
 
 
-  document.getElementById(
-    "nuevoNombre"
-  ).focus();
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 
 }
 
 
 /* =====================================================
-   OCULTAR FORMULARIO
+   EDITAR ESTUDIANTE
 ===================================================== */
 
-function ocultarFormulario() {
+function editarEstudianteWeb(id) {
+
+  const estudiante =
+    estudiantes.find(
+      function(item) {
+
+        return String(
+          item.id
+        ) === String(id);
+
+      }
+    );
+
+
+  if (!estudiante) {
+
+    alert(
+      "❌ No se encontró el estudiante."
+    );
+
+    return;
+  }
+
+
+  estudianteEditando =
+    estudiante;
+
 
   document.getElementById(
-    "formulario"
-  ).style.display =
-    "none";
+    "tituloFormulario"
+  ).textContent =
+    "✏️ Editar estudiante";
 
 
-  limpiarFormulario();
+  document.getElementById(
+    "btnGuardar"
+  ).textContent =
+    "💾 GUARDAR CAMBIOS";
 
-}
 
+  document.getElementById(
+    "labelContrasena"
+  ).textContent =
+    "Nueva contraseña (opcional)";
 
-/* =====================================================
-   LIMPIAR FORMULARIO
-===================================================== */
-
-function limpiarFormulario() {
 
   document.getElementById(
     "nuevoNombre"
-  ).value = "";
+  ).value =
+    estudiante.nombre || "";
 
 
   document.getElementById(
     "nuevoCI"
-  ).value = "";
+  ).value =
+    estudiante.ci || "";
 
 
   document.getElementById(
     "nuevoPais"
-  ).value = "";
+  ).value =
+    estudiante.pais || "";
 
 
   document.getElementById(
     "nuevoForo"
-  ).value = "";
+  ).value =
+    estudiante.foro || "";
 
 
   document.getElementById(
     "nuevoCurso"
-  ).value = "";
+  ).value =
+    estudiante.curso || "";
 
 
   document.getElementById(
     "nuevoUsuario"
-  ).value = "";
+  ).value =
+    estudiante.usuario || "";
 
 
   document.getElementById(
     "nuevoContrasena"
-  ).value = "";
+  ).value =
+    "";
 
 
-  const mensaje =
-    document.getElementById(
-      "mensajeFormulario"
-    );
+  document.getElementById(
+    "nuevoContrasena"
+  ).placeholder =
+    "Dejar vacío para conservar la contraseña actual";
 
 
-  mensaje.textContent = "";
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "block";
 
-  mensaje.className =
-    "mensaje-formulario";
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 
 }
 
 
 /* =====================================================
-   REGISTRAR ESTUDIANTE
+   GUARDAR ESTUDIANTE
 ===================================================== */
 
-async function registrarEstudiante() {
+async function guardarEstudiante() {
+
+  if (!verificarSesion()) {
+    return;
+  }
+
 
   const nombre =
     document.getElementById(
@@ -1303,13 +1082,45 @@ async function registrarEstudiante() {
   const contrasena =
     document.getElementById(
       "nuevoContrasena"
-    ).value;
+    ).value.trim();
 
 
-  const mensaje =
-    document.getElementById(
-      "mensajeFormulario"
+  /* ---------------------------------------------
+     VALIDACIONES
+  --------------------------------------------- */
+
+  if (
+    !nombre ||
+    !ci ||
+    !foro ||
+    !curso ||
+    !usuario
+  ) {
+
+    alert(
+      "❌ Completa todos los campos obligatorios."
     );
+
+    return;
+  }
+
+
+  /*
+    Si es un estudiante NUEVO,
+    la contraseña es obligatoria.
+  */
+
+  if (
+    !estudianteEditando &&
+    !contrasena
+  ) {
+
+    alert(
+      "❌ La contraseña es obligatoria."
+    );
+
+    return;
+  }
 
 
   const boton =
@@ -1318,124 +1129,152 @@ async function registrarEstudiante() {
     );
 
 
-  if (
-    !nombre ||
-    !ci ||
-    !foro ||
-    !curso ||
-    !usuario ||
-    !contrasena
-  ) {
-
-    mensaje.textContent =
-      "❌ Completa todos los campos obligatorios.";
-
-    mensaje.className =
-      "mensaje-formulario error";
-
-    return;
-
-  }
-
-
   boton.disabled = true;
-
-  boton.textContent =
-    "⏳ GUARDANDO...";
-
-
-  mensaje.textContent =
-    "Registrando estudiante...";
-
-  mensaje.className =
-    "mensaje-formulario";
 
 
   try {
 
-    const resultado =
-      await llamarAPI(
-        "registrarEstudiante",
-        {
+    let resultado;
 
-          token:
-            tokenAdmin,
 
-          nombre:
-            nombre,
+    /* =================================================
+       EDITAR
+    ================================================= */
 
-          ci:
-            ci,
+    if (estudianteEditando) {
 
-          pais:
-            pais,
-
-          foro:
-            foro,
-
-          curso:
-            curso,
-
-          usuario:
-            usuario,
-
-          contrasena:
-            contrasena
-
-        }
+      mostrarMensaje(
+        "⏳ Guardando cambios...",
+        "info"
       );
 
 
-    if (!resultado.exito) {
+      resultado =
+        await llamarAPI(
+          "editarEstudiante",
+          {
 
-      mensaje.textContent =
-        resultado.mensaje ||
-        "❌ No se pudo registrar.";
+            token:
+              tokenAdmin,
 
-      mensaje.className =
-        "mensaje-formulario error";
+            idEstudiante:
+              estudianteEditando.id,
 
-      return;
+            nombre:
+              nombre,
+
+            ci:
+              ci,
+
+            pais:
+              pais,
+
+            foro:
+              foro,
+
+            curso:
+              curso,
+
+            usuario:
+              usuario,
+
+            contrasena:
+              contrasena
+
+          }
+        );
 
     }
 
 
-    mensaje.textContent =
-      "✅ Estudiante registrado correctamente.";
+    /* =================================================
+       REGISTRAR NUEVO
+    ================================================= */
 
-    mensaje.className =
-      "mensaje-formulario exito";
+    else {
+
+      mostrarMensaje(
+        "⏳ Registrando estudiante...",
+        "info"
+      );
+
+
+      resultado =
+        await llamarAPI(
+          "registrarEstudiante",
+          {
+
+            token:
+              tokenAdmin,
+
+            nombre:
+              nombre,
+
+            ci:
+              ci,
+
+            pais:
+              pais,
+
+            foro:
+              foro,
+
+            curso:
+              curso,
+
+            usuario:
+              usuario,
+
+            contrasena:
+              contrasena
+
+          }
+        );
+
+    }
+
+
+    /* =================================================
+       RESULTADO
+    ================================================= */
+
+    if (!resultado.exito) {
+
+      mostrarMensaje(
+        resultado.mensaje ||
+        "❌ No se pudo guardar.",
+        "error"
+      );
+
+      return;
+    }
+
+
+    mostrarMensaje(
+      resultado.mensaje ||
+      "✅ Operación realizada correctamente.",
+      "exito"
+    );
+
+
+    cancelarFormulario();
 
 
     await cargarEstudiantes();
-
-
-    setTimeout(
-      function() {
-
-        ocultarFormulario();
-
-      },
-      1200
-    );
 
 
   } catch (error) {
 
     console.error(error);
 
-    mensaje.textContent =
-      "❌ Error de comunicación con el servidor.";
-
-    mensaje.className =
-      "mensaje-formulario error";
+    mostrarMensaje(
+      "❌ No se pudo comunicar con el servidor.",
+      "error"
+    );
 
   } finally {
 
     boton.disabled = false;
-
-    boton.textContent =
-      "💾 GUARDAR ESTUDIANTE";
 
   }
 
@@ -1443,7 +1282,94 @@ async function registrarEstudiante() {
 
 
 /* =====================================================
-   SEGURIDAD
+   CANCELAR FORMULARIO
+===================================================== */
+
+function cancelarFormulario() {
+
+  estudianteEditando = null;
+
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "none";
+
+
+  limpiarCampos();
+
+
+  document.getElementById(
+    "tituloFormulario"
+  ).textContent =
+    "➕ Registrar nuevo estudiante";
+
+
+  document.getElementById(
+    "btnGuardar"
+  ).textContent =
+    "💾 REGISTRAR ESTUDIANTE";
+
+
+  document.getElementById(
+    "labelContrasena"
+  ).textContent =
+    "Contraseña *";
+
+
+  document.getElementById(
+    "nuevoContrasena"
+  ).placeholder =
+    "Contraseña";
+
+}
+
+
+/* =====================================================
+   LIMPIAR CAMPOS
+===================================================== */
+
+function limpiarCampos() {
+
+  document.getElementById(
+    "nuevoNombre"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoCI"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoPais"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoForo"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoCurso"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoUsuario"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoContrasena"
+  ).value = "";
+
+}
+
+
+/* =====================================================
+   ESCAPAR HTML
 ===================================================== */
 
 function escapeHTML(valor) {
@@ -1451,37 +1377,53 @@ function escapeHTML(valor) {
   return String(
     valor ?? ""
   )
-
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
 
 }
 
 
 /* =====================================================
-   VOLVER
+   ESCAPAR ID PARA onclick
+===================================================== */
+
+function escapeJS(valor) {
+
+  return String(
+    valor ?? ""
+  )
+  .replace(
+    /\\/g,
+    "\\\\"
+  )
+  .replace(
+    /'/g,
+    "\\'"
+  );
+
+}
+
+
+/* =====================================================
+   VOLVER AL PANEL
 ===================================================== */
 
 function volverAdmin() {
@@ -1493,13 +1435,14 @@ function volverAdmin() {
 
 
 /* =====================================================
-   INICIAR
+   INICIO
 ===================================================== */
+
+verificarSesion();
 
 cargarEstudiantes();
 
 </script>
 
 </body>
-
 </html>
