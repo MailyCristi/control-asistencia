@@ -1,0 +1,2609 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Asistencia</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+
+  margin: 0;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background: #f4f6f9;
+
+  color: #1f2937;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.header {
+
+  background: #1f3c88;
+
+  color: white;
+
+  padding: 22px;
+
+  text-align: center;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.15);
+}
+
+.header h1 {
+
+  margin: 0;
+
+  font-size: 28px;
+}
+
+.header p {
+
+  margin: 7px 0 0;
+
+  opacity: 0.9;
+}
+
+
+/* =========================================================
+   CONTENEDOR
+   ========================================================= */
+
+.contenedor {
+
+  width: 95%;
+
+  max-width: 1500px;
+
+  margin: 25px auto;
+}
+
+
+/* =========================================================
+   TARJETAS
+   ========================================================= */
+
+.card {
+
+  background: white;
+
+  border-radius: 12px;
+
+  padding: 22px;
+
+  margin-bottom: 22px;
+
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+
+  margin-top: 0;
+
+  color: #1f3c88;
+
+  font-size: 21px;
+}
+
+
+/* =========================================================
+   FORMULARIOS
+   ========================================================= */
+
+.form-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 15px;
+}
+
+.campo {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.campo label {
+
+  font-weight: bold;
+
+  font-size: 14px;
+}
+
+.campo select,
+.campo input {
+
+  width: 100%;
+
+  padding: 11px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 7px;
+
+  font-size: 14px;
+
+  background: white;
+}
+
+.campo input[readonly] {
+
+  background: #f1f5f9;
+}
+
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+.botones {
+
+  display: flex;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+
+  margin-top: 18px;
+}
+
+button {
+
+  border: none;
+
+  border-radius: 7px;
+
+  padding: 11px 18px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  font-size: 14px;
+}
+
+.btn-principal {
+
+  background: #1f3c88;
+
+  color: white;
+}
+
+.btn-principal:hover {
+
+  background: #162d67;
+}
+
+.btn-secundario {
+
+  background: #64748b;
+
+  color: white;
+}
+
+.btn-verde {
+
+  background: #198754;
+
+  color: white;
+}
+
+
+/* =========================================================
+   LISTA DE ESTUDIANTES
+   ========================================================= */
+
+.lista-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-top: 20px;
+
+  margin-bottom: 10px;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+.lista-header h3 {
+
+  margin: 0;
+
+  color: #334155;
+}
+
+.contador {
+
+  font-size: 14px;
+
+  color: #64748b;
+}
+
+.lista-estudiantes {
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  max-height: 350px;
+
+  overflow-y: auto;
+}
+
+.estudiante {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 12px 15px;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.estudiante:last-child {
+
+  border-bottom: none;
+}
+
+.estudiante:hover {
+
+  background: #f8fafc;
+}
+
+.estudiante input {
+
+  width: 18px;
+
+  height: 18px;
+
+  cursor: pointer;
+}
+
+.estudiante-info {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.estudiante-nombre {
+
+  font-weight: bold;
+}
+
+.estudiante-datos {
+
+  font-size: 13px;
+
+  color: #64748b;
+}
+
+
+/* =========================================================
+   MENSAJES
+   ========================================================= */
+
+.mensaje {
+
+  padding: 12px 15px;
+
+  border-radius: 7px;
+
+  margin-top: 15px;
+
+  display: none;
+
+  font-size: 14px;
+}
+
+.mensaje.exito {
+
+  display: block;
+
+  background: #dcfce7;
+
+  color: #166534;
+}
+
+.mensaje.error {
+
+  display: block;
+
+  background: #fee2e2;
+
+  color: #991b1b;
+}
+
+.mensaje.info {
+
+  display: block;
+
+  background: #dbeafe;
+
+  color: #1e40af;
+}
+
+
+/* =========================================================
+   TARJETAS DE RESUMEN
+   ========================================================= */
+
+.resumen-cards {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+.resumen-card {
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 10px;
+
+  padding: 18px;
+
+  text-align: center;
+}
+
+.resumen-card .numero {
+
+  font-size: 28px;
+
+  font-weight: bold;
+
+  color: #1f3c88;
+
+  margin-bottom: 5px;
+}
+
+.resumen-card .texto {
+
+  font-size: 13px;
+
+  color: #64748b;
+}
+
+
+/* =========================================================
+   TABLAS
+   ========================================================= */
+
+.tabla-contenedor {
+
+  width: 100%;
+
+  overflow-x: auto;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 8px;
+}
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 800px;
+}
+
+th,
+td {
+
+  border-bottom: 1px solid #e2e8f0;
+
+  padding: 10px;
+
+  text-align: center;
+
+  font-size: 13px;
+}
+
+th {
+
+  background: #1f3c88;
+
+  color: white;
+
+  white-space: nowrap;
+}
+
+td.nombre {
+
+  text-align: left;
+
+  font-weight: bold;
+
+  white-space: nowrap;
+}
+
+td.presente {
+
+  color: #198754;
+
+  font-weight: bold;
+
+  font-size: 17px;
+}
+
+td.falta {
+
+  color: #dc3545;
+
+  font-weight: bold;
+
+  font-size: 17px;
+}
+
+td.total {
+
+  font-weight: bold;
+
+  background: #f8fafc;
+}
+
+
+/* =========================================================
+   SECCIONES
+   ========================================================= */
+
+.seccion-titulo {
+
+  margin-top: 30px;
+
+  margin-bottom: 12px;
+
+  color: #334155;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   BOTÓN VOLVER
+   ========================================================= */
+
+.volver {
+
+  margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   CARGANDO
+   ========================================================= */
+
+.cargando {
+
+  text-align: center;
+
+  padding: 25px;
+
+  color: #64748b;
+
+  display: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .form-grid {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .resumen-cards {
+
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .contenedor {
+
+    width: 94%;
+
+    margin: 15px auto;
+  }
+
+  .header h1 {
+
+    font-size: 23px;
+  }
+
+  .form-grid {
+
+    grid-template-columns: 1fr;
+  }
+
+  .resumen-cards {
+
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .card {
+
+    padding: 16px;
+  }
+
+  button {
+
+    width: 100%;
+  }
+
+  .botones {
+
+    flex-direction: column;
+  }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ========================================================
+     ENCABEZADO
+     ======================================================== -->
+
+<div class="header">
+
+  <h1>📋 Control de Asistencia</h1>
+
+  <p>
+    Administración de asistencia y capacitaciones
+  </p>
+
+</div>
+
+
+<div class="contenedor">
+
+
+<!-- ========================================================
+     VOLVER
+     ======================================================== -->
+
+<div class="volver">
+
+  <button
+    class="btn-secundario"
+    onclick="volverAlPanel()"
+  >
+    ← VOLVER AL PANEL
+  </button>
+
+</div>
+
+
+<!-- ========================================================
+     REGISTRO MANUAL
+     ======================================================== -->
+
+<div class="card">
+
+  <h2>
+    ✍️ Registro manual de asistencia
+  </h2>
+
+  <p>
+    Seleccione el foro, la capacitación y el país.
+    La fecha se obtiene automáticamente de la capacitación.
+  </p>
+
+
+  <div class="form-grid">
+
+
+    <!-- FORO -->
+
+    <div class="campo">
+
+      <label for="selectForo">
+        Foro
+      </label>
+
+      <select
+        id="selectForo"
+        onchange="cambioForo()"
+      >
+
+        <option value="">
+          Seleccione un foro
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- CAPACITACIÓN -->
+
+    <div class="campo">
+
+      <label for="selectCapacitacion">
+        Capacitación
+      </label>
+
+      <select
+        id="selectCapacitacion"
+        onchange="cambioCapacitacion()"
+        disabled
+      >
+
+        <option value="">
+          Seleccione una capacitación
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- FECHA -->
+
+    <div class="campo">
+
+      <label for="fechaCapacitacion">
+        Fecha
+      </label>
+
+      <input
+        type="text"
+        id="fechaCapacitacion"
+        readonly
+        placeholder="Automática"
+      >
+
+    </div>
+
+
+    <!-- PAÍS -->
+
+    <div class="campo">
+
+      <label for="selectPais">
+        País
+      </label>
+
+      <select
+        id="selectPais"
+        onchange="cambioPais()"
+        disabled
+      >
+
+        <option value="">
+          Seleccione un país
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <!-- MENSAJE -->
+
+  <div
+    id="mensajeManual"
+    class="mensaje"
+  ></div>
+
+
+  <!-- LISTA -->
+
+  <div
+    id="contenedorLista"
+    style="display:none;"
+  >
+
+    <div class="lista-header">
+
+      <h3>
+        Delegados
+      </h3>
+
+      <span
+        class="contador"
+        id="contadorEstudiantes"
+      >
+        0 estudiantes
+      </span>
+
+      <button
+        class="btn-secundario"
+        onclick="seleccionarTodos()"
+      >
+        ☑ SELECCIONAR TODOS
+      </button>
+
+    </div>
+
+
+    <div
+      class="lista-estudiantes"
+      id="listaEstudiantes"
+    ></div>
+
+
+    <div class="botones">
+
+      <button
+        class="btn-verde"
+        onclick="registrarSeleccionados()"
+      >
+        ✓ REGISTRAR ASISTENCIA
+      </button>
+
+      <button
+        class="btn-secundario"
+        onclick="limpiarSeleccion()"
+      >
+        LIMPIAR SELECCIÓN
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="cargandoManual"
+    class="cargando"
+  >
+    Cargando...
+  </div>
+
+</div>
+
+
+
+<!-- ========================================================
+     REPORTE
+     ======================================================== -->
+
+<div class="card">
+
+  <h2>
+    📊 Reporte de asistencia
+  </h2>
+
+  <div class="form-grid">
+
+    <div class="campo">
+
+      <label for="selectForoReporte">
+        Foro
+      </label>
+
+      <select
+        id="selectForoReporte"
+        onchange="cargarReporte()"
+      >
+
+        <option value="">
+          Seleccione un foro
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="cargandoReporte"
+    class="cargando"
+  >
+    Generando reporte...
+  </div>
+
+
+  <!-- RESUMEN GENERAL -->
+
+  <div
+    id="resumenGeneral"
+    style="display:none;"
+  >
+
+    <div class="resumen-cards">
+
+      <div class="resumen-card">
+
+        <div
+          class="numero"
+          id="totalDelegados"
+        >
+          0
+        </div>
+
+        <div class="texto">
+          Delegados
+        </div>
+
+      </div>
+
+
+      <div class="resumen-card">
+
+        <div
+          class="numero"
+          id="totalCapacitaciones"
+        >
+          0
+        </div>
+
+        <div class="texto">
+          Capacitaciones
+        </div>
+
+      </div>
+
+
+      <div class="resumen-card">
+
+        <div
+          class="numero"
+          id="totalAsistencias"
+        >
+          0
+        </div>
+
+        <div class="texto">
+          Asistencias
+        </div>
+
+      </div>
+
+
+      <div class="resumen-card">
+
+        <div
+          class="numero"
+          id="totalFaltas"
+        >
+          0
+        </div>
+
+        <div class="texto">
+          Faltas
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MATRIZ
+         ===================================================== -->
+
+    <h3 class="seccion-titulo">
+      👥 Asistencia por delegado
+    </h3>
+
+    <div class="tabla-contenedor">
+
+      <table>
+
+        <thead id="cabeceraMatriz">
+
+        </thead>
+
+        <tbody id="cuerpoMatriz">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- =====================================================
+         RESUMEN POR PAÍS
+         ===================================================== -->
+
+    <h3 class="seccion-titulo">
+      🌎 Resumen por país
+    </h3>
+
+    <div class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              País
+            </th>
+
+            <th>
+              Delegados
+            </th>
+
+            <th>
+              Asistencias
+            </th>
+
+            <th>
+              Faltas
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="cuerpoPais">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <!-- =====================================================
+         RESUMEN POR CAPACITACIÓN
+         ===================================================== -->
+
+    <h3 class="seccion-titulo">
+      📅 Resumen por capacitación
+    </h3>
+
+    <div class="tabla-contenedor">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Fecha
+            </th>
+
+            <th>
+              Capacitación
+            </th>
+
+            <th>
+              Delegados
+            </th>
+
+            <th>
+              Presentes
+            </th>
+
+            <th>
+              Ausentes
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody id="cuerpoCapacitacion">
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/************************************************************
+ * CONFIGURACIÓN
+ ************************************************************/
+
+const URL_API =
+  "https://quiet-lab-973a.cristimi1232.workers.dev/";
+
+
+let tokenAdmin =
+  sessionStorage.getItem("tokenAdmin");
+
+
+let estudiantesActuales = [];
+
+let capacitacionesActuales = [];
+
+
+/************************************************************
+ * VERIFICAR SESIÓN
+ ************************************************************/
+
+if (!tokenAdmin) {
+
+  alert(
+    "❌ La sesión de administrador ha terminado."
+  );
+
+  window.location.href =
+    "admin.html";
+}
+
+
+/************************************************************
+ * FUNCIÓN API
+ ************************************************************/
+
+async function llamarAPI(datos) {
+
+  const respuesta =
+    await fetch(
+      URL_API,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(datos)
+      }
+    );
+
+  if (!respuesta.ok) {
+
+    throw new Error(
+      "Error HTTP " +
+      respuesta.status
+    );
+  }
+
+  return await respuesta.json();
+}
+
+
+/************************************************************
+ * AL CARGAR
+ ************************************************************/
+
+window.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    cargarForos();
+
+  }
+);
+
+
+/************************************************************
+ * CARGAR FOROS
+ ************************************************************/
+
+async function cargarForos() {
+
+  try {
+
+    const resultado =
+      await llamarAPI({
+
+        api:
+          "listarForos",
+
+        token:
+          tokenAdmin
+
+      });
+
+
+    if (!resultado.exito) {
+
+      mostrarMensaje(
+        "mensajeManual",
+        resultado.mensaje,
+        "error"
+      );
+
+      return;
+    }
+
+
+    const selectManual =
+      document.getElementById(
+        "selectForo"
+      );
+
+
+    const selectReporte =
+      document.getElementById(
+        "selectForoReporte"
+      );
+
+
+    resultado.foros.forEach(
+      function(foro) {
+
+        const opcion1 =
+          document.createElement(
+            "option"
+          );
+
+        opcion1.value =
+          foro.nombreForo;
+
+        opcion1.textContent =
+          foro.nombreForo;
+
+        selectManual.appendChild(
+          opcion1
+        );
+
+
+        const opcion2 =
+          document.createElement(
+            "option"
+          );
+
+        opcion2.value =
+          foro.nombreForo;
+
+        opcion2.textContent =
+          foro.nombreForo;
+
+        selectReporte.appendChild(
+          opcion2
+        );
+
+      }
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    mostrarMensaje(
+      "mensajeManual",
+      "❌ No se pudo conectar con el servidor.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/************************************************************
+ * CAMBIO DE FORO
+ ************************************************************/
+
+async function cambioForo() {
+
+  const foro =
+    document.getElementById(
+      "selectForo"
+    ).value;
+
+
+  const selectCap =
+    document.getElementById(
+      "selectCapacitacion"
+    );
+
+  const selectPais =
+    document.getElementById(
+      "selectPais"
+    );
+
+
+  selectCap.innerHTML =
+    '<option value="">Seleccione una capacitación</option>';
+
+  selectPais.innerHTML =
+    '<option value="">Seleccione un país</option>';
+
+
+  document.getElementById(
+    "fechaCapacitacion"
+  ).value = "";
+
+
+  document.getElementById(
+    "contenedorLista"
+  ).style.display =
+    "none";
+
+
+  selectCap.disabled =
+    true;
+
+  selectPais.disabled =
+    true;
+
+
+  if (!foro) {
+    return;
+  }
+
+
+  mostrarCargando(
+    "cargandoManual",
+    true
+  );
+
+
+  try {
+
+    const resultado =
+      await llamarAPI({
+
+        api:
+          "listarCapacitacionesPorForo",
+
+        token:
+          tokenAdmin,
+
+        foro:
+          foro
+
+      });
+
+
+    if (!resultado.exito) {
+
+      mostrarMensaje(
+        "mensajeManual",
+        resultado.mensaje,
+        "error"
+      );
+
+      return;
+    }
+
+
+    capacitacionesActuales =
+      resultado.capacitaciones;
+
+
+    resultado.capacitaciones.forEach(
+      function(cap) {
+
+        const opcion =
+          document.createElement(
+            "option"
+          );
+
+        opcion.value =
+          cap.idCapacitacion;
+
+        opcion.textContent =
+          formatearFecha(cap.fecha) +
+          " — " +
+          cap.nombre;
+
+        selectCap.appendChild(
+          opcion
+        );
+
+      }
+    );
+
+
+    selectCap.disabled =
+      false;
+
+
+    const paises =
+      await llamarAPI({
+
+        api:
+          "listarPaisesPorForo",
+
+        token:
+          tokenAdmin,
+
+        foro:
+          foro
+
+      });
+
+
+    if (!paises.exito) {
+
+      mostrarMensaje(
+        "mensajeManual",
+        paises.mensaje,
+        "error"
+      );
+
+      return;
+    }
+
+
+    paises.paises.forEach(
+      function(pais) {
+
+        const opcion =
+          document.createElement(
+            "option"
+          );
+
+        opcion.value =
+          pais;
+
+        opcion.textContent =
+          pais;
+
+        selectPais.appendChild(
+          opcion
+        );
+
+      }
+    );
+
+
+    selectPais.disabled =
+      false;
+
+
+    limpiarMensaje(
+      "mensajeManual"
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    mostrarMensaje(
+      "mensajeManual",
+      "❌ Error al cargar los datos del foro.",
+      "error"
+    );
+
+  } finally {
+
+    mostrarCargando(
+      "cargandoManual",
+      false
+    );
+
+  }
+
+}
+
+
+/************************************************************
+ * CAMBIO DE CAPACITACIÓN
+ ************************************************************/
+
+function cambioCapacitacion() {
+
+  const id =
+    document.getElementById(
+      "selectCapacitacion"
+    ).value;
+
+
+  const capacitacion =
+    capacitacionesActuales.find(
+      function(c) {
+
+        return c.idCapacitacion === id;
+
+      }
+    );
+
+
+  if (!capacitacion) {
+
+    document.getElementById(
+      "fechaCapacitacion"
+    ).value = "";
+
+    return;
+  }
+
+
+  document.getElementById(
+    "fechaCapacitacion"
+  ).value =
+    formatearFecha(
+      capacitacion.fecha
+    );
+
+
+  cargarEstudiantes();
+
+}
+
+
+/************************************************************
+ * CAMBIO DE PAÍS
+ ************************************************************/
+
+function cambioPais() {
+
+  cargarEstudiantes();
+
+}
+
+
+/************************************************************
+ * CARGAR ESTUDIANTES
+ ************************************************************/
+
+async function cargarEstudiantes() {
+
+  const foro =
+    document.getElementById(
+      "selectForo"
+    ).value;
+
+
+  const pais =
+    document.getElementById(
+      "selectPais"
+    ).value;
+
+
+  const capacitacion =
+    document.getElementById(
+      "selectCapacitacion"
+    ).value;
+
+
+  if (
+    !foro ||
+    !pais ||
+    !capacitacion
+  ) {
+
+    document.getElementById(
+      "contenedorLista"
+    ).style.display =
+      "none";
+
+    return;
+  }
+
+
+  mostrarCargando(
+    "cargandoManual",
+    true
+  );
+
+
+  try {
+
+    const resultado =
+      await llamarAPI({
+
+        api:
+          "listarEstudiantesPorForoPais",
+
+        token:
+          tokenAdmin,
+
+        foro:
+          foro,
+
+        pais:
+          pais
+
+      });
+
+
+    if (!resultado.exito) {
+
+      mostrarMensaje(
+        "mensajeManual",
+        resultado.mensaje,
+        "error"
+      );
+
+      return;
+    }
+
+
+    estudiantesActuales =
+      resultado.estudiantes;
+
+
+    mostrarListaEstudiantes();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    mostrarMensaje(
+      "mensajeManual",
+      "❌ No se pudieron cargar los estudiantes.",
+      "error"
+    );
+
+  } finally {
+
+    mostrarCargando(
+      "cargandoManual",
+      false
+    );
+
+  }
+
+}
+
+
+/************************************************************
+ * MOSTRAR ESTUDIANTES
+ ************************************************************/
+
+function mostrarListaEstudiantes() {
+
+  const contenedor =
+    document.getElementById(
+      "listaEstudiantes"
+    );
+
+
+  contenedor.innerHTML = "";
+
+
+  document.getElementById(
+    "contadorEstudiantes"
+  ).textContent =
+    estudiantesActuales.length +
+    (
+      estudiantesActuales.length === 1
+        ? " estudiante"
+        : " estudiantes"
+    );
+
+
+  if (
+    estudiantesActuales.length === 0
+  ) {
+
+    contenedor.innerHTML =
+      `
+      <div style="
+        padding:20px;
+        text-align:center;
+        color:#64748b;
+      ">
+        No existen estudiantes activos
+        para este país y foro.
+      </div>
+      `;
+
+  } else {
+
+    estudiantesActuales.forEach(
+      function(estudiante) {
+
+        const fila =
+          document.createElement(
+            "label"
+          );
+
+        fila.className =
+          "estudiante";
+
+
+        fila.innerHTML = `
+
+          <input
+            type="checkbox"
+            class="check-estudiante"
+            value="${escapeHTML(estudiante.id)}"
+          >
+
+          <div class="estudiante-info">
+
+            <div class="estudiante-nombre">
+
+              ${escapeHTML(
+                estudiante.nombre
+              )}
+
+            </div>
+
+            <div class="estudiante-datos">
+
+              CI:
+              ${escapeHTML(
+                estudiante.ci || "-"
+              )}
+
+              &nbsp; | &nbsp;
+
+              ${escapeHTML(
+                estudiante.pais
+              )}
+
+            </div>
+
+          </div>
+
+        `;
+
+
+        contenedor.appendChild(
+          fila
+        );
+
+      }
+    );
+
+  }
+
+
+  document.getElementById(
+    "contenedorLista"
+  ).style.display =
+    "block";
+
+
+  limpiarMensaje(
+    "mensajeManual"
+  );
+
+}
+
+
+/************************************************************
+ * SELECCIONAR TODOS
+ ************************************************************/
+
+function seleccionarTodos() {
+
+  const checks =
+    document.querySelectorAll(
+      ".check-estudiante"
+    );
+
+
+  checks.forEach(
+    function(check) {
+
+      check.checked = true;
+
+    }
+  );
+
+}
+
+
+/************************************************************
+ * LIMPIAR SELECCIÓN
+ ************************************************************/
+
+function limpiarSeleccion() {
+
+  const checks =
+    document.querySelectorAll(
+      ".check-estudiante"
+    );
+
+
+  checks.forEach(
+    function(check) {
+
+      check.checked = false;
+
+    }
+  );
+
+}
+
+
+/************************************************************
+ * REGISTRAR SELECCIONADOS
+ ************************************************************/
+
+async function registrarSeleccionados() {
+
+  const checks =
+    Array.from(
+      document.querySelectorAll(
+        ".check-estudiante:checked"
+      )
+    );
+
+
+  if (checks.length === 0) {
+
+    mostrarMensaje(
+      "mensajeManual",
+      "⚠️ Seleccione al menos un estudiante.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const foro =
+    document.getElementById(
+      "selectForo"
+    ).value;
+
+
+  const idCapacitacion =
+    document.getElementById(
+      "selectCapacitacion"
+    ).value;
+
+
+  if (
+    !foro ||
+    !idCapacitacion
+  ) {
+
+    mostrarMensaje(
+      "mensajeManual",
+      "⚠️ Seleccione foro y capacitación.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  mostrarCargando(
+    "cargandoManual",
+    true
+  );
+
+
+  let registrados = 0;
+
+  let duplicados = 0;
+
+  let errores = [];
+
+
+  try {
+
+    for (
+      const check of checks
+    ) {
+
+      try {
+
+        const resultado =
+          await llamarAPI({
+
+            api:
+              "registrarAsistenciaManual",
+
+            token:
+              tokenAdmin,
+
+            foro:
+              foro,
+
+            idCapacitacion:
+              idCapacitacion,
+
+            idEstudiante:
+              check.value
+
+          });
+
+
+        if (resultado.exito) {
+
+          registrados++;
+
+        } else if (
+          resultado.duplicado
+        ) {
+
+          duplicados++;
+
+        } else {
+
+          errores.push(
+            resultado.mensaje
+          );
+
+        }
+
+      } catch (error) {
+
+        errores.push(
+          "Error de conexión."
+        );
+
+      }
+
+    }
+
+
+    let mensaje =
+      "✅ Registrados: " +
+      registrados;
+
+
+    if (duplicados > 0) {
+
+      mensaje +=
+        " | Ya registrados: " +
+        duplicados;
+
+    }
+
+
+    if (errores.length > 0) {
+
+      mensaje +=
+        " | Errores: " +
+        errores.length;
+
+    }
+
+
+    mostrarMensaje(
+      "mensajeManual",
+      mensaje,
+      errores.length > 0
+        ? "error"
+        : "exito"
+    );
+
+
+    /*
+     * Actualizamos el reporte
+     * automáticamente si el mismo foro
+     * está seleccionado.
+     */
+
+    const foroReporte =
+      document.getElementById(
+        "selectForoReporte"
+      ).value;
+
+
+    if (
+      foroReporte === foro
+    ) {
+
+      await cargarReporte();
+
+    }
+
+
+    limpiarSeleccion();
+
+
+  } finally {
+
+    mostrarCargando(
+      "cargandoManual",
+      false
+    );
+
+  }
+
+}
+
+
+/************************************************************
+ * CARGAR REPORTE
+ ************************************************************/
+
+async function cargarReporte() {
+
+  const foro =
+    document.getElementById(
+      "selectForoReporte"
+    ).value;
+
+
+  if (!foro) {
+
+    document.getElementById(
+      "resumenGeneral"
+    ).style.display =
+      "none";
+
+    return;
+  }
+
+
+  mostrarCargando(
+    "cargandoReporte",
+    true
+  );
+
+
+  try {
+
+    const resultado =
+      await llamarAPI({
+
+        api:
+          "obtenerReporteAsistencia",
+
+        token:
+          tokenAdmin,
+
+        foro:
+          foro
+
+      });
+
+
+    if (!resultado.exito) {
+
+      alert(
+        resultado.mensaje
+      );
+
+      return;
+    }
+
+
+    mostrarReporte(
+      resultado
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "❌ No se pudo generar el reporte."
+    );
+
+  } finally {
+
+    mostrarCargando(
+      "cargandoReporte",
+      false
+    );
+
+  }
+
+}
+
+
+/************************************************************
+ * MOSTRAR REPORTE
+ ************************************************************/
+
+function mostrarReporte(
+  reporte
+) {
+
+  document.getElementById(
+    "resumenGeneral"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "totalDelegados"
+  ).textContent =
+    reporte.totalDelegados;
+
+
+  document.getElementById(
+    "totalCapacitaciones"
+  ).textContent =
+    reporte.totalCapacitaciones;
+
+
+  document.getElementById(
+    "totalAsistencias"
+  ).textContent =
+    reporte.totalAsistencias;
+
+
+  document.getElementById(
+    "totalFaltas"
+  ).textContent =
+    reporte.totalFaltas;
+
+
+  construirMatriz(
+    reporte
+  );
+
+
+  construirResumenPais(
+    reporte.resumenPorPais
+  );
+
+
+  construirResumenCapacitacion(
+    reporte.resumenPorCapacitacion
+  );
+
+}
+
+
+/************************************************************
+ * CONSTRUIR MATRIZ
+ ************************************************************/
+
+function construirMatriz(
+  reporte
+) {
+
+  const cabecera =
+    document.getElementById(
+      "cabeceraMatriz"
+    );
+
+  const cuerpo =
+    document.getElementById(
+      "cuerpoMatriz"
+    );
+
+
+  cabecera.innerHTML = "";
+
+  cuerpo.innerHTML = "";
+
+
+  const tr =
+    document.createElement(
+      "tr"
+    );
+
+
+  const thNombre =
+    document.createElement(
+      "th"
+    );
+
+  thNombre.textContent =
+    "DELEGADO";
+
+  tr.appendChild(
+    thNombre
+  );
+
+
+  reporte.capacitaciones.forEach(
+    function(cap) {
+
+      const th =
+        document.createElement(
+          "th"
+        );
+
+      th.innerHTML =
+        formatearFecha(
+          cap.fecha
+        ) +
+        "<br>" +
+        escapeHTML(
+          cap.nombre
+        );
+
+      tr.appendChild(
+        th
+      );
+
+    }
+  );
+
+
+  const thAsistencias =
+    document.createElement(
+      "th"
+    );
+
+  thAsistencias.textContent =
+    "ASISTENCIAS";
+
+  tr.appendChild(
+    thAsistencias
+  );
+
+
+  const thFaltas =
+    document.createElement(
+      "th"
+    );
+
+  thFaltas.textContent =
+    "FALTAS";
+
+  tr.appendChild(
+    thFaltas
+  );
+
+
+  cabecera.appendChild(
+    tr
+  );
+
+
+  reporte.estudiantes.forEach(
+    function(estudiante) {
+
+      const fila =
+        document.createElement(
+          "tr"
+        );
+
+
+      const tdNombre =
+        document.createElement(
+          "td"
+        );
+
+      tdNombre.className =
+        "nombre";
+
+      tdNombre.textContent =
+        estudiante.nombrePais;
+
+      fila.appendChild(
+        tdNombre
+      );
+
+
+      reporte.capacitaciones.forEach(
+        function(cap) {
+
+          const td =
+            document.createElement(
+              "td"
+            );
+
+
+          const presente =
+            estudiante.asistencia[
+              cap.idCapacitacion
+            ] === true;
+
+
+          if (presente) {
+
+            td.className =
+              "presente";
+
+            td.textContent =
+              "✓";
+
+            td.title =
+              "Asistencia";
+
+          } else {
+
+            td.className =
+              "falta";
+
+            td.textContent =
+              "—";
+
+            td.title =
+              "Falta";
+
+          }
+
+
+          fila.appendChild(
+            td
+          );
+
+        }
+      );
+
+
+      const tdAsistencias =
+        document.createElement(
+          "td"
+        );
+
+      tdAsistencias.className =
+        "total";
+
+      tdAsistencias.textContent =
+        estudiante.totalAsistencias;
+
+      fila.appendChild(
+        tdAsistencias
+      );
+
+
+      const tdFaltas =
+        document.createElement(
+          "td"
+        );
+
+      tdFaltas.className =
+        "total";
+
+      tdFaltas.textContent =
+        estudiante.totalFaltas;
+
+      fila.appendChild(
+        tdFaltas
+      );
+
+
+      cuerpo.appendChild(
+        fila
+      );
+
+    }
+  );
+
+}
+
+
+/************************************************************
+ * RESUMEN POR PAÍS
+ ************************************************************/
+
+function construirResumenPais(
+  datos
+) {
+
+  const cuerpo =
+    document.getElementById(
+      "cuerpoPais"
+    );
+
+
+  cuerpo.innerHTML = "";
+
+
+  datos.forEach(
+    function(item) {
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+
+      tr.innerHTML = `
+
+        <td class="nombre">
+          ${escapeHTML(item.pais)}
+        </td>
+
+        <td>
+          ${item.delegados}
+        </td>
+
+        <td class="presente">
+          ${item.asistencias}
+        </td>
+
+        <td class="falta">
+          ${item.faltas}
+        </td>
+
+      `;
+
+
+      cuerpo.appendChild(
+        tr
+      );
+
+    }
+  );
+
+
+  if (datos.length === 0) {
+
+    cuerpo.innerHTML = `
+
+      <tr>
+
+        <td colspan="4">
+          No existen datos.
+        </td>
+
+      </tr>
+
+    `;
+
+  }
+
+}
+
+
+/************************************************************
+ * RESUMEN POR CAPACITACIÓN
+ ************************************************************/
+
+function construirResumenCapacitacion(
+  datos
+) {
+
+  const cuerpo =
+    document.getElementById(
+      "cuerpoCapacitacion"
+    );
+
+
+  cuerpo.innerHTML = "";
+
+
+  datos.forEach(
+    function(item) {
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+
+      tr.innerHTML = `
+
+        <td>
+          ${formatearFecha(
+            item.fecha
+          )}
+        </td>
+
+        <td class="nombre">
+          ${escapeHTML(
+            item.nombre
+          )}
+        </td>
+
+        <td>
+          ${item.totalDelegados}
+        </td>
+
+        <td class="presente">
+          ${item.presentes}
+        </td>
+
+        <td class="falta">
+          ${item.ausentes}
+        </td>
+
+      `;
+
+
+      cuerpo.appendChild(
+        tr
+      );
+
+    }
+  );
+
+
+  if (datos.length === 0) {
+
+    cuerpo.innerHTML = `
+
+      <tr>
+
+        <td colspan="5">
+          No existen capacitaciones.
+        </td>
+
+      </tr>
+
+    `;
+
+  }
+
+}
+
+
+/************************************************************
+ * FORMATEAR FECHA
+ ************************************************************/
+
+function formatearFecha(
+  fecha
+) {
+
+  if (!fecha) {
+    return "";
+  }
+
+
+  const partes =
+    fecha.split("-");
+
+
+  if (partes.length !== 3) {
+    return fecha;
+  }
+
+
+  return (
+    partes[2] +
+    "/" +
+    partes[1] +
+    "/" +
+    partes[0]
+  );
+
+}
+
+
+/************************************************************
+ * MENSAJES
+ ************************************************************/
+
+function mostrarMensaje(
+  id,
+  texto,
+  tipo
+) {
+
+  const elemento =
+    document.getElementById(id);
+
+
+  elemento.textContent =
+    texto;
+
+
+  elemento.className =
+    "mensaje " +
+    tipo;
+
+}
+
+
+function limpiarMensaje(
+  id
+) {
+
+  const elemento =
+    document.getElementById(id);
+
+
+  elemento.textContent =
+    "";
+
+  elemento.className =
+    "mensaje";
+
+}
+
+
+/************************************************************
+ * CARGANDO
+ ************************************************************/
+
+function mostrarCargando(
+  id,
+  mostrar
+) {
+
+  document.getElementById(
+    id
+  ).style.display =
+    mostrar
+      ? "block"
+      : "none";
+
+}
+
+
+/************************************************************
+ * ESCAPAR HTML
+ ************************************************************/
+
+function escapeHTML(
+  texto
+) {
+
+  return String(
+    texto || ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/************************************************************
+ * VOLVER
+ ************************************************************/
+
+function volverAlPanel() {
+
+  window.location.href =
+    "admin.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
