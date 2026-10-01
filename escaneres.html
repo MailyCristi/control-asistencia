@@ -1122,17 +1122,29 @@
           );
 
 
-        if (!resultado.exito) {
-
-          mostrarMensaje(
-            resultado.mensaje ||
-            "❌ No se pudo habilitar.",
-            "error"
-          );
-
-          return;
-
-        }
+    if (!resultado.exito) {
+    
+      if (
+        resultado.mensaje &&
+        resultado.mensaje.includes(
+          "jornada de hoy ya fue cerrada"
+        )
+      ) {
+    
+        mostrarAdvertenciaJornadaCerrada();
+    
+      } else {
+    
+        mostrarMensaje(
+          resultado.mensaje ||
+          "❌ No se pudo habilitar.",
+          "error"
+        );
+    
+      }
+    
+      return;
+    }
 
 
         mostrarMensaje(
@@ -1165,6 +1177,16 @@
 
     }
 
+    function mostrarAdvertenciaJornadaCerrada() {
+    
+      alert(
+        "🔒 JORNADA CERRADA\n\n" +
+        "La jornada de hoy ya fue cerrada.\n\n" +
+        "No se pueden habilitar ni deshabilitar " +
+        "escáneres hasta el siguiente día."
+      );
+    
+    }
 
     /* =====================================================
        DESHABILITAR
@@ -1216,17 +1238,29 @@
           );
 
 
-        if (!resultado.exito) {
-
-          mostrarMensaje(
-            resultado.mensaje ||
-            "❌ No se pudo deshabilitar.",
-            "error"
-          );
-
-          return;
-
-        }
+          if (!resultado.exito) {
+          
+            if (
+              resultado.mensaje &&
+              resultado.mensaje.includes(
+                "jornada de hoy ya fue cerrada"
+              )
+            ) {
+          
+              mostrarAdvertenciaJornadaCerrada();
+          
+            } else {
+          
+              mostrarMensaje(
+                resultado.mensaje ||
+                "❌ No se pudo deshabilitar.",
+                "error"
+              );
+          
+            }
+          
+            return;
+          }
 
 
         mostrarMensaje(
@@ -1266,90 +1300,76 @@
 
     async function cerrarJornadaAdmin() {
 
+  if (procesando) {
+    return;
+  }
 
-      if (procesando) {
-        return;
-      }
+  const confirmar =
+    confirm(
+      "⚠️ ¿Seguro que deseas cerrar la jornada?\n\n" +
+      "Todos los escáneres quedarán deshabilitados " +
+      "y los que no fueron habilitados quedarán " +
+      "registrados como AUSENTES."
+    );
 
+  if (!confirmar) {
+    return;
+  }
 
-      const confirmar =
-        confirm(
-          "⚠️ ¿Seguro que deseas cerrar la jornada?\n\n" +
-          "Todos los escáneres quedarán deshabilitados " +
-          "y los que no fueron habilitados quedarán " +
-          "registrados como AUSENTES."
-        );
+  procesando = true;
 
+  mostrarMensaje(
+    "⏳ Cerrando jornada...",
+    "info"
+  );
 
-      if (!confirmar) {
-        return;
-      }
+  try {
 
-
-      procesando = true;
-
-
-      mostrarMensaje(
-        "⏳ Cerrando jornada...",
-        "info"
+    const resultado =
+      await llamarAPI(
+        "cerrarJornadaEscaneres",
+        {
+          token: tokenAdmin
+        }
       );
 
+    if (!resultado.exito) {
 
-      try {
-
-
-        const resultado =
-          await llamarAPI(
-            "cerrarJornadaEscaneres",
-            {
-              token:
-                tokenAdmin
-            }
-          );
-
-
-        if (!resultado.exito) {
-
-          mostrarMensaje(
-            resultado.mensaje ||
-            "❌ No se pudo cerrar la jornada.",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        mostrarMensaje(
+      alert(
+        "🔒 JORNADA CERRADA\n\n" +
+        (
           resultado.mensaje ||
-          "🔴 Jornada cerrada correctamente.",
-          "exito"
-        );
+          "La jornada de hoy ya fue cerrada."
+        )
+      );
 
-
-        await cargarControlEscaneres();
-
-
-      } catch (error) {
-
-
-        console.error(error);
-
-
-        mostrarMensaje(
-          "❌ Error de comunicación con el servidor.",
-          "error"
-        );
-
-
-      } finally {
-
-        procesando = false;
-
-      }
-
+      return;
     }
+
+    mostrarMensaje(
+      resultado.mensaje ||
+      "🔴 Jornada cerrada correctamente.",
+      "exito"
+    );
+
+    await cargarControlEscaneres();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "❌ ERROR\n\n" +
+      "No se pudo comunicar con el servidor."
+    );
+
+  } finally {
+
+    procesando = false;
+
+  }
+
+}
 
 
     /* =====================================================
