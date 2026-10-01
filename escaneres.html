@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Escáneres - Control de Asistencia
+  </title>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      font-family:
+        Arial,
+        sans-serif;
+
+      background: #f1f5f9;
+
+      color: #1e293b;
+    }
+
+
+    .contenedor {
+
+      width: 92%;
+
+      max-width: 900px;
+
+      margin: 30px auto;
+    }
+
+
+    .tarjeta {
+
+      background: white;
+
+      border-radius: 18px;
+
+      padding: 30px;
+
+      box-shadow:
+        0 10px 30px
+        rgba(0,0,0,0.10);
+    }
+
+
+    h1 {
+
+      text-align: center;
+
+      margin-top: 0;
+
+      color: #1e3a8a;
+    }
+
+
+    .subtitulo {
+
+      text-align: center;
+
+      color: #64748b;
+
+      margin-bottom: 25px;
+    }
+
+
+    /* =====================================================
+       CABECERA
+    ====================================================== */
+
+    .cabecera {
+
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items: center;
+
+      gap: 15px;
+
+      margin-bottom: 25px;
+    }
+
+
+    .cabecera h2 {
+
+      margin: 0;
+
+      color: #1e3a8a;
+    }
+
+
+    .fecha {
+
+      margin-top: 5px;
+
+      color: #64748b;
+
+      font-size: 14px;
+    }
+
+
+    /* =====================================================
+       BOTONES
+    ====================================================== */
+
+    button {
+
+      border: none;
+
+      padding: 12px 16px;
+
+      border-radius: 10px;
+
+      font-size: 15px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      transition:
+        0.2s;
+    }
+
+
+    button:disabled {
+
+      opacity: 0.6;
+
+      cursor: not-allowed;
+    }
+
+
+    .btn-volver {
+
+      background: #e2e8f0;
+
+      color: #1e293b;
+    }
+
+
+    .btn-volver:hover {
+
+      background: #cbd5e1;
+    }
+
+
+    .btn-actualizar {
+
+      width: 100%;
+
+      background: #2563eb;
+
+      color: white;
+
+      margin-top: 10px;
+    }
+
+
+    .btn-actualizar:hover {
+
+      background: #1d4ed8;
+    }
+
+
+    .btn-cerrar {
+
+      width: 100%;
+
+      background: #dc2626;
+
+      color: white;
+
+      margin-top: 10px;
+    }
+
+
+    .btn-cerrar:hover {
+
+      background: #b91c1c;
+    }
+
+
+    .btn-habilitar {
+
+      background: #16a34a;
+
+      color: white;
+    }
+
+
+    .btn-habilitar:hover {
+
+      background: #15803d;
+    }
+
+
+    .btn-deshabilitar {
+
+      background: #dc2626;
+
+      color: white;
+    }
+
+
+    .btn-deshabilitar:hover {
+
+      background: #b91c1c;
+    }
+
+
+    /* =====================================================
+       ESCÁNER
+    ====================================================== */
+
+    .escaner {
+
+      border: 1px solid #e2e8f0;
+
+      border-radius: 14px;
+
+      padding: 20px;
+
+      margin-bottom: 15px;
+
+      background: #f8fafc;
+    }
+
+
+    .escaner-cabecera {
+
+      display: flex;
+
+      justify-content:
+        space-between;
+
+      align-items: center;
+
+      gap: 15px;
+    }
+
+
+    .escaner-nombre {
+
+      font-size: 19px;
+
+      font-weight: bold;
+
+      color: #1e293b;
+    }
+
+
+    .escaner-id {
+
+      color: #64748b;
+
+      font-size: 13px;
+
+      margin-top: 3px;
+    }
+
+
+    .escaner-info {
+
+      color: #475569;
+
+      font-size: 14px;
+
+      margin-top: 8px;
+
+      line-height: 1.6;
+    }
+
+
+    .estado-linea {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      gap: 8px;
+
+      margin-top: 12px;
+    }
+
+
+    .estado {
+
+      display: inline-block;
+
+      padding: 6px 10px;
+
+      border-radius: 999px;
+
+      font-size: 13px;
+
+      font-weight: bold;
+    }
+
+
+    .presente {
+
+      background: #dcfce7;
+
+      color: #166534;
+    }
+
+
+    .ausente {
+
+      background: #fee2e2;
+
+      color: #991b1b;
+    }
+
+
+    .sin-registro {
+
+      background: #fef3c7;
+
+      color: #92400e;
+    }
+
+
+    .habilitado {
+
+      background: #dcfce7;
+
+      color: #166534;
+    }
+
+
+    .deshabilitado {
+
+      background: #fee2e2;
+
+      color: #991b1b;
+    }
+
+
+    .acciones {
+
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 15px;
+    }
+
+
+    .acciones button {
+
+      flex: 1;
+    }
+
+
+    .horas {
+
+      color: #64748b;
+
+      font-size: 13px;
+
+      margin-top: 10px;
+    }
+
+
+    /* =====================================================
+       MENSAJES
+    ====================================================== */
+
+    .mensaje {
+
+      margin-top: 15px;
+
+      padding: 12px;
+
+      border-radius: 10px;
+
+      text-align: center;
+
+      display: none;
+    }
+
+
+    .mensaje.exito {
+
+      display: block;
+
+      background: #dcfce7;
+
+      color: #166534;
+    }
+
+
+    .mensaje.error {
+
+      display: block;
+
+      background: #fee2e2;
+
+      color: #991b1b;
+    }
+
+
+    .mensaje.info {
+
+      display: block;
+
+      background: #dbeafe;
+
+      color: #1e40af;
+    }
+
+
+    .cargando {
+
+      text-align: center;
+
+      padding: 30px;
+
+      color: #64748b;
+    }
+
+
+    .sin-escaneres {
+
+      text-align: center;
+
+      padding: 30px;
+
+      color: #64748b;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ====================================================== */
+
+    @media (max-width: 600px) {
+
+      .contenedor {
+
+        width: 94%;
+
+        margin:
+          15px auto;
+      }
+
+
+      .tarjeta {
+
+        padding: 20px;
+      }
+
+
+      .cabecera {
+
+        flex-direction: column;
+
+        align-items: stretch;
+      }
+
+
+      .btn-volver {
+
+        width: 100%;
+      }
+
+
+      .escaner-cabecera {
+
+        flex-direction: column;
+
+        align-items: stretch;
+      }
+
+
+      .acciones {
+
+        flex-direction: column;
+      }
+
+
+      .acciones button {
+
+        width: 100%;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <div class="contenedor">
+
+
+    <div class="tarjeta">
+
+
+      <!-- =================================================
+           CABECERA
+      ================================================== -->
+
+      <div class="cabecera">
+
+        <div>
+
+          <h2>
+            📱 Control de Escáneres
+          </h2>
+
+          <div
+            class="fecha"
+            id="fechaEscaneres"
+          >
+            Cargando fecha...
+          </div>
+
+        </div>
+
+
+        <button
+          class="btn-volver"
+          onclick="volverAlPanel()"
+        >
+          ← VOLVER AL PANEL
+        </button>
+
+      </div>
+
+
+      <!-- =================================================
+           SUBTÍTULO
+      ================================================== -->
+
+      <div class="subtitulo">
+
+        Habilitación y control de asistencia
+        de los escáneres
+
+      </div>
+
+
+      <!-- =================================================
+           LISTA DE ESCÁNERES
+      ================================================== -->
+
+      <div id="listaEscaneres">
+
+        <div class="cargando">
+
+          ⏳ Cargando escáneres...
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           ACTUALIZAR
+      ================================================== -->
+
+      <button
+        class="btn-actualizar"
+        id="btnActualizar"
+        onclick="cargarControlEscaneres()"
+      >
+        🔄 ACTUALIZAR
+      </button>
+
+
+      <!-- =================================================
+           CERRAR JORNADA
+      ================================================== -->
+
+      <button
+        class="btn-cerrar"
+        id="btnCerrarJornada"
+        onclick="cerrarJornadaAdmin()"
+      >
+        🔴 CERRAR JORNADA
+      </button>
+
+
+      <!-- =================================================
+           MENSAJE
+      ================================================== -->
+
+      <div
+        id="mensajeEscaneres"
+        class="mensaje"
+      ></div>
+
+
+    </div>
+
+
+  </div>
+
+
+  <script>
+
+
+    /* =====================================================
+       CONFIGURACIÓN
+    ====================================================== */
+
+    const URL_WORKER =
+      "https://quiet-lab-973a.cristimi1232.workers.dev";
+
+
+    let tokenAdmin =
+      sessionStorage.getItem("tokenAdmin");
+
+
+    let procesando =
+      false;
+
+
+    /* =====================================================
+       VERIFICAR SESIÓN
+    ====================================================== */
+
+    if (!tokenAdmin) {
+
+      alert(
+        "❌ No existe una sesión de administrador."
+      );
+
+      window.location.href =
+        "admin.html";
+
+    }
+
+
+    /* =====================================================
+       LLAMAR API
+    ====================================================== */
+
+    async function llamarAPI(
+      api,
+      parametros = {}
+    ) {
+
+      const respuesta =
+        await fetch(
+          URL_WORKER,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+              api: api,
+              ...parametros
+            })
+          }
+        );
+
+
+      if (!respuesta.ok) {
+
+        throw new Error(
+          "HTTP " +
+          respuesta.status
+        );
+
+      }
+
+
+      return await respuesta.json();
+
+    }
+
+
+    /* =====================================================
+       MENSAJE
+    ====================================================== */
+
+    function mostrarMensaje(
+      texto,
+      tipo = "info"
+    ) {
+
+      const mensaje =
+        document.getElementById(
+          "mensajeEscaneres"
+        );
+
+
+      mensaje.textContent =
+        texto;
+
+
+      mensaje.className =
+        "mensaje " +
+        tipo;
+
+    }
+
+
+    /* =====================================================
+       CARGAR ESCÁNERES
+    ====================================================== */
+
+    async function cargarControlEscaneres() {
+
+
+      if (procesando) {
+        return;
+      }
+
+
+      const lista =
+        document.getElementById(
+          "listaEscaneres"
+        );
+
+
+      lista.innerHTML = `
+        <div class="cargando">
+          ⏳ Cargando escáneres...
+        </div>
+      `;
+
+
+      try {
+
+
+        const resultado =
+          await llamarAPI(
+            "obtenerControlEscaneres",
+            {
+              token:
+                tokenAdmin
+            }
+          );
+
+
+        if (!resultado.exito) {
+
+          mostrarMensaje(
+            resultado.mensaje ||
+            "❌ No se pudo obtener la información.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        document.getElementById(
+          "fechaEscaneres"
+        ).textContent =
+          "Fecha: " +
+          resultado.fecha;
+
+
+        mostrarEscaneres(
+          resultado.escaneres || []
+        );
+
+
+      } catch (error) {
+
+
+        console.error(error);
+
+
+        mostrarMensaje(
+          "❌ Error de comunicación con el servidor.",
+          "error"
+        );
+
+
+        lista.innerHTML = `
+          <div class="sin-escaneres">
+            ❌ No se pudo cargar la información.
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       MOSTRAR ESCÁNERES
+    ====================================================== */
+
+    function mostrarEscaneres(
+      escaneres
+    ) {
+
+
+      const lista =
+        document.getElementById(
+          "listaEscaneres"
+        );
+
+
+      if (!escaneres.length) {
+
+        lista.innerHTML = `
+          <div class="sin-escaneres">
+            No existen escáneres activos.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      lista.innerHTML = "";
+
+
+      escaneres.forEach(
+        function(escaner) {
+
+
+          const estadoDia =
+            String(
+              escaner.estadoDia ||
+              "SIN REGISTRO"
+            ).trim();
+
+
+          const permiso =
+            String(
+              escaner.permisoEscanear ||
+              "NO"
+            ).trim();
+
+
+          let claseEstado =
+            "sin-registro";
+
+
+          if (
+            estadoDia ===
+            "PRESENTE"
+          ) {
+
+            claseEstado =
+              "presente";
+
+          }
+
+          else if (
+            estadoDia ===
+            "AUSENTE"
+          ) {
+
+            claseEstado =
+              "ausente";
+
+          }
+
+
+          const estaHabilitado =
+            permiso === "SI";
+
+
+          const div =
+            document.createElement(
+              "div"
+            );
+
+
+          div.className =
+            "escaner";
+
+
+          div.innerHTML = `
+
+            <div class="escaner-cabecera">
+
+              <div>
+
+                <div class="escaner-nombre">
+
+                  ${escapeHTML(
+                    escaner.nombre
+                  )}
+
+                </div>
+
+                <div class="escaner-id">
+
+                  ID:
+                  ${escapeHTML(
+                    escaner.idEscaner
+                  )}
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="escaner-info">
+
+              <strong>
+                Cargo:
+              </strong>
+
+              ${escapeHTML(
+                escaner.cargo
+              )}
+
+              <br>
+
+
+              <strong>
+                Foro:
+              </strong>
+
+              ${escapeHTML(
+                escaner.foro
+              )}
+
+            </div>
+
+
+            <div class="estado-linea">
+
+              <span
+                class="estado ${claseEstado}"
+              >
+
+                ${obtenerTextoEstado(
+                  estadoDia
+                )}
+
+              </span>
+
+
+              <span
+                class="estado ${
+                  estaHabilitado
+                    ? "habilitado"
+                    : "deshabilitado"
+                }"
+              >
+
+                ${
+                  estaHabilitado
+                    ? "🟢 HABILITADO"
+                    : "🔴 DESHABILITADO"
+                }
+
+              </span>
+
+            </div>
+
+
+            ${
+              escaner.horaHabilitacion
+                ? `
+                  <div class="horas">
+                    🕐 Habilitado:
+                    ${escapeHTML(
+                      escaner.horaHabilitacion
+                    )}
+                  </div>
+                `
+                : ""
+            }
+
+
+            ${
+              escaner.horaDeshabilitacion
+                ? `
+                  <div class="horas">
+                    🕐 Deshabilitado:
+                    ${escapeHTML(
+                      escaner.horaDeshabilitacion
+                    )}
+                  </div>
+                `
+                : ""
+            }
+
+
+            <div class="acciones">
+
+              ${
+                estaHabilitado
+                  ? `
+                    <button
+                      class="btn-deshabilitar"
+                      onclick="deshabilitarEscanerWeb(
+                        '${escapeJS(
+                          escaner.idEscaner
+                        )}'
+                      )"
+                    >
+                      🔴 DESHABILITAR
+                    </button>
+                  `
+                  : `
+                    <button
+                      class="btn-habilitar"
+                      onclick="habilitarEscanerWeb(
+                        '${escapeJS(
+                          escaner.idEscaner
+                        )}'
+                      )"
+                    >
+                      🟢 HABILITAR
+                    </button>
+                  `
+              }
+
+            </div>
+
+          `;
+
+
+          lista.appendChild(
+            div
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       TEXTO DEL ESTADO
+    ====================================================== */
+
+    function obtenerTextoEstado(
+      estado
+    ) {
+
+
+      if (
+        estado ===
+        "PRESENTE"
+      ) {
+
+        return "🟢 PRESENTE";
+
+      }
+
+
+      if (
+        estado ===
+        "AUSENTE"
+      ) {
+
+        return "🔴 AUSENTE";
+
+      }
+
+
+      return "🟡 SIN REGISTRO";
+
+    }
+
+
+    /* =====================================================
+       HABILITAR
+    ====================================================== */
+
+    async function habilitarEscanerWeb(
+      idEscaner
+    ) {
+
+
+      if (procesando) {
+        return;
+      }
+
+
+      procesando = true;
+
+
+      mostrarMensaje(
+        "⏳ Habilitando escáner...",
+        "info"
+      );
+
+
+      try {
+
+
+        const resultado =
+          await llamarAPI(
+            "habilitarEscaner",
+            {
+              idEscaner:
+                idEscaner,
+
+              token:
+                tokenAdmin
+            }
+          );
+
+
+        if (!resultado.exito) {
+
+          mostrarMensaje(
+            resultado.mensaje ||
+            "❌ No se pudo habilitar.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        mostrarMensaje(
+          resultado.mensaje ||
+          "🟢 Escáner habilitado.",
+          "exito"
+        );
+
+
+        await cargarControlEscaneres();
+
+
+      } catch (error) {
+
+
+        console.error(error);
+
+
+        mostrarMensaje(
+          "❌ Error de comunicación con el servidor.",
+          "error"
+        );
+
+
+      } finally {
+
+        procesando = false;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       DESHABILITAR
+    ====================================================== */
+
+    async function deshabilitarEscanerWeb(
+      idEscaner
+    ) {
+
+
+      if (procesando) {
+        return;
+      }
+
+
+      const confirmar =
+        confirm(
+          "¿Deseas deshabilitar este escáner?"
+        );
+
+
+      if (!confirmar) {
+        return;
+      }
+
+
+      procesando = true;
+
+
+      mostrarMensaje(
+        "⏳ Deshabilitando escáner...",
+        "info"
+      );
+
+
+      try {
+
+
+        const resultado =
+          await llamarAPI(
+            "deshabilitarEscaner",
+            {
+              idEscaner:
+                idEscaner,
+
+              token:
+                tokenAdmin
+            }
+          );
+
+
+        if (!resultado.exito) {
+
+          mostrarMensaje(
+            resultado.mensaje ||
+            "❌ No se pudo deshabilitar.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        mostrarMensaje(
+          resultado.mensaje ||
+          "🔴 Escáner deshabilitado.",
+          "exito"
+        );
+
+
+        await cargarControlEscaneres();
+
+
+      } catch (error) {
+
+
+        console.error(error);
+
+
+        mostrarMensaje(
+          "❌ Error de comunicación con el servidor.",
+          "error"
+        );
+
+
+      } finally {
+
+        procesando = false;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       CERRAR JORNADA
+    ====================================================== */
+
+    async function cerrarJornadaAdmin() {
+
+
+      if (procesando) {
+        return;
+      }
+
+
+      const confirmar =
+        confirm(
+          "⚠️ ¿Seguro que deseas cerrar la jornada?\n\n" +
+          "Todos los escáneres quedarán deshabilitados " +
+          "y los que no fueron habilitados quedarán " +
+          "registrados como AUSENTES."
+        );
+
+
+      if (!confirmar) {
+        return;
+      }
+
+
+      procesando = true;
+
+
+      mostrarMensaje(
+        "⏳ Cerrando jornada...",
+        "info"
+      );
+
+
+      try {
+
+
+        const resultado =
+          await llamarAPI(
+            "cerrarJornadaEscaneres",
+            {
+              token:
+                tokenAdmin
+            }
+          );
+
+
+        if (!resultado.exito) {
+
+          mostrarMensaje(
+            resultado.mensaje ||
+            "❌ No se pudo cerrar la jornada.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        mostrarMensaje(
+          resultado.mensaje ||
+          "🔴 Jornada cerrada correctamente.",
+          "exito"
+        );
+
+
+        await cargarControlEscaneres();
+
+
+      } catch (error) {
+
+
+        console.error(error);
+
+
+        mostrarMensaje(
+          "❌ Error de comunicación con el servidor.",
+          "error"
+        );
+
+
+      } finally {
+
+        procesando = false;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       VOLVER AL PANEL
+    ====================================================== */
+
+    function volverAlPanel() {
+
+      window.location.href =
+        "admin.html";
+
+    }
+
+
+    /* =====================================================
+       ESCAPAR HTML
+    ====================================================== */
+
+    function escapeHTML(
+      valor
+    ) {
+
+      return String(
+        valor ?? ""
+      )
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+    }
+
+
+    /* =====================================================
+       ESCAPAR JAVASCRIPT
+    ====================================================== */
+
+    function escapeJS(
+      valor
+    ) {
+
+      return String(
+        valor ?? ""
+      )
+      .replace(
+        /\\/g,
+        "\\\\"
+      )
+      .replace(
+        /'/g,
+        "\\'"
+      )
+      .replace(
+        /"/g,
+        '\\"'
+      );
+
+    }
+
+
+    /* =====================================================
+       CARGAR AL ABRIR LA PÁGINA
+    ====================================================== */
+
+    if (tokenAdmin) {
+
+      cargarControlEscaneres();
+
+    }
+
+
+  </script>
+
+
+</body>
+
+</html>
