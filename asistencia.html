@@ -982,10 +982,6 @@ td.total {
             </th>
 
             <th>
-              Delegados
-            </th>
-
-            <th>
               Asistencias
             </th>
 
@@ -2159,33 +2155,6 @@ function construirMatriz(
     }
   );
 
-
-  const thAsistencias =
-    document.createElement(
-      "th"
-    );
-
-  thAsistencias.textContent =
-    "ASISTENCIAS";
-
-  tr.appendChild(
-    thAsistencias
-  );
-
-
-  const thFaltas =
-    document.createElement(
-      "th"
-    );
-
-  thFaltas.textContent =
-    "FALTAS";
-
-  tr.appendChild(
-    thFaltas
-  );
-
-
   cabecera.appendChild(
     tr
   );
@@ -2263,39 +2232,6 @@ function construirMatriz(
         }
       );
 
-
-      const tdAsistencias =
-        document.createElement(
-          "td"
-        );
-
-      tdAsistencias.className =
-        "total";
-
-      tdAsistencias.textContent =
-        estudiante.totalAsistencias;
-
-      fila.appendChild(
-        tdAsistencias
-      );
-
-
-      const tdFaltas =
-        document.createElement(
-          "td"
-        );
-
-      tdFaltas.className =
-        "total";
-
-      tdFaltas.textContent =
-        estudiante.totalFaltas;
-
-      fila.appendChild(
-        tdFaltas
-      );
-
-
       cuerpo.appendChild(
         fila
       );
@@ -2338,10 +2274,6 @@ function construirResumenPais(
           ${escapeHTML(item.pais)}
         </td>
 
-        <td>
-          ${item.delegados}
-        </td>
-
         <td class="presente">
           ${item.asistencias}
         </td>
@@ -2367,7 +2299,7 @@ function construirResumenPais(
 
       <tr>
 
-        <td colspan="4">
+        <td colspan="3">
           No existen datos.
         </td>
 
