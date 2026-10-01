@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>Gestión de Capacitaciones</title>
+
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+
+  margin: 0;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  background: #f4f6f9;
+
+  color: #222;
+
+}
+
+
+header {
+
+  background: #1f4e78;
+
+  color: white;
+
+  padding: 18px 25px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+}
+
+
+header h1 {
+
+  margin: 0;
+
+  font-size: 22px;
+
+}
+
+
+.btn-volver {
+
+  background: white;
+
+  color: #1f4e78;
+
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 7px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+}
+
+
+.contenedor {
+
+  width: 95%;
+
+  max-width: 1200px;
+
+  margin: 25px auto;
+
+}
+
+
+.panel {
+
+  background: white;
+
+  border-radius: 10px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 2px 8px
+    rgba(0,0,0,0.08);
+
+  margin-bottom: 20px;
+
+}
+
+
+.panel-superior {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  flex-wrap: wrap;
+
+}
+
+
+.panel-superior h2 {
+
+  margin: 0;
+
+}
+
+
+.buscar {
+
+  width: 100%;
+
+  max-width: 400px;
+
+  padding: 11px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 6px;
+
+  font-size: 14px;
+
+}
+
+
+.btn {
+
+  border: none;
+
+  padding: 10px 15px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+}
+
+
+.btn-nuevo {
+
+  background: #198754;
+
+  color: white;
+
+}
+
+
+.btn-guardar {
+
+  background: #1f4e78;
+
+  color: white;
+
+}
+
+
+.btn-cancelar {
+
+  background: #6c757d;
+
+  color: white;
+
+}
+
+
+.btn-editar {
+
+  background: #ffc107;
+
+  color: #222;
+
+  padding: 7px 11px;
+
+  font-size: 12px;
+
+}
+
+
+.formulario {
+
+  display: none;
+
+  margin-top: 20px;
+
+  border-top: 1px solid #ddd;
+
+  padding-top: 20px;
+
+}
+
+
+.formulario h3 {
+
+  margin-top: 0;
+
+}
+
+
+.grid-formulario {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 15px;
+
+}
+
+
+.campo {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+
+}
+
+
+.campo label {
+
+  font-weight: bold;
+
+  font-size: 14px;
+
+}
+
+
+.campo input,
+.campo select {
+
+  width: 100%;
+
+  padding: 11px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 6px;
+
+  font-size: 14px;
+
+}
+
+
+.acciones-formulario {
+
+  margin-top: 20px;
+
+  display: flex;
+
+  gap: 10px;
+
+}
+
+
+.tabla-contenedor {
+
+  overflow-x: auto;
+
+}
+
+
+table {
+
+  width: 100%;
+
+  border-collapse: collapse;
+
+  min-width: 750px;
+
+}
+
+
+thead {
+
+  background: #1f4e78;
+
+  color: white;
+
+}
+
+
+th,
+td {
+
+  padding: 12px 10px;
+
+  border-bottom:
+    1px solid #ddd;
+
+  text-align: center;
+
+  font-size: 14px;
+
+}
+
+
+tbody tr:hover {
+
+  background: #f5f5f5;
+
+}
+
+
+.estado-activo {
+
+  color: #198754;
+
+  font-weight: bold;
+
+}
+
+
+.estado-inactivo {
+
+  color: #dc3545;
+
+  font-weight: bold;
+
+}
+
+
+.sin-datos {
+
+  padding: 30px;
+
+  text-align: center;
+
+  color: #777;
+
+}
+
+
+.cargando {
+
+  padding: 30px;
+
+  text-align: center;
+
+  font-weight: bold;
+
+}
+
+
+.mensaje {
+
+  padding: 12px;
+
+  border-radius: 6px;
+
+  margin-bottom: 15px;
+
+  display: none;
+
+}
+
+
+.mensaje.info {
+
+  display: block;
+
+  background: #cff4fc;
+
+  color: #055160;
+
+}
+
+
+.mensaje.exito {
+
+  display: block;
+
+  background: #d1e7dd;
+
+  color: #0f5132;
+
+}
+
+
+.mensaje.error {
+
+  display: block;
+
+  background: #f8d7da;
+
+  color: #842029;
+
+}
+
+
+@media (max-width: 700px) {
+
+  header {
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+  }
+
+
+  .btn-volver {
+
+    width: 100%;
+
+  }
+
+
+  .panel-superior {
+
+    align-items: stretch;
+
+  }
+
+
+  .buscar {
+
+    max-width: none;
+
+  }
+
+
+  .btn-nuevo {
+
+    width: 100%;
+
+  }
+
+
+  .grid-formulario {
+
+    grid-template-columns: 1fr;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+  <h1>
+    📅 Gestión de Capacitaciones
+  </h1>
+
+
+  <button
+    class="btn-volver"
+    onclick="volverAdmin()"
+  >
+
+    ← VOLVER AL PANEL
+
+  </button>
+
+</header>
+
+
+
+<div class="contenedor">
+
+
+  <div class="panel">
+
+
+    <div class="panel-superior">
+
+
+      <h2>
+        Capacitaciones registradas
+      </h2>
+
+
+      <input
+        type="text"
+        id="buscar"
+        class="buscar"
+        placeholder="🔎 Buscar por foro, fecha o nombre..."
+        oninput="filtrarCapacitaciones()"
+      >
+
+
+      <button
+        class="btn btn-nuevo"
+        onclick="mostrarFormularioNuevo()"
+      >
+
+        ➕ NUEVA CAPACITACIÓN
+
+      </button>
+
+
+    </div>
+
+
+
+    <div
+      id="formulario"
+      class="formulario"
+    >
+
+
+      <h3 id="tituloFormulario">
+        ➕ Registrar nueva capacitación
+      </h3>
+
+
+      <div class="grid-formulario">
+
+
+        <div class="campo">
+
+          <label for="foro">
+
+            Foro *
+
+          </label>
+
+
+          <select id="foro">
+
+            <option value="">
+              Seleccionar foro
+            </option>
+
+          </select>
+
+        </div>
+
+
+
+        <div class="campo">
+
+          <label for="fecha">
+
+            Fecha *
+
+          </label>
+
+
+          <input
+            type="date"
+            id="fecha"
+          >
+
+        </div>
+
+
+
+        <div class="campo">
+
+          <label for="nombre">
+
+            Nombre *
+
+          </label>
+
+
+          <input
+            type="text"
+            id="nombre"
+            placeholder="Ej. Capacitación 5"
+          >
+
+        </div>
+
+
+
+        <div
+          class="campo"
+          id="campoActiva"
+        >
+
+          <label for="activa">
+
+            Estado
+
+          </label>
+
+
+          <select id="activa">
+
+            <option value="SI">
+              ACTIVA
+            </option>
+
+            <option value="NO">
+              INACTIVA
+            </option>
+
+          </select>
+
+        </div>
+
+
+      </div>
+
+
+
+      <div class="acciones-formulario">
+
+
+        <button
+          id="btnGuardar"
+          class="btn btn-guardar"
+          onclick="guardarCapacitacion()"
+        >
+
+          💾 REGISTRAR CAPACITACIÓN
+
+        </button>
+
+
+        <button
+          class="btn btn-cancelar"
+          onclick="cancelarFormulario()"
+        >
+
+          ✖ CANCELAR
+
+        </button>
+
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+
+  <div
+    id="mensaje"
+    class="mensaje"
+  ></div>
+
+
+
+  <div class="panel">
+
+
+    <div class="tabla-contenedor">
+
+
+      <table>
+
+
+        <thead>
+
+          <tr>
+
+            <th>
+              ID
+            </th>
+
+            <th>
+              FORO
+            </th>
+
+            <th>
+              FECHA
+            </th>
+
+            <th>
+              NOMBRE
+            </th>
+
+            <th>
+              ESTADO
+            </th>
+
+            <th>
+              ACCIONES
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody
+          id="tablaCapacitaciones"
+        >
+
+          <tr>
+
+            <td
+              colspan="6"
+              class="cargando"
+            >
+
+              ⏳ Cargando capacitaciones...
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+
+      </table>
+
+
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* =========================================
+   CONFIGURACIÓN
+========================================= */
+
+const API_URL =
+  "https://quiet-lab-973a.cristimi1232.workers.dev/";
+
+
+let tokenAdmin =
+  sessionStorage.getItem(
+    "tokenAdmin"
+  );
+
+
+let capacitaciones = [];
+
+
+let foros = [];
+
+
+let capacitacionEditando =
+  null;
+
+
+
+/* =========================================
+   LLAMAR API
+========================================= */
+
+async function llamarAPI(
+  api,
+  datos = {}
+) {
+
+  const respuesta =
+    await fetch(
+      API_URL,
+      {
+
+        method: "POST",
+
+        headers: {
+
+          "Content-Type":
+            "application/json"
+
+        },
+
+        body:
+          JSON.stringify({
+
+            api:
+              api,
+
+            ...datos
+
+          })
+
+      }
+    );
+
+
+  const texto =
+    await respuesta.text();
+
+
+  let resultado;
+
+
+  try {
+
+    resultado =
+      JSON.parse(texto);
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Respuesta no válida:",
+      texto
+    );
+
+    throw new Error(
+      "El servidor devolvió una respuesta no válida."
+    );
+
+  }
+
+
+  return resultado;
+
+}
+
+
+
+/* =========================================
+   SESIÓN
+========================================= */
+
+function verificarSesion() {
+
+  tokenAdmin =
+    sessionStorage.getItem(
+      "tokenAdmin"
+    );
+
+
+  if (!tokenAdmin) {
+
+    window.location.href =
+      "admin.html";
+
+    return false;
+
+  }
+
+
+  return true;
+
+}
+
+
+
+/* =========================================
+   MENSAJE
+========================================= */
+
+function mostrarMensaje(
+  texto,
+  tipo = "info"
+) {
+
+  const elemento =
+    document.getElementById(
+      "mensaje"
+    );
+
+
+  elemento.textContent =
+    texto;
+
+
+  elemento.className =
+    "mensaje " + tipo;
+
+}
+
+
+
+/* =========================================
+   CARGAR FOROS
+========================================= */
+
+async function cargarForos() {
+
+  const resultado =
+    await llamarAPI(
+      "listarForos",
+      {
+        token:
+          tokenAdmin
+      }
+    );
+
+
+  if (!resultado.exito) {
+
+    throw new Error(
+      resultado.mensaje ||
+      "No se pudieron cargar los foros."
+    );
+
+  }
+
+
+  foros =
+    resultado.foros || [];
+
+
+  const select =
+    document.getElementById(
+      "foro"
+    );
+
+
+  select.innerHTML = `
+
+    <option value="">
+      Seleccionar foro
+    </option>
+
+  `;
+
+
+  foros.forEach(
+    function(foro) {
+
+      const activo =
+        String(
+          foro.activo || ""
+        )
+        .trim()
+        .toUpperCase();
+
+
+      if (activo !== "SI") {
+        return;
+      }
+
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        foro.nombreForo;
+
+
+      option.textContent =
+        foro.nombreForo;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+}
+
+
+
+/* =========================================
+   CARGAR CAPACITACIONES
+========================================= */
+
+async function cargarCapacitaciones() {
+
+  if (!verificarSesion()) {
+    return;
+  }
+
+
+  const tabla =
+    document.getElementById(
+      "tablaCapacitaciones"
+    );
+
+
+  tabla.innerHTML = `
+
+    <tr>
+
+      <td
+        colspan="6"
+        class="cargando"
+      >
+
+        ⏳ Cargando capacitaciones...
+
+      </td>
+
+    </tr>
+
+  `;
+
+
+  try {
+
+
+    await cargarForos();
+
+
+    const resultado =
+      await llamarAPI(
+        "listarCapacitaciones",
+        {
+          token:
+            tokenAdmin
+        }
+      );
+
+
+    if (!resultado.exito) {
+
+      tabla.innerHTML = `
+
+        <tr>
+
+          <td
+            colspan="6"
+            class="sin-datos"
+          >
+
+            ❌ ${
+              resultado.mensaje ||
+              "No se pudieron cargar las capacitaciones."
+            }
+
+          </td>
+
+        </tr>
+
+      `;
+
+      return;
+
+    }
+
+
+    capacitaciones =
+      resultado.capacitaciones || [];
+
+
+    mostrarCapacitaciones(
+      capacitaciones
+    );
+
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+
+    tabla.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="6"
+          class="sin-datos"
+        >
+
+          ❌ ${
+            error.message ||
+            "No se pudo comunicar con el servidor."
+          }
+
+        </td>
+
+      </tr>
+
+    `;
+
+  }
+
+}
+
+
+
+/* =========================================
+   MOSTRAR CAPACITACIONES
+========================================= */
+
+function mostrarCapacitaciones(
+  lista
+) {
+
+  const tabla =
+    document.getElementById(
+      "tablaCapacitaciones"
+    );
+
+
+  if (
+    !lista ||
+    lista.length === 0
+  ) {
+
+    tabla.innerHTML = `
+
+      <tr>
+
+        <td
+          colspan="6"
+          class="sin-datos"
+        >
+
+          No existen capacitaciones registradas.
+
+        </td>
+
+      </tr>
+
+    `;
+
+
+    return;
+
+  }
+
+
+  tabla.innerHTML =
+
+    lista.map(
+      function(item) {
+
+
+        const estado =
+          String(
+            item.activa || ""
+          )
+          .trim()
+          .toUpperCase();
+
+
+        const clase =
+          estado === "SI"
+            ? "estado-activo"
+            : "estado-inactivo";
+
+
+        const textoEstado =
+          estado === "SI"
+            ? "ACTIVA"
+            : "INACTIVA";
+
+
+        return `
+
+          <tr>
+
+            <td>
+              ${escapeHTML(
+                item.idCapacitacion
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                item.foro
+              )}
+            </td>
+
+            <td>
+              ${formatearFecha(
+                item.fecha
+              )}
+            </td>
+
+            <td>
+              ${escapeHTML(
+                item.nombre
+              )}
+            </td>
+
+            <td
+              class="${clase}"
+            >
+              ${textoEstado}
+            </td>
+
+            <td>
+
+              <button
+                class="btn btn-editar"
+                onclick="
+                  editarCapacitacionWeb(
+                    '${escapeJS(
+                      item.idCapacitacion
+                    )}'
+                  )
+                "
+              >
+
+                ✏️ EDITAR
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    )
+    .join("");
+
+}
+
+
+
+/* =========================================
+   FORMATEAR FECHA
+========================================= */
+
+function formatearFecha(
+  fecha
+) {
+
+  if (!fecha) {
+    return "";
+  }
+
+
+  const partes =
+    String(fecha).split("-");
+
+
+  if (
+    partes.length !== 3
+  ) {
+
+    return escapeHTML(
+      fecha
+    );
+
+  }
+
+
+  return (
+    partes[2] +
+    "/" +
+    partes[1] +
+    "/" +
+    partes[0]
+  );
+
+}
+
+
+
+/* =========================================
+   FILTRAR
+========================================= */
+
+function filtrarCapacitaciones() {
+
+  const texto =
+    document
+      .getElementById(
+        "buscar"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  if (!texto) {
+
+    mostrarCapacitaciones(
+      capacitaciones
+    );
+
+    return;
+
+  }
+
+
+  const filtradas =
+    capacitaciones.filter(
+      function(item) {
+
+        const contenido = [
+
+          item.idCapacitacion,
+
+          item.foro,
+
+          item.fecha,
+
+          item.nombre,
+
+          item.activa
+
+        ]
+        .join(" ")
+        .toLowerCase();
+
+
+        return contenido.includes(
+          texto
+        );
+
+      }
+    );
+
+
+  mostrarCapacitaciones(
+    filtradas
+  );
+
+}
+
+
+
+/* =========================================
+   NUEVA CAPACITACIÓN
+========================================= */
+
+function mostrarFormularioNuevo() {
+
+  capacitacionEditando =
+    null;
+
+
+  document.getElementById(
+    "tituloFormulario"
+  ).textContent =
+    "➕ Registrar nueva capacitación";
+
+
+  document.getElementById(
+    "btnGuardar"
+  ).textContent =
+    "💾 REGISTRAR CAPACITACIÓN";
+
+
+  document.getElementById(
+    "foro"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "fecha"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "nombre"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "activa"
+  ).value =
+    "SI";
+
+
+  document.getElementById(
+    "campoActiva"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "block";
+
+
+  window.scrollTo({
+
+    top: 0,
+
+    behavior: "smooth"
+
+  });
+
+}
+
+
+
+/* =========================================
+   EDITAR
+========================================= */
+
+function editarCapacitacionWeb(
+  id
+) {
+
+  const item =
+    capacitaciones.find(
+      function(capacitacion) {
+
+        return String(
+          capacitacion.idCapacitacion
+        ) === String(id);
+
+      }
+    );
+
+
+  if (!item) {
+
+    alert(
+      "❌ No se encontró la capacitación."
+    );
+
+    return;
+
+  }
+
+
+  capacitacionEditando =
+    item;
+
+
+  document.getElementById(
+    "tituloFormulario"
+  ).textContent =
+    "✏️ Editar capacitación";
+
+
+  document.getElementById(
+    "btnGuardar"
+  ).textContent =
+    "💾 GUARDAR CAMBIOS";
+
+
+  document.getElementById(
+    "campoActiva"
+  ).style.display =
+    "flex";
+
+
+  document.getElementById(
+    "foro"
+  ).value =
+    item.foro || "";
+
+
+  document.getElementById(
+    "fecha"
+  ).value =
+    item.fecha || "";
+
+
+  document.getElementById(
+    "nombre"
+  ).value =
+    item.nombre || "";
+
+
+  document.getElementById(
+    "activa"
+  ).value =
+    item.activa || "SI";
+
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "block";
+
+
+  window.scrollTo({
+
+    top: 0,
+
+    behavior: "smooth"
+
+  });
+
+}
+
+
+
+/* =========================================
+   GUARDAR
+========================================= */
+
+async function guardarCapacitacion() {
+
+  if (!verificarSesion()) {
+    return;
+  }
+
+
+  const foro =
+    document.getElementById(
+      "foro"
+    ).value.trim();
+
+
+  const fecha =
+    document.getElementById(
+      "fecha"
+    ).value;
+
+
+  const nombre =
+    document.getElementById(
+      "nombre"
+    ).value.trim();
+
+
+  const activa =
+    document.getElementById(
+      "activa"
+    ).value;
+
+
+  if (
+    !foro ||
+    !fecha ||
+    !nombre
+  ) {
+
+    alert(
+      "❌ Completa todos los campos obligatorios."
+    );
+
+    return;
+
+  }
+
+
+  const boton =
+    document.getElementById(
+      "btnGuardar"
+    );
+
+
+  boton.disabled =
+    true;
+
+
+  try {
+
+    let resultado;
+
+
+    if (
+      capacitacionEditando
+    ) {
+
+
+      mostrarMensaje(
+        "⏳ Guardando cambios...",
+        "info"
+      );
+
+
+      resultado =
+        await llamarAPI(
+          "editarCapacitacion",
+          {
+
+            token:
+              tokenAdmin,
+
+            idCapacitacion:
+              capacitacionEditando
+                .idCapacitacion,
+
+            foro:
+              foro,
+
+            fecha:
+              fecha,
+
+            nombre:
+              nombre,
+
+            activa:
+              activa
+
+          }
+        );
+
+    }
+
+    else {
+
+
+      mostrarMensaje(
+        "⏳ Registrando capacitación...",
+        "info"
+      );
+
+
+      resultado =
+        await llamarAPI(
+          "registrarCapacitacion",
+          {
+
+            token:
+              tokenAdmin,
+
+            foro:
+              foro,
+
+            fecha:
+              fecha,
+
+            nombre:
+              nombre
+
+          }
+        );
+
+    }
+
+
+    if (!resultado.exito) {
+
+      mostrarMensaje(
+        resultado.mensaje ||
+        "❌ No se pudo guardar.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    mostrarMensaje(
+      resultado.mensaje ||
+      "✅ Operación realizada correctamente.",
+      "exito"
+    );
+
+
+    cancelarFormulario();
+
+
+    await cargarCapacitaciones();
+
+
+  }
+
+  catch (error) {
+
+    console.error(error);
+
+
+    mostrarMensaje(
+      "❌ No se pudo comunicar con el servidor.",
+      "error"
+    );
+
+  }
+
+  finally {
+
+    boton.disabled =
+      false;
+
+  }
+
+}
+
+
+
+/* =========================================
+   CANCELAR
+========================================= */
+
+function cancelarFormulario() {
+
+  capacitacionEditando =
+    null;
+
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "foro"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "fecha"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "nombre"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "activa"
+  ).value =
+    "SI";
+
+
+  document.getElementById(
+    "tituloFormulario"
+  ).textContent =
+    "➕ Registrar nueva capacitación";
+
+
+  document.getElementById(
+    "btnGuardar"
+  ).textContent =
+    "💾 REGISTRAR CAPACITACIÓN";
+
+
+  document.getElementById(
+    "campoActiva"
+  ).style.display =
+    "none";
+
+}
+
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHTML(
+  valor
+) {
+
+  return String(
+    valor ?? ""
+  )
+
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+
+  .replace(
+    /</g,
+    "&lt;"
+  )
+
+  .replace(
+    />/g,
+    "&gt;"
+  )
+
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+
+/* =========================================
+   ESCAPE JS
+========================================= */
+
+function escapeJS(
+  valor
+) {
+
+  return String(
+    valor ?? ""
+  )
+
+  .replace(
+    /\\/g,
+    "\\\\"
+  )
+
+  .replace(
+    /'/g,
+    "\\'"
+  );
+
+}
+
+
+
+/* =========================================
+   VOLVER
+========================================= */
+
+function volverAdmin() {
+
+  window.location.href =
+    "admin.html";
+
+}
+
+
+
+/* =========================================
+   INICIO
+========================================= */
+
+verificarSesion();
+
+cargarCapacitaciones();
+
+</script>
+
+</body>
+
+</html>
