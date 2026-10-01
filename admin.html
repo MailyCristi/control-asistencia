@@ -71,6 +71,16 @@
       background: #1d4ed8;
     }
 
+    .btn-volver {
+      background: #e2e8f0;
+      color: #1e293b;
+      margin-top: 10px;
+    }
+    
+    .btn-volver:hover {
+      background: #cbd5e1;
+    }
+    
     .mensaje {
       margin-top: 15px;
       padding: 12px;
@@ -197,6 +207,13 @@
       <button class="btn-login" onclick="iniciarSesionAdmin()">
         INGRESAR
       </button>
+      
+      <button
+        class="btn-volver"
+        onclick="volverAlInicio()"
+      >
+        ← VOLVER
+      </button>
 
       <div id="mensajeLogin" class="mensaje"></div>
 
@@ -244,9 +261,18 @@
 
         <div class="opcion">
           <div class="icono">📱</div>
+        
           <h3>Escáneres</h3>
-          <p>Administrar usuarios y escáneres.</p>
-          <button class="btn-opcion" onclick="proximamente()">
+        
+          <p>
+            Controlar la habilitación y asistencia
+            de los escáneres.
+          </p>
+        
+          <button
+            class="btn-opcion"
+            onclick="abrirEscaneres()"
+          >
             ADMINISTRAR
           </button>
         </div>
@@ -265,6 +291,8 @@
 
     </div>
 
+    
+
   </div>
 
 
@@ -276,6 +304,9 @@
 
     let tokenAdmin = null;
 
+    function volverAlInicio() {
+      window.location.href = "index.html";
+    }
 
     async function llamarAPI(api, parametros = {}) {
 
@@ -408,6 +439,10 @@
 
       window.location.href = "estudiantes.html";
     
+    }
+
+    function abrirEscaneres() {
+      window.location.href = "escaneres.html";
     }
     
     document
