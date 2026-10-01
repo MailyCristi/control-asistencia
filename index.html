@@ -884,7 +884,47 @@ async function iniciarSesionAdminWeb() {
   }
 
 }
+async function cargarControlEscaneres() {
 
+  const token =
+    sessionStorage.getItem("tokenAdmin");
+
+  if (!token) {
+    console.error("No existe token de administrador.");
+    return;
+  }
+
+  try {
+
+    const respuesta = await fetch(
+      "https://quiet-lab-973a.cristimi1232.workers.dev",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          api: "obtenerControlEscaneres",
+          token: token
+        })
+      }
+    );
+
+    const resultado = await respuesta.json();
+
+    console.log("CONTROL DE ESCÁNERES:", resultado);
+
+  } catch (error) {
+
+    console.error(
+      "Error obteniendo control de escáneres:",
+      error
+    );
+
+  }
+}
 
   // ==========================================================
   // LOGIN GENERAL
