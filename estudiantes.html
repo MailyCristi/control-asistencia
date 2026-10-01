@@ -1,184 +1,538 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Estudiantes - Control de Asistencia</title>
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    Estudiantes - Control de Asistencia
+  </title>
 
   <style>
+
     * {
       box-sizing: border-box;
     }
 
     body {
+
       margin: 0;
-      font-family: Arial, sans-serif;
+
+      font-family:
+        Arial,
+        sans-serif;
+
       background: #f1f5f9;
+
       color: #1e293b;
+
     }
+
 
     .contenedor {
+
       width: 95%;
+
       max-width: 1200px;
+
       margin: 30px auto;
+
     }
+
 
     .tarjeta {
+
       background: white;
+
       border-radius: 18px;
+
       padding: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+
+      box-shadow:
+        0 10px 30px
+        rgba(0,0,0,0.08);
+
     }
+
 
     .cabecera {
+
       display: flex;
-      justify-content: space-between;
+
+      justify-content:
+        space-between;
+
       align-items: center;
+
       gap: 15px;
+
       margin-bottom: 25px;
+
     }
+
 
     h1 {
+
       margin: 0;
+
       color: #1e3a8a;
+
     }
+
 
     .subtitulo {
+
       color: #64748b;
+
       margin: 5px 0 0;
+
     }
+
 
     button {
+
       border: none;
+
       border-radius: 9px;
+
       padding: 11px 16px;
+
       font-weight: bold;
+
       cursor: pointer;
+
     }
+
+
+    button:disabled {
+
+      opacity: 0.6;
+
+      cursor: not-allowed;
+
+    }
+
 
     .btn-volver {
+
       background: #64748b;
+
       color: white;
+
     }
+
 
     .btn-nuevo {
+
       background: #16a34a;
+
       color: white;
+
     }
+
 
     .barra {
+
       display: flex;
+
       gap: 10px;
+
       margin-bottom: 20px;
+
     }
+
 
     .buscador {
+
       flex: 1;
+
       padding: 13px;
-      border: 1px solid #cbd5e1;
+
+      border:
+        1px solid #cbd5e1;
+
       border-radius: 9px;
+
       font-size: 15px;
+
     }
+
 
     .tabla-contenedor {
+
       overflow-x: auto;
+
     }
+
 
     table {
+
       width: 100%;
-      border-collapse: collapse;
-      min-width: 750px;
+
+      border-collapse:
+        collapse;
+
+      min-width: 1100px;
+
     }
+
 
     th {
+
       background: #1e3a8a;
+
       color: white;
+
       padding: 13px;
+
       text-align: left;
+
+      white-space: nowrap;
+
     }
+
 
     td {
+
       padding: 12px;
-      border-bottom: 1px solid #e2e8f0;
+
+      border-bottom:
+        1px solid #e2e8f0;
+
+      white-space: nowrap;
+
     }
+
 
     tr:hover {
+
       background: #f8fafc;
+
     }
+
 
     .estado {
+
       display: inline-block;
+
       padding: 5px 9px;
+
       border-radius: 20px;
+
       font-size: 12px;
+
       font-weight: bold;
+
     }
+
 
     .activo {
+
       background: #dcfce7;
+
       color: #166534;
+
     }
+
 
     .inactivo {
+
       background: #fee2e2;
+
       color: #991b1b;
+
     }
+
 
     .mensaje {
+
       text-align: center;
+
       padding: 20px;
+
       color: #64748b;
+
     }
 
+
     .contador {
+
       margin-bottom: 15px;
+
       color: #475569;
+
       font-weight: bold;
+
     }
+
+
+    /* =====================================================
+       FORMULARIO
+    ====================================================== */
+
+    .formulario {
+
+      display: none;
+
+      margin-bottom: 25px;
+
+      padding: 20px;
+
+      background: #f8fafc;
+
+      border:
+        1px solid #e2e8f0;
+
+      border-radius: 14px;
+
+    }
+
+
+    .formulario h2 {
+
+      margin-top: 0;
+
+      color: #1e3a8a;
+
+    }
+
+
+    .grid-formulario {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 15px;
+
+    }
+
+
+    .campo {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 6px;
+
+    }
+
+
+    .campo label {
+
+      font-size: 14px;
+
+      font-weight: bold;
+
+      color: #475569;
+
+    }
+
+
+    .campo input,
+    .campo select {
+
+      width: 100%;
+
+      padding: 12px;
+
+      border:
+        1px solid #cbd5e1;
+
+      border-radius: 9px;
+
+      font-size: 15px;
+
+      background: white;
+
+    }
+
+
+    .campo-completo {
+
+      grid-column:
+        1 / -1;
+
+    }
+
+
+    .acciones-formulario {
+
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 20px;
+
+    }
+
+
+    .btn-guardar {
+
+      background: #16a34a;
+
+      color: white;
+
+      flex: 1;
+
+    }
+
+
+    .btn-cancelar {
+
+      background: #64748b;
+
+      color: white;
+
+      flex: 1;
+
+    }
+
+
+    .mensaje-formulario {
+
+      margin-top: 15px;
+
+      padding: 12px;
+
+      border-radius: 9px;
+
+      text-align: center;
+
+      display: none;
+
+    }
+
+
+    .mensaje-formulario.exito {
+
+      display: block;
+
+      background: #dcfce7;
+
+      color: #166534;
+
+    }
+
+
+    .mensaje-formulario.error {
+
+      display: block;
+
+      background: #fee2e2;
+
+      color: #991b1b;
+
+    }
+
 
     @media (max-width: 600px) {
 
       .cabecera {
-        flex-direction: column;
-        align-items: stretch;
+
+        flex-direction:
+          column;
+
+        align-items:
+          stretch;
+
       }
+
 
       .cabecera button {
+
         width: 100%;
+
       }
 
+
       .barra {
-        flex-direction: column;
+
+        flex-direction:
+          column;
+
+      }
+
+
+      .grid-formulario {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+
+      .campo-completo {
+
+        grid-column:
+          auto;
+
+      }
+
+
+      .acciones-formulario {
+
+        flex-direction:
+          column;
+
       }
 
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
 <div class="contenedor">
 
+
   <div class="tarjeta">
+
+
+    <!-- =====================================================
+         CABECERA
+    ====================================================== -->
 
     <div class="cabecera">
 
       <div>
-        <h1>👥 Estudiantes</h1>
+
+        <h1>
+          👥 Estudiantes
+        </h1>
+
         <p class="subtitulo">
           Administración de estudiantes
         </p>
+
       </div>
+
 
       <button
         class="btn-volver"
-        onclick="volverAdmin()">
+        onclick="volverAdmin()"
+      >
         ← VOLVER
       </button>
 
     </div>
 
+
+    <!-- =====================================================
+         BARRA
+    ====================================================== -->
 
     <div class="barra">
 
@@ -186,47 +540,233 @@
         type="text"
         id="buscador"
         class="buscador"
-        placeholder="🔎 Buscar por nombre, CI o código QR..."
+        placeholder="🔎 Buscar por nombre, CI, QR, país, foro o curso..."
         oninput="filtrarEstudiantes()"
       >
 
+
       <button
         class="btn-nuevo"
-        onclick="alert('El formulario lo construiremos después.')">
+        onclick="mostrarFormulario()"
+      >
         ➕ NUEVO ESTUDIANTE
       </button>
 
     </div>
 
 
+    <!-- =====================================================
+         FORMULARIO
+    ====================================================== -->
+
+    <div
+      id="formulario"
+      class="formulario"
+    >
+
+      <h2>
+        ➕ Registrar nuevo estudiante
+      </h2>
+
+
+      <div class="grid-formulario">
+
+
+        <div class="campo">
+
+          <label>
+            Nombre completo *
+          </label>
+
+          <input
+            type="text"
+            id="nuevoNombre"
+            placeholder="Ej.: JUAN PÉREZ"
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            CI *
+          </label>
+
+          <input
+            type="text"
+            id="nuevoCI"
+            placeholder="Ej.: 123456"
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            País
+          </label>
+
+          <input
+            type="text"
+            id="nuevoPais"
+            placeholder="Ej.: BOLIVIA"
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            Foro *
+          </label>
+
+          <input
+            type="text"
+            id="nuevoForo"
+            placeholder="Ej.: OMS"
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            Curso *
+          </label>
+
+          <input
+            type="text"
+            id="nuevoCurso"
+            placeholder="Ej.: 5TO A"
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            Usuario *
+          </label>
+
+          <input
+            type="text"
+            id="nuevoUsuario"
+            placeholder="Ej.: juan"
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            Contraseña *
+          </label>
+
+          <input
+            type="password"
+            id="nuevoContrasena"
+            placeholder="Contraseña"
+          >
+
+        </div>
+
+
+      </div>
+
+
+      <div
+        id="mensajeFormulario"
+        class="mensaje-formulario"
+      ></div>
+
+
+      <div class="acciones-formulario">
+
+        <button
+          class="btn-guardar"
+          id="btnGuardar"
+          onclick="registrarEstudiante()"
+        >
+          💾 GUARDAR ESTUDIANTE
+        </button>
+
+
+        <button
+          class="btn-cancelar"
+          onclick="ocultarFormulario()"
+        >
+          CANCELAR
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         CONTADOR
+    ====================================================== -->
+
     <div
       id="contador"
-      class="contador">
+      class="contador"
+    >
       Cargando estudiantes...
     </div>
 
+
+    <!-- =====================================================
+         TABLA
+    ====================================================== -->
 
     <div class="tabla-contenedor">
 
       <table>
 
         <thead>
+
           <tr>
+
             <th>ID</th>
+
             <th>Código QR</th>
+
             <th>Nombre</th>
+
             <th>CI</th>
+
+            <th>País</th>
+
             <th>Foro</th>
+
             <th>Estado</th>
+
+            <th>Curso</th>
+
+            <th>Usuario</th>
+
           </tr>
+
         </thead>
+
 
         <tbody id="tablaEstudiantes">
 
           <tr>
-            <td colspan="6" class="mensaje">
+
+            <td
+              colspan="9"
+              class="mensaje"
+            >
               ⏳ Cargando...
             </td>
+
           </tr>
 
         </tbody>
@@ -235,6 +775,7 @@
 
     </div>
 
+
   </div>
 
 </div>
@@ -242,63 +783,82 @@
 
 <script>
 
+
 const URL_WORKER =
   "https://quiet-lab-973a.cristimi1232.workers.dev";
 
 
 let tokenAdmin = null;
+
 let estudiantes = [];
 
 
-/* =========================
+/* =====================================================
    API
-========================= */
+===================================================== */
 
-async function llamarAPI(api, parametros = {}) {
+async function llamarAPI(
+  api,
+  parametros = {}
+) {
 
-  const respuesta = await fetch(URL_WORKER, {
+  const respuesta =
+    await fetch(
+      URL_WORKER,
+      {
 
-    method: "POST",
+        method: "POST",
 
-    headers: {
-      "Content-Type": "application/json"
-    },
+        headers: {
+          "Content-Type":
+            "application/json"
+        },
 
-    body: JSON.stringify({
-      api: api,
-      ...parametros
-    })
+        body: JSON.stringify({
 
-  });
+          api: api,
+
+          ...parametros
+
+        })
+
+      }
+    );
 
 
   if (!respuesta.ok) {
-    throw new Error("HTTP " + respuesta.status);
+
+    throw new Error(
+      "HTTP " +
+      respuesta.status
+    );
+
   }
 
 
   return await respuesta.json();
+
 }
 
 
-/* =========================
+/* =====================================================
    CARGAR ESTUDIANTES
-========================= */
+===================================================== */
 
 async function cargarEstudiantes() {
 
   const contador =
-    document.getElementById("contador");
+    document.getElementById(
+      "contador"
+    );
+
 
   try {
 
-    /*
-      Recuperamos la sesión de administrador
-      guardada temporalmente.
-    */
-
     tokenAdmin =
-      sessionStorage.getItem("tokenAdmin");
+      sessionStorage.getItem(
+        "tokenAdmin"
+      );
 
 
     if (!tokenAdmin) {
@@ -310,6 +870,7 @@ async function cargarEstudiantes() {
       volverAdmin();
 
       return;
+
     }
 
 
@@ -317,7 +878,8 @@ async function cargarEstudiantes() {
       await llamarAPI(
         "listarEstudiantes",
         {
-          token: tokenAdmin
+          token:
+            tokenAdmin
         }
       );
 
@@ -328,6 +890,7 @@ async function cargarEstudiantes() {
         resultado.mensaje;
 
       return;
+
     }
 
 
@@ -335,7 +898,9 @@ async function cargarEstudiantes() {
       resultado.estudiantes || [];
 
 
-    mostrarEstudiantes(estudiantes);
+    mostrarEstudiantes(
+      estudiantes
+    );
 
 
   } catch (error) {
@@ -350,86 +915,161 @@ async function cargarEstudiantes() {
 }
 
 
-/* =========================
-   MOSTRAR
-========================= */
+/* =====================================================
+   MOSTRAR ESTUDIANTES
+===================================================== */
 
-function mostrarEstudiantes(lista) {
+function mostrarEstudiantes(
+  lista
+) {
 
   const tabla =
-    document.getElementById("tablaEstudiantes");
+    document.getElementById(
+      "tablaEstudiantes"
+    );
+
 
   const contador =
-    document.getElementById("contador");
+    document.getElementById(
+      "contador"
+    );
 
 
   contador.textContent =
-    "Total de estudiantes: " + lista.length;
+    "Total de estudiantes: " +
+    lista.length;
 
 
-  if (lista.length === 0) {
+  if (!lista.length) {
 
     tabla.innerHTML = `
       <tr>
-        <td colspan="6" class="mensaje">
+        <td
+          colspan="9"
+          class="mensaje"
+        >
           No hay estudiantes registrados.
         </td>
       </tr>
     `;
 
     return;
+
   }
 
 
   tabla.innerHTML =
-    lista.map(estudiante => {
+    lista.map(
+      estudiante => {
 
-      const estado =
-        estudiante.estado.toUpperCase();
+        const estado =
+          String(
+            estudiante.estado ||
+            ""
+          )
+            .trim()
+            .toUpperCase();
 
 
-      const claseEstado =
-        estado === "ACTIVO"
-          ? "activo"
-          : "inactivo";
+        const claseEstado =
+          estado === "ACTIVO"
+            ? "activo"
+            : "inactivo";
 
 
-      return `
-        <tr>
+        return `
 
-          <td>${escapeHTML(estudiante.id)}</td>
+          <tr>
 
-          <td>${escapeHTML(estudiante.codigoQR)}</td>
+            <td>
+              ${escapeHTML(
+                estudiante.id
+              )}
+            </td>
 
-          <td>${escapeHTML(estudiante.nombre)}</td>
 
-          <td>${escapeHTML(estudiante.ci)}</td>
+            <td>
+              ${escapeHTML(
+                estudiante.codigoQR
+              )}
+            </td>
 
-          <td>${escapeHTML(estudiante.foro)}</td>
 
-          <td>
-            <span class="estado ${claseEstado}">
-              ${escapeHTML(estado)}
-            </span>
-          </td>
+            <td>
+              ${escapeHTML(
+                estudiante.nombre
+              )}
+            </td>
 
-        </tr>
-      `;
 
-    }).join("");
+            <td>
+              ${escapeHTML(
+                estudiante.ci
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHTML(
+                estudiante.pais
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHTML(
+                estudiante.foro
+              )}
+            </td>
+
+
+            <td>
+
+              <span
+                class="estado ${claseEstado}"
+              >
+                ${escapeHTML(
+                  estado
+                )}
+              </span>
+
+            </td>
+
+
+            <td>
+              ${escapeHTML(
+                estudiante.curso
+              )}
+            </td>
+
+
+            <td>
+              ${escapeHTML(
+                estudiante.usuario
+              )}
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    ).join("");
 
 }
 
 
-/* =========================
+/* =====================================================
    BUSCAR
-========================= */
+===================================================== */
 
 function filtrarEstudiantes() {
 
   const texto =
     document
-      .getElementById("buscador")
+      .getElementById(
+        "buscador"
+      )
       .value
       .toLowerCase()
       .trim();
@@ -437,74 +1077,412 @@ function filtrarEstudiantes() {
 
   if (!texto) {
 
-    mostrarEstudiantes(estudiantes);
+    mostrarEstudiantes(
+      estudiantes
+    );
 
     return;
+
   }
 
 
   const filtrados =
-    estudiantes.filter(estudiante => {
+    estudiantes.filter(
+      estudiante => {
 
-      return (
+        return (
 
-        String(estudiante.id)
-          .toLowerCase()
-          .includes(texto)
+          String(
+            estudiante.id || ""
+          )
+            .toLowerCase()
+            .includes(texto)
 
-        ||
+          ||
 
-        String(estudiante.codigoQR)
-          .toLowerCase()
-          .includes(texto)
+          String(
+            estudiante.codigoQR || ""
+          )
+            .toLowerCase()
+            .includes(texto)
 
-        ||
+          ||
 
-        String(estudiante.nombre)
-          .toLowerCase()
-          .includes(texto)
+          String(
+            estudiante.nombre || ""
+          )
+            .toLowerCase()
+            .includes(texto)
 
-        ||
+          ||
 
-        String(estudiante.ci)
-          .toLowerCase()
-          .includes(texto)
+          String(
+            estudiante.ci || ""
+          )
+            .toLowerCase()
+            .includes(texto)
 
-        ||
+          ||
 
-        String(estudiante.foro)
-          .toLowerCase()
-          .includes(texto)
+          String(
+            estudiante.pais || ""
+          )
+            .toLowerCase()
+            .includes(texto)
 
-      );
+          ||
 
-    });
+          String(
+            estudiante.foro || ""
+          )
+            .toLowerCase()
+            .includes(texto)
+
+          ||
+
+          String(
+            estudiante.curso || ""
+          )
+            .toLowerCase()
+            .includes(texto)
+
+          ||
+
+          String(
+            estudiante.usuario || ""
+          )
+            .toLowerCase()
+            .includes(texto)
+
+        );
+
+      }
+    );
 
 
-  mostrarEstudiantes(filtrados);
+  mostrarEstudiantes(
+    filtrados
+  );
 
 }
 
 
-/* =========================
+/* =====================================================
+   MOSTRAR FORMULARIO
+===================================================== */
+
+function mostrarFormulario() {
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "nuevoNombre"
+  ).focus();
+
+}
+
+
+/* =====================================================
+   OCULTAR FORMULARIO
+===================================================== */
+
+function ocultarFormulario() {
+
+  document.getElementById(
+    "formulario"
+  ).style.display =
+    "none";
+
+
+  limpiarFormulario();
+
+}
+
+
+/* =====================================================
+   LIMPIAR FORMULARIO
+===================================================== */
+
+function limpiarFormulario() {
+
+  document.getElementById(
+    "nuevoNombre"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoCI"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoPais"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoForo"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoCurso"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoUsuario"
+  ).value = "";
+
+
+  document.getElementById(
+    "nuevoContrasena"
+  ).value = "";
+
+
+  const mensaje =
+    document.getElementById(
+      "mensajeFormulario"
+    );
+
+
+  mensaje.textContent = "";
+
+  mensaje.className =
+    "mensaje-formulario";
+
+}
+
+
+/* =====================================================
+   REGISTRAR ESTUDIANTE
+===================================================== */
+
+async function registrarEstudiante() {
+
+  const nombre =
+    document.getElementById(
+      "nuevoNombre"
+    ).value.trim();
+
+
+  const ci =
+    document.getElementById(
+      "nuevoCI"
+    ).value.trim();
+
+
+  const pais =
+    document.getElementById(
+      "nuevoPais"
+    ).value.trim();
+
+
+  const foro =
+    document.getElementById(
+      "nuevoForo"
+    ).value.trim();
+
+
+  const curso =
+    document.getElementById(
+      "nuevoCurso"
+    ).value.trim();
+
+
+  const usuario =
+    document.getElementById(
+      "nuevoUsuario"
+    ).value.trim();
+
+
+  const contrasena =
+    document.getElementById(
+      "nuevoContrasena"
+    ).value;
+
+
+  const mensaje =
+    document.getElementById(
+      "mensajeFormulario"
+    );
+
+
+  const boton =
+    document.getElementById(
+      "btnGuardar"
+    );
+
+
+  if (
+    !nombre ||
+    !ci ||
+    !foro ||
+    !curso ||
+    !usuario ||
+    !contrasena
+  ) {
+
+    mensaje.textContent =
+      "❌ Completa todos los campos obligatorios.";
+
+    mensaje.className =
+      "mensaje-formulario error";
+
+    return;
+
+  }
+
+
+  boton.disabled = true;
+
+  boton.textContent =
+    "⏳ GUARDANDO...";
+
+
+  mensaje.textContent =
+    "Registrando estudiante...";
+
+  mensaje.className =
+    "mensaje-formulario";
+
+
+  try {
+
+    const resultado =
+      await llamarAPI(
+        "registrarEstudiante",
+        {
+
+          token:
+            tokenAdmin,
+
+          nombre:
+            nombre,
+
+          ci:
+            ci,
+
+          pais:
+            pais,
+
+          foro:
+            foro,
+
+          curso:
+            curso,
+
+          usuario:
+            usuario,
+
+          contrasena:
+            contrasena
+
+        }
+      );
+
+
+    if (!resultado.exito) {
+
+      mensaje.textContent =
+        resultado.mensaje ||
+        "❌ No se pudo registrar.";
+
+      mensaje.className =
+        "mensaje-formulario error";
+
+      return;
+
+    }
+
+
+    mensaje.textContent =
+      "✅ Estudiante registrado correctamente.";
+
+    mensaje.className =
+      "mensaje-formulario exito";
+
+
+    await cargarEstudiantes();
+
+
+    setTimeout(
+      function() {
+
+        ocultarFormulario();
+
+      },
+      1200
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    mensaje.textContent =
+      "❌ Error de comunicación con el servidor.";
+
+    mensaje.className =
+      "mensaje-formulario error";
+
+  } finally {
+
+    boton.disabled = false;
+
+    boton.textContent =
+      "💾 GUARDAR ESTUDIANTE";
+
+  }
+
+}
+
+
+/* =====================================================
    SEGURIDAD
-========================= */
+===================================================== */
 
 function escapeHTML(valor) {
 
-  return String(valor)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+  return String(
+    valor ?? ""
+  )
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
 
 }
 
 
-/* =========================
+/* =====================================================
    VOLVER
-========================= */
+===================================================== */
 
 function volverAdmin() {
 
@@ -514,13 +1492,14 @@ function volverAdmin() {
 }
 
 
-/* =========================
+/* =====================================================
    INICIAR
-========================= */
+===================================================== */
 
 cargarEstudiantes();
 
 </script>
 
 </body>
+
 </html>
