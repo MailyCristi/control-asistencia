@@ -594,6 +594,225 @@ td.total {
   }
 }
 
+
+/* =========================================================
+   MEJORAS VISUALES: ATRASOS Y LICENCIAS
+   ========================================================= */
+
+.incidencia-card {
+  border-top: 5px solid #1f3c88;
+}
+
+.incidencia-atraso {
+  border-top-color: #f59e0b;
+}
+
+.incidencia-licencia {
+  border-top-color: #2563eb;
+}
+
+.incidencia-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.incidencia-header h2 {
+  margin: 0 0 5px;
+}
+
+.incidencia-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.incidencia-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #f8fafc;
+  font-size: 24px;
+  flex: 0 0 46px;
+}
+
+.form-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 16px;
+}
+
+.form-grid-1 {
+  grid-template-columns: 1fr;
+  margin-top: 16px;
+}
+
+.delegado-seleccionado {
+  margin-top: 15px;
+  padding: 12px 15px;
+  border: 1px solid #dbe4f0;
+  border-radius: 9px;
+  background: #f8fafc;
+  color: #334155;
+}
+
+.delegado-seleccionado span {
+  color: #64748b;
+}
+
+.btn-atraso {
+  background: #f59e0b;
+  color: white;
+}
+
+.btn-atraso:hover {
+  background: #d97706;
+}
+
+.btn-licencia {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-licencia:hover {
+  background: #1d4ed8;
+}
+
+.mensaje.advertencia {
+  display: block;
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.resumen-cards-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.resumen-verde .numero {
+  color: #198754;
+}
+
+.resumen-naranja .numero {
+  color: #d97706;
+}
+
+.resumen-azul .numero {
+  color: #2563eb;
+}
+
+.resumen-rojo .numero {
+  color: #dc3545;
+}
+
+td.atraso {
+  color: #d97706;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+td.licencia {
+  color: #2563eb;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.detalle-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  margin-top: 30px;
+}
+
+.detalle-bloque {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  background: #fff;
+}
+
+.detalle-titulo {
+  font-size: 17px;
+  font-weight: bold;
+  color: #334155;
+  margin-bottom: 12px;
+}
+
+.detalle-atrasos .detalle-titulo {
+  color: #b45309;
+}
+
+.detalle-licencias .detalle-titulo {
+  color: #1d4ed8;
+}
+
+.detalle-bloque .tabla-contenedor {
+  border-radius: 8px;
+}
+
+/* Estados de la matriz */
+td.presente,
+td.atraso,
+td.licencia,
+td.falta {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+@media (max-width: 1250px) {
+  .resumen-cards-6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .form-grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .resumen-cards-6 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .incidencia-header {
+    align-items: flex-start;
+  }
+
+  .resumen-cards-6 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.leyenda-estados {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: -2px 0 12px;
+  padding: 10px 13px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.leyenda-estados b {
+  display: inline-flex;
+  min-width: 20px;
+  justify-content: center;
+  margin-right: 4px;
+  font-size: 16px;
+}
+
+.leyenda-presente { color: #198754; }
+.leyenda-atraso { color: #d97706; }
+.leyenda-licencia { color: #2563eb; }
+.leyenda-falta { color: #dc3545; }
+
 </style>
 
 </head>
@@ -819,6 +1038,141 @@ td.total {
 
 
 
+<!-- ==========================================================
+     REGISTRO DE ATRASOS
+========================================================== -->
+
+<div class="card incidencia-card incidencia-atraso">
+
+  <div class="incidencia-header">
+    <div class="incidencia-icon">⏰</div>
+    <div>
+      <h2>Registro de Atrasos</h2>
+      <p>Registra cuando un delegado llegó tarde a una capacitación.</p>
+    </div>
+  </div>
+
+  <div class="form-grid">
+
+    <div class="campo">
+      <label for="foroAtraso">Foro</label>
+      <select id="foroAtraso" onchange="cambioForoAtraso()">
+        <option value="">Seleccione un foro</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="capacitacionAtraso">Capacitación</label>
+      <select id="capacitacionAtraso" onchange="cambioCapacitacionAtraso()" disabled>
+        <option value="">Seleccione una capacitación</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="fechaAtraso">Fecha</label>
+      <input id="fechaAtraso" type="text" readonly placeholder="Automática">
+    </div>
+
+    <div class="campo">
+      <label for="paisAtraso">País</label>
+      <select id="paisAtraso" onchange="cambioPaisAtraso()" disabled>
+        <option value="">Seleccione un país</option>
+      </select>
+    </div>
+
+  </div>
+
+  <div id="delegadoAtraso" class="delegado-seleccionado" style="display:none;"></div>
+
+  <div class="form-grid form-grid-3">
+    <div class="campo">
+      <label for="horaAtraso">Hora de llegada</label>
+      <input id="horaAtraso" type="time">
+    </div>
+
+    <div class="campo">
+      <label for="minutosAtraso">Minutos de atraso</label>
+      <input id="minutosAtraso" type="number" min="1" placeholder="Ej. 15">
+    </div>
+
+    <div class="campo">
+      <label for="motivoAtraso">Motivo</label>
+      <input id="motivoAtraso" type="text" placeholder="Ej. Tráfico">
+    </div>
+  </div>
+
+  <div class="botones">
+    <button class="btn-atraso" onclick="registrarAtrasoDesdeWeb()">
+      ⏰ REGISTRAR ATRASO
+    </button>
+  </div>
+
+  <div id="mensajeAtraso"></div>
+
+</div>
+
+
+<!-- ==========================================================
+     REGISTRO DE LICENCIAS
+========================================================== -->
+
+<div class="card incidencia-card incidencia-licencia">
+
+  <div class="incidencia-header">
+    <div class="incidencia-icon">📄</div>
+    <div>
+      <h2>Registro de Licencias</h2>
+      <p>Registra permisos de ausencia de los delegados.</p>
+    </div>
+  </div>
+
+  <div class="form-grid">
+
+    <div class="campo">
+      <label for="foroLicencia">Foro</label>
+      <select id="foroLicencia" onchange="cambioForoLicencia()">
+        <option value="">Seleccione un foro</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="paisLicencia">País</label>
+      <select id="paisLicencia" onchange="cambioPaisLicencia()" disabled>
+        <option value="">Seleccione un país</option>
+      </select>
+    </div>
+
+    <div class="campo">
+      <label for="fechaDesdeLicencia">Desde</label>
+      <input id="fechaDesdeLicencia" type="date">
+    </div>
+
+    <div class="campo">
+      <label for="fechaHastaLicencia">Hasta</label>
+      <input id="fechaHastaLicencia" type="date">
+    </div>
+
+  </div>
+
+  <div id="delegadoLicencia" class="delegado-seleccionado" style="display:none;"></div>
+
+  <div class="form-grid form-grid-1">
+    <div class="campo">
+      <label for="motivoLicencia">Motivo</label>
+      <input id="motivoLicencia" type="text" placeholder="Motivo de la licencia">
+    </div>
+  </div>
+
+  <div class="botones">
+    <button class="btn-licencia" onclick="registrarLicenciaDesdeWeb()">
+      📄 REGISTRAR LICENCIA
+    </button>
+  </div>
+
+  <div id="mensajeLicencia"></div>
+
+</div>
+
 <!-- ========================================================
      REPORTE
      ======================================================== -->
@@ -868,73 +1222,39 @@ td.total {
     style="display:none;"
   >
 
-    <div class="resumen-cards">
+    <div class="resumen-cards resumen-cards-6">
 
       <div class="resumen-card">
-
-        <div
-          class="numero"
-          id="totalDelegados"
-        >
-          0
-        </div>
-
-        <div class="texto">
-          Delegados
-        </div>
-
+        <div class="numero" id="totalDelegados">0</div>
+        <div class="texto">Delegados</div>
       </div>
 
-
       <div class="resumen-card">
-
-        <div
-          class="numero"
-          id="totalCapacitaciones"
-        >
-          0
-        </div>
-
-        <div class="texto">
-          Capacitaciones
-        </div>
-
+        <div class="numero" id="totalCapacitaciones">0</div>
+        <div class="texto">Capacitaciones</div>
       </div>
 
-
-      <div class="resumen-card">
-
-        <div
-          class="numero"
-          id="totalAsistencias"
-        >
-          0
-        </div>
-
-        <div class="texto">
-          Asistencias
-        </div>
-
+      <div class="resumen-card resumen-verde">
+        <div class="numero" id="totalPresentesReporte">0</div>
+        <div class="texto">Presentes</div>
       </div>
 
+      <div class="resumen-card resumen-naranja">
+        <div class="numero" id="totalAtrasosReporte">0</div>
+        <div class="texto">Atrasos</div>
+      </div>
 
-      <div class="resumen-card">
+      <div class="resumen-card resumen-azul">
+        <div class="numero" id="totalLicenciasReporte">0</div>
+        <div class="texto">Licencias</div>
+      </div>
 
-        <div
-          class="numero"
-          id="totalFaltas"
-        >
-          0
-        </div>
-
-        <div class="texto">
-          Faltas
-        </div>
-
+      <div class="resumen-card resumen-rojo">
+        <div class="numero" id="totalFaltas">0</div>
+        <div class="texto">Faltas</div>
       </div>
 
     </div>
-
 
     <!-- =====================================================
          MATRIZ
@@ -943,6 +1263,13 @@ td.total {
     <h3 class="seccion-titulo">
       👥 Asistencia por delegado
     </h3>
+
+    <div class="leyenda-estados">
+      <span><b class="leyenda-presente">✓</b> Presente</span>
+      <span><b class="leyenda-atraso">A</b> Atraso</span>
+      <span><b class="leyenda-licencia">L</b> Licencia</span>
+      <span><b class="leyenda-falta">—</b> Ausente</span>
+    </div>
 
     <div class="tabla-contenedor">
 
@@ -977,17 +1304,11 @@ td.total {
 
           <tr>
 
-            <th>
-              País
-            </th>
-
-            <th>
-              Asistencias
-            </th>
-
-            <th>
-              Faltas
-            </th>
+            <th>País</th>
+            <th>Presentes</th>
+            <th>Atrasos</th>
+            <th>Licencias</th>
+            <th>Faltas</th>
 
           </tr>
 
@@ -1018,25 +1339,12 @@ td.total {
 
           <tr>
 
-            <th>
-              Fecha
-            </th>
-
-            <th>
-              Capacitación
-            </th>
-
-            <th>
-              Delegados
-            </th>
-
-            <th>
-              Presentes
-            </th>
-
-            <th>
-              Ausentes
-            </th>
+            <th>Fecha</th>
+            <th>Capacitación</th>
+            <th>Presentes</th>
+            <th>Atrasos</th>
+            <th>Licencias</th>
+            <th>Ausentes</th>
 
           </tr>
 
@@ -1050,243 +1358,52 @@ td.total {
 
     </div>
 
+    <div class="detalle-grid">
+
+      <div class="detalle-bloque detalle-atrasos">
+        <div class="detalle-titulo">⏰ Detalle de atrasos</div>
+        <div class="tabla-contenedor">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Delegado</th>
+                <th>País</th>
+                <th>Capacitación</th>
+                <th>Hora</th>
+                <th>Minutos</th>
+                <th>Motivo</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoDetalleAtrasos"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="detalle-bloque detalle-licencias">
+        <div class="detalle-titulo">📄 Detalle de licencias</div>
+        <div class="tabla-contenedor">
+          <table>
+            <thead>
+              <tr>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Delegado</th>
+                <th>País</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="cuerpoDetalleLicencias"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 
 </div>
-
-</div>
-
-<!-- ==========================================================
-     NUEVO: ATRASOS
-========================================================== -->
-
-<div class="tarjeta">
-
-  <h2>⏰ Registro de Atrasos</h2>
-
-  <p class="subtitulo">
-    Registra cuando un delegado llegó tarde a una capacitación.
-  </p>
-
-  <label for="foroAtraso">Foro</label>
-
-  <select id="foroAtraso" onchange="cambioForoAtraso()">
-    <option value="">Selecciona un foro</option>
-  </select>
-
-
-  <label for="capacitacionAtraso">
-    Capacitación
-  </label>
-
-  <select id="capacitacionAtraso">
-    <option value="">
-      Selecciona una capacitación
-    </option>
-  </select>
-
-
-  <label for="paisAtraso">
-    País
-  </label>
-
-  <select id="paisAtraso" onchange="cambioPaisAtraso()">
-    <option value="">
-      Selecciona un país
-    </option>
-  </select>
-
-
-  <div
-    id="delegadoAtraso"
-    class="datos"
-    style="display:none;"
-  >
-  </div>
-
-
-  <label for="fechaAtraso">
-    Fecha
-  </label>
-
-  <input
-    id="fechaAtraso"
-    type="date"
-  >
-
-
-  <label for="horaAtraso">
-    Hora de llegada
-  </label>
-
-  <input
-    id="horaAtraso"
-    type="time"
-  >
-
-
-  <label for="minutosAtraso">
-    Minutos de atraso
-  </label>
-
-  <input
-    id="minutosAtraso"
-    type="number"
-    min="1"
-    placeholder="Ej. 15"
-  >
-
-
-  <label for="motivoAtraso">
-    Motivo
-  </label>
-
-  <input
-    id="motivoAtraso"
-    type="text"
-    placeholder="Ej. Tráfico"
-  >
-
-
-  <button
-    class="btn-principal"
-    onclick="registrarAtrasoDesdeWeb()"
-  >
-    ⏰ REGISTRAR ATRASO
-  </button>
-
-
-  <div id="mensajeAtraso"></div>
-
-</div>
-
-
-<!-- ==========================================================
-     NUEVO: LICENCIAS
-========================================================== -->
-
-<div class="tarjeta">
-
-  <h2>📄 Registro de Licencias</h2>
-
-  <p class="subtitulo">
-    Registra permisos de ausencia de los delegados.
-  </p>
-
-
-  <label for="foroLicencia">
-    Foro
-  </label>
-
-  <select
-    id="foroLicencia"
-    onchange="cambioForoLicencia()"
-  >
-    <option value="">
-      Selecciona un foro
-    </option>
-  </select>
-
-
-  <label for="paisLicencia">
-    País
-  </label>
-
-  <select
-    id="paisLicencia"
-    onchange="cambioPaisLicencia()"
-  >
-    <option value="">
-      Selecciona un país
-    </option>
-  </select>
-
-
-  <div
-    id="delegadoLicencia"
-    class="datos"
-    style="display:none;"
-  >
-  </div>
-
-
-  <label for="fechaDesdeLicencia">
-    Desde
-  </label>
-
-  <input
-    id="fechaDesdeLicencia"
-    type="date"
-  >
-
-
-  <label for="fechaHastaLicencia">
-    Hasta
-  </label>
-
-  <input
-    id="fechaHastaLicencia"
-    type="date"
-  >
-
-
-  <label for="motivoLicencia">
-    Motivo
-  </label>
-
-  <input
-    id="motivoLicencia"
-    type="text"
-    placeholder="Motivo de la licencia"
-  >
-
-
-  <button
-    class="btn-principal"
-    onclick="registrarLicenciaDesdeWeb()"
-  >
-    📄 REGISTRAR LICENCIA
-  </button>
-
-
-  <div id="mensajeLicencia"></div>
-
-</div>
-
-
-<!-- ==========================================================
-     LISTADO DE ATRASOS
-========================================================== -->
-
-<div class="tarjeta">
-
-  <h2>⏰ Atrasos registrados</h2>
-
-  <div
-    id="tablaAtrasos"
-    style="overflow-x:auto;"
-  >
-  </div>
-
-</div>
-
-
-<!-- ==========================================================
-     LISTADO DE LICENCIAS
-========================================================== -->
-
-<div class="tarjeta">
-
-  <h2>📄 Licencias registradas</h2>
-
-  <div
-    id="tablaLicencias"
-    style="overflow-x:auto;"
-  >
-  </div>
-
-</div>
-
 
 <script>
 
@@ -2190,438 +2307,476 @@ async function registrarSeleccionados() {
 async function cargarReporte() {
 
   const foro =
-    document.getElementById(
-      "selectForoReporte"
-    ).value;
-
+    document.getElementById("selectForoReporte").value;
 
   if (!foro) {
-
-    document.getElementById(
-      "resumenGeneral"
-    ).style.display =
-      "none";
-
+    document.getElementById("resumenGeneral").style.display = "none";
     return;
   }
 
-
-  mostrarCargando(
-    "cargandoReporte",
-    true
-  );
-
+  mostrarCargando("cargandoReporte", true);
 
   try {
 
-    const resultado =
-      await llamarAPI({
-
-        api:
-          "obtenerReporteAsistencia",
-
-        token:
-          tokenAdmin,
-
-        foro:
-          foro
-
-      });
-
+    const resultado = await llamarAPI({
+      api: "obtenerReporteAsistencia",
+      token: tokenAdmin,
+      foro: foro
+    });
 
     if (!resultado.exito) {
-
-      alert(
-        resultado.mensaje
-      );
-
+      alert(resultado.mensaje);
       return;
     }
 
+    const incidencias = await obtenerIncidenciasReporte(foro);
 
-    mostrarReporte(
-      resultado
-    );
+    resultado._atrasos = incidencias.atrasos;
+    resultado._licencias = incidencias.licencias;
 
+    mostrarReporte(resultado);
 
   } catch (error) {
 
     console.error(error);
-
-    alert(
-      "❌ No se pudo generar el reporte."
-    );
+    alert("❌ No se pudo generar el reporte.");
 
   } finally {
-
-    mostrarCargando(
-      "cargandoReporte",
-      false
-    );
-
+    mostrarCargando("cargandoReporte", false);
   }
 
 }
 
 
-/************************************************************
- * MOSTRAR REPORTE
- ************************************************************/
+async function obtenerIncidenciasReporte(foro) {
 
-function mostrarReporte(
-  reporte
-) {
+  const [respuestaAtrasos, respuestaLicencias] = await Promise.all([
 
-  document.getElementById(
-    "resumenGeneral"
-  ).style.display =
-    "block";
+    llamarAPINuevoModulo({
+      api: "listarAtrasos",
+      tokenAdmin: tokenAdmin,
+      foro: foro
+    }),
 
+    llamarAPINuevoModulo({
+      api: "listarLicencias",
+      tokenAdmin: tokenAdmin,
+      foro: foro
+    })
 
-  document.getElementById(
-    "totalDelegados"
-  ).textContent =
-    reporte.totalDelegados;
+  ]);
 
-
-  document.getElementById(
-    "totalCapacitaciones"
-  ).textContent =
-    reporte.totalCapacitaciones;
-
-
-  document.getElementById(
-    "totalAsistencias"
-  ).textContent =
-    reporte.totalAsistencias;
-
-
-  document.getElementById(
-    "totalFaltas"
-  ).textContent =
-    reporte.totalFaltas;
-
-
-  construirMatriz(
-    reporte
-  );
-
-
-  construirResumenPais(
-    reporte.resumenPorPais
-  );
-
-
-  construirResumenCapacitacion(
-    reporte.resumenPorCapacitacion
-  );
-
+  return {
+    atrasos: respuestaAtrasos.exito ? (respuestaAtrasos.atrasos || []) : [],
+    licencias: respuestaLicencias.exito ? (respuestaLicencias.licencias || []) : []
+  };
 }
 
 
-/************************************************************
- * CONSTRUIR MATRIZ
- ************************************************************/
+function obtenerIdEstudianteReporte(estudiante) {
 
-function construirMatriz(
-  reporte
-) {
+  return String(
+    estudiante.id ??
+    estudiante.idEstudiante ??
+    estudiante.ID_ESTUDIANTE ??
+    ""
+  );
+}
 
-  const cabecera =
-    document.getElementById(
-      "cabeceraMatriz"
-    );
 
-  const cuerpo =
-    document.getElementById(
-      "cuerpoMatriz"
-    );
+function obtenerPaisEstudianteReporte(estudiante) {
 
+  if (estudiante.pais) {
+    return estudiante.pais;
+  }
+
+  const texto = String(estudiante.nombrePais || "");
+  const partes = texto.split(" - ");
+
+  return partes.length > 1
+    ? partes[partes.length - 1].trim()
+    : "SIN PAÍS";
+}
+
+
+function normalizarFechaReporte(fecha) {
+
+  if (!fecha) return "";
+
+  const texto = String(fecha);
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(texto)) {
+    return texto;
+  }
+
+  const match = texto.match(/(\d{4})[-/](\d{2})[-/](\d{2})/);
+
+  if (match) {
+    return match[1] + "-" + match[2] + "-" + match[3];
+  }
+
+  return texto.slice(0, 10);
+}
+
+
+function fechaDentroDeLicencia(fecha, licencia) {
+
+  const dia = normalizarFechaReporte(fecha);
+  const desde = normalizarFechaReporte(licencia.fechaDesde);
+  const hasta = normalizarFechaReporte(licencia.fechaHasta);
+
+  if (!dia || !desde || !hasta) {
+    return false;
+  }
+
+  return dia >= desde && dia <= hasta;
+}
+
+
+function encontrarAtraso(estudiante, cap, atrasos) {
+
+  const id = obtenerIdEstudianteReporte(estudiante);
+  const nombre = String(estudiante.nombre || "").trim().toUpperCase();
+  const pais = String(obtenerPaisEstudianteReporte(estudiante)).trim().toUpperCase();
+
+  return atrasos.find(function(a) {
+
+    const mismoId = id && String(a.idEstudiante ?? "") === id;
+    const mismoDelegado = nombre &&
+      String(a.nombre || "").trim().toUpperCase() === nombre &&
+      String(a.pais || "").trim().toUpperCase() === pais;
+
+    return String(a.idCapacitacion ?? "") === String(cap.idCapacitacion ?? "") &&
+      (mismoId || mismoDelegado);
+
+  }) || null;
+}
+
+
+function encontrarLicencia(estudiante, cap, licencias) {
+
+  const id = obtenerIdEstudianteReporte(estudiante);
+  const nombre = String(estudiante.nombre || "").trim().toUpperCase();
+  const pais = String(obtenerPaisEstudianteReporte(estudiante)).trim().toUpperCase();
+
+  return licencias.find(function(l) {
+
+    const mismoId = id && String(l.idEstudiante ?? "") === id;
+    const mismoDelegado = nombre &&
+      String(l.nombre || "").trim().toUpperCase() === nombre &&
+      String(l.pais || "").trim().toUpperCase() === pais;
+
+    return (mismoId || mismoDelegado) &&
+      fechaDentroDeLicencia(String(cap.fecha || ""), l);
+
+  }) || null;
+}
+
+
+function obtenerEstadoCelda(estudiante, cap, reporte) {
+
+  const licencia = encontrarLicencia(
+    estudiante,
+    cap,
+    reporte._licencias || []
+  );
+
+  if (licencia) {
+    return { codigo: "L", clase: "licencia", titulo: "Licencia" };
+  }
+
+  const atraso = encontrarAtraso(
+    estudiante,
+    cap,
+    reporte._atrasos || []
+  );
+
+  if (atraso) {
+    return {
+      codigo: "A",
+      clase: "atraso",
+      titulo: "Atraso: " + (atraso.minutosAtraso || 0) + " min"
+    };
+  }
+
+  const presente = estudiante.asistencia &&
+    estudiante.asistencia[cap.idCapacitacion] === true;
+
+  if (presente) {
+    return { codigo: "✓", clase: "presente", titulo: "Presente" };
+  }
+
+  return { codigo: "—", clase: "falta", titulo: "Ausente" };
+}
+
+
+function calcularResumenReporte(reporte) {
+
+  const resumen = {
+    presentes: 0,
+    atrasos: 0,
+    licencias: 0,
+    faltas: 0
+  };
+
+  (reporte.estudiantes || []).forEach(function(estudiante) {
+
+    (reporte.capacitaciones || []).forEach(function(cap) {
+
+      const estado = obtenerEstadoCelda(estudiante, cap, reporte).codigo;
+
+      if (estado === "✓") resumen.presentes++;
+      else if (estado === "A") resumen.atrasos++;
+      else if (estado === "L") resumen.licencias++;
+      else resumen.faltas++;
+
+    });
+
+  });
+
+  return resumen;
+}
+
+
+function mostrarReporte(reporte) {
+
+  document.getElementById("resumenGeneral").style.display = "block";
+
+  const resumen = calcularResumenReporte(reporte);
+
+  document.getElementById("totalDelegados").textContent =
+    reporte.totalDelegados ?? (reporte.estudiantes || []).length;
+
+  document.getElementById("totalCapacitaciones").textContent =
+    reporte.totalCapacitaciones ?? (reporte.capacitaciones || []).length;
+
+  document.getElementById("totalPresentesReporte").textContent = resumen.presentes;
+  document.getElementById("totalAtrasosReporte").textContent = resumen.atrasos;
+  document.getElementById("totalLicenciasReporte").textContent = resumen.licencias;
+  document.getElementById("totalFaltas").textContent = resumen.faltas;
+
+  construirMatriz(reporte);
+  construirResumenPais(reporte);
+  construirResumenCapacitacion(reporte);
+  construirDetalleAtrasos(reporte._atrasos || []);
+  construirDetalleLicencias(reporte._licencias || []);
+}
+
+
+function construirMatriz(reporte) {
+
+  const cabecera = document.getElementById("cabeceraMatriz");
+  const cuerpo = document.getElementById("cuerpoMatriz");
 
   cabecera.innerHTML = "";
-
   cuerpo.innerHTML = "";
 
+  const tr = document.createElement("tr");
 
-  const tr =
-    document.createElement(
-      "tr"
-    );
+  const thNombre = document.createElement("th");
+  thNombre.textContent = "DELEGADO";
+  tr.appendChild(thNombre);
 
+  reporte.capacitaciones.forEach(function(cap) {
 
-  const thNombre =
-    document.createElement(
-      "th"
-    );
+    const th = document.createElement("th");
+    th.innerHTML = formatearFecha(cap.fecha) + "<br>" + escapeHTML(cap.nombre);
+    tr.appendChild(th);
 
-  thNombre.textContent =
-    "DELEGADO";
+  });
 
-  tr.appendChild(
-    thNombre
-  );
+  cabecera.appendChild(tr);
 
+  reporte.estudiantes.forEach(function(estudiante) {
 
-  reporte.capacitaciones.forEach(
-    function(cap) {
+    const fila = document.createElement("tr");
+    const tdNombre = document.createElement("td");
 
-      const th =
-        document.createElement(
-          "th"
-        );
+    tdNombre.className = "nombre";
+    tdNombre.textContent = estudiante.nombrePais || estudiante.nombre || "-";
+    fila.appendChild(tdNombre);
 
-      th.innerHTML =
-        formatearFecha(
-          cap.fecha
-        ) +
-        "<br>" +
-        escapeHTML(
-          cap.nombre
-        );
+    reporte.capacitaciones.forEach(function(cap) {
 
-      tr.appendChild(
-        th
-      );
+      const td = document.createElement("td");
+      const estado = obtenerEstadoCelda(estudiante, cap, reporte);
 
-    }
-  );
+      td.className = estado.clase;
+      td.textContent = estado.codigo;
+      td.title = estado.titulo;
 
-  cabecera.appendChild(
-    tr
-  );
+      fila.appendChild(td);
 
+    });
 
-  reporte.estudiantes.forEach(
-    function(estudiante) {
+    cuerpo.appendChild(fila);
 
-      const fila =
-        document.createElement(
-          "tr"
-        );
-
-
-      const tdNombre =
-        document.createElement(
-          "td"
-        );
-
-      tdNombre.className =
-        "nombre";
-
-      tdNombre.textContent =
-        estudiante.nombrePais;
-
-      fila.appendChild(
-        tdNombre
-      );
-
-
-      reporte.capacitaciones.forEach(
-        function(cap) {
-
-          const td =
-            document.createElement(
-              "td"
-            );
-
-
-          const presente =
-            estudiante.asistencia[
-              cap.idCapacitacion
-            ] === true;
-
-
-          if (presente) {
-
-            td.className =
-              "presente";
-
-            td.textContent =
-              "✓";
-
-            td.title =
-              "Asistencia";
-
-          } else {
-
-            td.className =
-              "falta";
-
-            td.textContent =
-              "—";
-
-            td.title =
-              "Falta";
-
-          }
-
-
-          fila.appendChild(
-            td
-          );
-
-        }
-      );
-
-      cuerpo.appendChild(
-        fila
-      );
-
-    }
-  );
-
+  });
 }
 
 
-/************************************************************
- * RESUMEN POR PAÍS
- ************************************************************/
+function construirResumenPais(reporte) {
 
-function construirResumenPais(
-  datos
-) {
-
-  const cuerpo =
-    document.getElementById(
-      "cuerpoPais"
-    );
-
-
+  const cuerpo = document.getElementById("cuerpoPais");
   cuerpo.innerHTML = "";
 
+  const mapa = {};
 
-  datos.forEach(
-    function(item) {
+  (reporte.estudiantes || []).forEach(function(estudiante) {
 
-      const tr =
-        document.createElement(
-          "tr"
-        );
+    const pais = obtenerPaisEstudianteReporte(estudiante);
 
+    if (!mapa[pais]) {
+      mapa[pais] = {
+        pais: pais,
+        presentes: 0,
+        atrasos: 0,
+        licencias: 0,
+        faltas: 0
+      };
+    }
+
+    reporte.capacitaciones.forEach(function(cap) {
+
+      const estado = obtenerEstadoCelda(estudiante, cap, reporte).codigo;
+
+      if (estado === "✓") mapa[pais].presentes++;
+      else if (estado === "A") mapa[pais].atrasos++;
+      else if (estado === "L") mapa[pais].licencias++;
+      else mapa[pais].faltas++;
+
+    });
+
+  });
+
+  Object.values(mapa)
+    .sort(function(a, b) { return a.pais.localeCompare(b.pais); })
+    .forEach(function(item) {
+
+      const tr = document.createElement("tr");
 
       tr.innerHTML = `
-
-        <td class="nombre">
-          ${escapeHTML(item.pais)}
-        </td>
-
-        <td class="presente">
-          ${item.asistencias}
-        </td>
-
-        <td class="falta">
-          ${item.faltas}
-        </td>
-
+        <td class="nombre">${escapeHTML(item.pais)}</td>
+        <td class="presente">${item.presentes}</td>
+        <td class="atraso">${item.atrasos}</td>
+        <td class="licencia">${item.licencias}</td>
+        <td class="falta">${item.faltas}</td>
       `;
 
+      cuerpo.appendChild(tr);
 
-      cuerpo.appendChild(
-        tr
-      );
+    });
 
-    }
-  );
-
-
-  if (datos.length === 0) {
-
-    cuerpo.innerHTML = `
-
-      <tr>
-
-        <td colspan="3">
-          No existen datos.
-        </td>
-
-      </tr>
-
-    `;
-
+  if (!cuerpo.children.length) {
+    cuerpo.innerHTML = '<tr><td colspan="5">No existen datos.</td></tr>';
   }
-
 }
 
 
-/************************************************************
- * RESUMEN POR CAPACITACIÓN
- ************************************************************/
+function construirResumenCapacitacion(reporte) {
 
-function construirResumenCapacitacion(
-  datos
-) {
+  const cuerpo = document.getElementById("cuerpoCapacitacion");
+  cuerpo.innerHTML = "";
 
-  const cuerpo =
-    document.getElementById(
-      "cuerpoCapacitacion"
-    );
+  (reporte.capacitaciones || []).forEach(function(cap) {
 
+    const item = {
+      presentes: 0,
+      atrasos: 0,
+      licencias: 0,
+      faltas: 0
+    };
+
+    reporte.estudiantes.forEach(function(estudiante) {
+
+      const estado = obtenerEstadoCelda(estudiante, cap, reporte).codigo;
+
+      if (estado === "✓") item.presentes++;
+      else if (estado === "A") item.atrasos++;
+      else if (estado === "L") item.licencias++;
+      else item.faltas++;
+
+    });
+
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${formatearFecha(cap.fecha)}</td>
+      <td class="nombre">${escapeHTML(cap.nombre)}</td>
+      <td class="presente">${item.presentes}</td>
+      <td class="atraso">${item.atrasos}</td>
+      <td class="licencia">${item.licencias}</td>
+      <td class="falta">${item.faltas}</td>
+    `;
+
+    cuerpo.appendChild(tr);
+
+  });
+
+  if (!cuerpo.children.length) {
+    cuerpo.innerHTML = '<tr><td colspan="6">No existen capacitaciones.</td></tr>';
+  }
+}
+
+
+function construirDetalleAtrasos(atrasos) {
+
+  const cuerpo = document.getElementById("cuerpoDetalleAtrasos");
+  if (!cuerpo) return;
 
   cuerpo.innerHTML = "";
 
+  atrasos.forEach(function(a) {
 
-  datos.forEach(
-    function(item) {
+    const tr = document.createElement("tr");
 
-      const tr =
-        document.createElement(
-          "tr"
-        );
-
-
-      tr.innerHTML = `
-
-        <td>
-          ${formatearFecha(
-            item.fecha
-          )}
-        </td>
-
-        <td class="nombre">
-          ${escapeHTML(
-            item.nombre
-          )}
-        </td>
-
-        <td>
-          ${item.totalDelegados}
-        </td>
-
-        <td class="presente">
-          ${item.presentes}
-        </td>
-
-        <td class="falta">
-          ${item.ausentes}
-        </td>
-
-      `;
-
-
-      cuerpo.appendChild(
-        tr
-      );
-
-    }
-  );
-
-
-  if (datos.length === 0) {
-
-    cuerpo.innerHTML = `
-
-      <tr>
-
-        <td colspan="5">
-          No existen capacitaciones.
-        </td>
-
-      </tr>
-
+    tr.innerHTML = `
+      <td>${formatearFecha(a.fecha)}</td>
+      <td>${escapeHTML(a.nombre || "-")}</td>
+      <td>${escapeHTML(a.pais || "-")}</td>
+      <td>${escapeHTML(a.idCapacitacion || "-")}</td>
+      <td>${escapeHTML(a.horaLlegada || "-")}</td>
+      <td class="atraso">${escapeHTML(a.minutosAtraso || "0")} min</td>
+      <td>${escapeHTML(a.motivo || "-")}</td>
     `;
 
-  }
+    cuerpo.appendChild(tr);
 
+  });
+
+  if (!cuerpo.children.length) {
+    cuerpo.innerHTML = '<tr><td colspan="7">No hay atrasos registrados para este foro.</td></tr>';
+  }
+}
+
+
+function construirDetalleLicencias(licencias) {
+
+  const cuerpo = document.getElementById("cuerpoDetalleLicencias");
+  if (!cuerpo) return;
+
+  cuerpo.innerHTML = "";
+
+  licencias.forEach(function(l) {
+
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${formatearFecha(l.fechaDesde)}</td>
+      <td>${formatearFecha(l.fechaHasta)}</td>
+      <td>${escapeHTML(l.nombre || "-")}</td>
+      <td>${escapeHTML(l.pais || "-")}</td>
+      <td>${escapeHTML(l.motivo || "-")}</td>
+      <td class="licencia">${escapeHTML(l.estado || "ACTIVA")}</td>
+    `;
+
+    cuerpo.appendChild(tr);
+
+  });
+
+  if (!cuerpo.children.length) {
+    cuerpo.innerHTML = '<tr><td colspan="6">No hay licencias registradas para este foro.</td></tr>';
+  }
 }
 
 
@@ -2766,25 +2921,19 @@ function volverAlPanel() {
 }
 
 // ==========================================================
-// NUEVO MÓDULO: ATRASOS Y LICENCIAS
-/************************************************************
- * CONFIGURACIÓN DEL NUEVO MÓDULO
- * Usa el mismo Worker y la misma sesión del administrador.
- ************************************************************/
+// MÓDULO DE ATRASOS Y LICENCIAS
+// ==========================================================
+
+const API_NUEVO_MODULO = URL_API;
+
 
 function obtenerTokenAdminNuevoModulo() {
 
-  const token =
-    sessionStorage.getItem("tokenAdmin");
+  const token = sessionStorage.getItem("tokenAdmin");
 
   if (!token) {
-
-    alert(
-      "❌ La sesión de administrador ha terminado."
-    );
-
+    alert("La sesión de administrador ha expirado.");
     window.location.href = "admin.html";
-
     return null;
   }
 
@@ -2792,867 +2941,403 @@ function obtenerTokenAdminNuevoModulo() {
 }
 
 
-/************************************************************
- * MENSAJES DEL NUEVO MÓDULO
- ************************************************************/
+async function llamarAPINuevoModulo(datos) {
 
-function mostrarMensajeNuevoModulo(id, texto, tipo) {
+  const respuesta = await fetch(API_NUEVO_MODULO, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(datos)
+  });
 
-  const elemento =
-    document.getElementById(id);
+  if (!respuesta.ok) {
+    throw new Error("Error HTTP " + respuesta.status);
+  }
 
-  if (!elemento) return;
-
-  elemento.textContent = texto;
-
-  elemento.className =
-    "mensaje " +
-    (tipo === "ok" ? "exito" : tipo);
-
+  return await respuesta.json();
 }
 
 
-/************************************************************
- * CARGAR FOROS DEL NUEVO MÓDULO
- ************************************************************/
+function agregarForosAIncidencias(foros) {
 
-async function cargarForosNuevosModulos() {
+  const selects = [
+    document.getElementById("foroAtraso"),
+    document.getElementById("foroLicencia")
+  ];
 
-  const token =
-    obtenerTokenAdminNuevoModulo();
+  selects.forEach(function(select) {
 
-  if (!token) return;
+    if (!select) return;
+
+    select.innerHTML = '<option value="">Seleccione un foro</option>';
+
+    (foros || []).forEach(function(foro) {
+
+      const option = document.createElement("option");
+      option.value = foro.nombreForo;
+      option.textContent = foro.nombreForo;
+      select.appendChild(option);
+
+    });
+
+  });
+}
+
+
+// Añadimos los mismos foros que ya usa el módulo de asistencia.
+const cargarForosOriginal = cargarForos;
+cargarForos = async function() {
+
+  await cargarForosOriginal();
 
   try {
+    const resultado = await llamarAPI({
+      api: "listarForos",
+      token: tokenAdmin
+    });
 
-    // listarForos existente utiliza "token".
-    const resultado =
-      await llamarAPI({
-        api: "listarForos",
-        token: token
-      });
-
-    if (!resultado.exito) {
-      console.error(resultado.mensaje);
-      return;
+    if (resultado.exito) {
+      agregarForosAIncidencias(resultado.foros);
     }
-
-    const selectAtraso =
-      document.getElementById("foroAtraso");
-
-    const selectLicencia =
-      document.getElementById("foroLicencia");
-
-    const forosActivos =
-      (resultado.foros || [])
-        .filter(function(foro) {
-          return String(foro.activo || "")
-            .trim()
-            .toUpperCase() === "SI";
-        });
-
-    const opciones =
-      '<option value="">Seleccione un foro</option>' +
-      forosActivos
-        .map(function(foro) {
-          return `
-            <option value="${escapeHTML(foro.nombreForo)}">
-              ${escapeHTML(foro.nombreForo)}
-            </option>
-          `;
-        })
-        .join("");
-
-    selectAtraso.innerHTML = opciones;
-    selectLicencia.innerHTML = opciones;
-
   } catch (error) {
-
-    console.error(
-      "Error cargando foros del nuevo módulo:",
-      error
-    );
+    console.error("No se pudieron cargar los foros para atrasos/licencias", error);
   }
-}
+};
 
-
-/************************************************************
- * CARGAR CAPACITACIONES PARA ATRASOS
- ************************************************************/
-
-async function cargarCapacitacionesAtraso() {
-
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
-  if (!token) return;
-
-  const foro =
-    document.getElementById("foroAtraso").value;
-
-  const selectCap =
-    document.getElementById("capacitacionAtraso");
-
-  selectCap.innerHTML =
-    '<option value="">Seleccione una capacitación</option>';
-
-  selectCap.disabled = true;
-
-  document.getElementById("fechaAtraso").value = "";
-
-  if (!foro) return;
-
-  try {
-
-    const resultado =
-      await llamarAPI({
-        api: "listarCapacitacionesPorForo",
-        token: token,
-        foro: foro
-      });
-
-    if (!resultado.exito) {
-
-      mostrarMensajeNuevoModulo(
-        "mensajeAtraso",
-        resultado.mensaje,
-        "error"
-      );
-
-      return;
-    }
-
-    (resultado.capacitaciones || [])
-      .forEach(function(cap) {
-
-        const opcion =
-          document.createElement("option");
-
-        opcion.value =
-          cap.idCapacitacion;
-
-        opcion.textContent =
-          formatearFecha(cap.fecha) +
-          " — " +
-          cap.nombre;
-
-        selectCap.appendChild(opcion);
-      });
-
-    selectCap.disabled = false;
-
-  } catch (error) {
-
-    console.error(error);
-
-    mostrarMensajeNuevoModulo(
-      "mensajeAtraso",
-      "❌ No se pudieron cargar las capacitaciones.",
-      "error"
-    );
-  }
-}
-
-
-/************************************************************
- * CAMBIO DE FORO - ATRASOS
- ************************************************************/
 
 async function cambioForoAtraso() {
 
-  const foro =
-    document.getElementById("foroAtraso").value;
+  const foro = document.getElementById("foroAtraso").value;
+  const selectCap = document.getElementById("capacitacionAtraso");
+  const selectPais = document.getElementById("paisAtraso");
+  const delegado = document.getElementById("delegadoAtraso");
 
-  const selectPais =
-    document.getElementById("paisAtraso");
-
-  const delegado =
-    document.getElementById("delegadoAtraso");
-
-  selectPais.innerHTML =
-    '<option value="">Seleccione un país</option>';
-
+  selectCap.innerHTML = '<option value="">Cargando capacitaciones...</option>';
+  selectPais.innerHTML = '<option value="">Seleccione un país</option>';
+  selectCap.disabled = true;
   selectPais.disabled = true;
-
   delegado.style.display = "none";
-  delegado.textContent = "";
+  delegado.innerHTML = "";
+  document.getElementById("fechaAtraso").value = "";
 
-  await cargarCapacitacionesAtraso();
+  if (!foro) {
+    selectCap.innerHTML = '<option value="">Seleccione una capacitación</option>';
+    return;
+  }
 
-  if (!foro) return;
-
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
+  const token = obtenerTokenAdminNuevoModulo();
   if (!token) return;
 
   try {
 
-    const resultado =
-      await llamarAPI({
-        api: "listarPaisesAtrasos",
-        tokenAdmin: token,
-        foro: foro
-      });
+    const resultado = await llamarAPINuevoModulo({
+      api: "listarCapacitacionesPorForo",
+      tokenAdmin: token,
+      token: token,
+      foro: foro
+    });
 
     if (!resultado.exito) {
-
-      mostrarMensajeNuevoModulo(
-        "mensajeAtraso",
-        resultado.mensaje,
-        "error"
-      );
-
+      selectCap.innerHTML = '<option value="">No hay capacitaciones</option>';
       return;
     }
 
-    (resultado.paises || [])
-      .forEach(function(pais) {
+    (resultado.capacitaciones || []).forEach(function(cap) {
+      const option = document.createElement("option");
+      option.value = cap.idCapacitacion;
+      option.textContent = formatearFecha(cap.fecha) + " — " + cap.nombre;
+      option.dataset.fecha = cap.fecha || "";
+      selectCap.appendChild(option);
+    });
 
-        const opcion =
-          document.createElement("option");
+    selectCap.disabled = false;
 
-        opcion.value = pais;
-        opcion.textContent = pais;
+    const paises = await llamarAPINuevoModulo({
+      api: "listarPaisesPorForo",
+      tokenAdmin: token,
+      token: token,
+      foro: foro
+    });
 
-        selectPais.appendChild(opcion);
+    if (paises.exito) {
+      (paises.paises || []).forEach(function(pais) {
+        const option = document.createElement("option");
+        option.value = pais;
+        option.textContent = pais;
+        selectPais.appendChild(option);
       });
-
-    selectPais.disabled = false;
-
-  } catch (error) {
-
-    console.error(error);
-
-    mostrarMensajeNuevoModulo(
-      "mensajeAtraso",
-      "❌ No se pudieron cargar los países.",
-      "error"
-    );
-  }
-}
-
-
-/************************************************************
- * CAMBIO DE CAPACITACIÓN - ATRASOS
- ************************************************************/
-
-async function cambioCapacitacionAtraso() {
-
-  const idCapacitacion =
-    document.getElementById("capacitacionAtraso").value;
-
-  const foro =
-    document.getElementById("foroAtraso").value;
-
-  const fecha =
-    document.getElementById("fechaAtraso");
-
-  fecha.value = "";
-
-  if (!idCapacitacion || !foro) return;
-
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
-  if (!token) return;
-
-  try {
-
-    const resultado =
-      await llamarAPI({
-        api: "listarCapacitacionesPorForo",
-        token: token,
-        foro: foro
-      });
-
-    if (!resultado.exito) return;
-
-    const capacitacion =
-      (resultado.capacitaciones || [])
-        .find(function(c) {
-          return String(c.idCapacitacion) ===
-            String(idCapacitacion);
-        });
-
-    if (capacitacion) {
-      fecha.value =
-        formatearFecha(capacitacion.fecha);
+      selectPais.disabled = false;
     }
 
   } catch (error) {
-
     console.error(error);
+    selectCap.innerHTML = '<option value="">Error al cargar</option>';
   }
 }
 
 
-/************************************************************
- * CAMBIO DE PAÍS - ATRASOS
- ************************************************************/
+function cambioCapacitacionAtraso() {
+
+  const select = document.getElementById("capacitacionAtraso");
+  const option = select.options[select.selectedIndex];
+  const fecha = option ? option.dataset.fecha : "";
+
+  document.getElementById("fechaAtraso").value = fecha
+    ? formatearFecha(fecha)
+    : "";
+
+}
+
 
 async function cambioPaisAtraso() {
 
-  const foro =
-    document.getElementById("foroAtraso").value;
-
-  const pais =
-    document.getElementById("paisAtraso").value;
-
-  const delegado =
-    document.getElementById("delegadoAtraso");
+  const foro = document.getElementById("foroAtraso").value;
+  const pais = document.getElementById("paisAtraso").value;
+  const delegado = document.getElementById("delegadoAtraso");
 
   delegado.style.display = "none";
+  delegado.innerHTML = "";
 
   if (!foro || !pais) return;
 
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
+  const token = obtenerTokenAdminNuevoModulo();
   if (!token) return;
 
   try {
+    const resultado = await llamarAPINuevoModulo({
+      api: "obtenerDelegadoAtraso",
+      tokenAdmin: token,
+      foro: foro,
+      pais: pais
+    });
 
-    const resultado =
-      await llamarAPI({
-        api: "obtenerDelegadoAtraso",
-        tokenAdmin: token,
-        foro: foro,
-        pais: pais
-      });
-
-    if (!resultado.exito) {
-
-      mostrarMensajeNuevoModulo(
-        "delegadoAtraso",
-        resultado.mensaje,
-        "error"
-      );
-
+    if (resultado.exito && resultado.delegado) {
+      delegado.innerHTML =
+        '<strong>Delegado:</strong> ' + escapeHTML(resultado.delegado.nombre || "-") +
+        ' <span>• ' + escapeHTML(resultado.delegado.ci || "-") + '</span>';
       delegado.style.display = "block";
-
-      return;
     }
-
-    delegado.textContent =
-      "Delegado: " + resultado.delegado.nombre;
-
-    delegado.className =
-      "mensaje info";
-
-    delegado.style.display = "block";
-
   } catch (error) {
-
     console.error(error);
   }
 }
 
-
-/************************************************************
- * REGISTRAR ATRASO
- ************************************************************/
 
 async function registrarAtrasoDesdeWeb() {
 
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
+  const token = obtenerTokenAdminNuevoModulo();
   if (!token) return;
 
-  const foro =
-    document.getElementById("foroAtraso").value;
+  const foro = document.getElementById("foroAtraso").value;
+  const capacitacion = document.getElementById("capacitacionAtraso").value;
+  const fechaVisible = document.getElementById("fechaAtraso").value;
+  const hora = document.getElementById("horaAtraso").value;
+  const minutos = document.getElementById("minutosAtraso").value;
+  const motivo = document.getElementById("motivoAtraso").value.trim();
+  const pais = document.getElementById("paisAtraso").value;
 
-  const idCapacitacion =
-    document.getElementById("capacitacionAtraso").value;
+  const option = document.getElementById("capacitacionAtraso").selectedOptions[0];
+  const fecha = option ? option.dataset.fecha : "";
 
-  const pais =
-    document.getElementById("paisAtraso").value;
-
-  const fechaTexto =
-    document.getElementById("fechaAtraso").value;
-
-  const horaLlegada =
-    document.getElementById("horaAtraso").value;
-
-  const minutosAtraso =
-    document.getElementById("minutosAtraso").value;
-
-  const motivo =
-    document.getElementById("motivoAtraso").value.trim();
-
-  if (
-    !foro ||
-    !idCapacitacion ||
-    !pais ||
-    !fechaTexto ||
-    !horaLlegada ||
-    !minutosAtraso
-  ) {
-
-    mostrarMensajeNuevoModulo(
-      "mensajeAtraso",
-      "⚠️ Completa todos los campos obligatorios.",
-      "error"
-    );
-
+  if (!foro || !capacitacion || !pais || !fecha || !hora || !minutos) {
+    mostrarMensajeNuevoModulo("mensajeAtraso", "⚠️ Completa los campos obligatorios.", "advertencia");
     return;
   }
 
-  // El backend espera yyyy-MM-dd.
-  const partes = fechaTexto.split("/");
-
-  const fecha =
-    partes.length === 3
-      ? `${partes[2]}-${partes[1]}-${partes[0]}`
-      : fechaTexto;
-
   try {
 
-    const resultado =
-      await llamarAPI({
-        api: "registrarAtraso",
-        tokenAdmin: token,
-        foro: foro,
-        idCapacitacion: idCapacitacion,
-        pais: pais,
-        fecha: fecha,
-        horaLlegada: horaLlegada,
-        minutosAtraso: minutosAtraso,
-        motivo: motivo
-      });
+    const resultado = await llamarAPINuevoModulo({
+      api: "registrarAtraso",
+      tokenAdmin: token,
+      foro: foro,
+      idCapacitacion: capacitacion,
+      pais: pais,
+      fecha: fecha,
+      horaLlegada: hora,
+      minutosAtraso: minutos,
+      motivo: motivo
+    });
 
-    if (!resultado.exito) {
-
-      mostrarMensajeNuevoModulo(
-        "mensajeAtraso",
-        resultado.mensaje,
-        "error"
-      );
-
-      return;
+    if (resultado.exito) {
+      mostrarMensajeNuevoModulo("mensajeAtraso", "✅ " + resultado.mensaje, "exito");
+      document.getElementById("horaAtraso").value = "";
+      document.getElementById("minutosAtraso").value = "";
+      document.getElementById("motivoAtraso").value = "";
+      cargarReporteSiCorresponde(foro);
+    } else {
+      mostrarMensajeNuevoModulo("mensajeAtraso", resultado.mensaje, "error");
     }
 
-    mostrarMensajeNuevoModulo(
-      "mensajeAtraso",
-      "✅ " + resultado.mensaje,
-      "ok"
-    );
-
-    document.getElementById("horaAtraso").value = "";
-    document.getElementById("minutosAtraso").value = "";
-    document.getElementById("motivoAtraso").value = "";
-
-    cargarTablaAtrasos();
-
   } catch (error) {
-
     console.error(error);
-
-    mostrarMensajeNuevoModulo(
-      "mensajeAtraso",
-      "❌ Error de comunicación con el servidor.",
-      "error"
-    );
+    mostrarMensajeNuevoModulo("mensajeAtraso", "❌ Error de comunicación con el servidor.", "error");
   }
 }
 
 
-/************************************************************
- * CAMBIO DE FORO - LICENCIAS
- ************************************************************/
-
 async function cambioForoLicencia() {
 
-  const foro =
-    document.getElementById("foroLicencia").value;
+  const foro = document.getElementById("foroLicencia").value;
+  const selectPais = document.getElementById("paisLicencia");
+  const delegado = document.getElementById("delegadoLicencia");
 
-  const selectPais =
-    document.getElementById("paisLicencia");
-
-  const delegado =
-    document.getElementById("delegadoLicencia");
-
-  selectPais.innerHTML =
-    '<option value="">Seleccione un país</option>';
-
+  selectPais.innerHTML = '<option value="">Cargando países...</option>';
   selectPais.disabled = true;
-
   delegado.style.display = "none";
-  delegado.textContent = "";
+  delegado.innerHTML = "";
 
-  if (!foro) return;
+  if (!foro) {
+    selectPais.innerHTML = '<option value="">Seleccione un país</option>';
+    return;
+  }
 
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
+  const token = obtenerTokenAdminNuevoModulo();
   if (!token) return;
 
   try {
 
-    const resultado =
-      await llamarAPI({
-        api: "listarPaisesLicencias",
-        tokenAdmin: token,
-        foro: foro
-      });
+    const resultado = await llamarAPINuevoModulo({
+      api: "listarPaisesLicencias",
+      tokenAdmin: token,
+      foro: foro
+    });
 
     if (!resultado.exito) {
-
-      mostrarMensajeNuevoModulo(
-        "mensajeLicencia",
-        resultado.mensaje,
-        "error"
-      );
-
+      selectPais.innerHTML = '<option value="">No hay países</option>';
       return;
     }
 
-    (resultado.paises || [])
-      .forEach(function(pais) {
-
-        const opcion =
-          document.createElement("option");
-
-        opcion.value = pais;
-        opcion.textContent = pais;
-
-        selectPais.appendChild(opcion);
-      });
+    (resultado.paises || []).forEach(function(pais) {
+      const option = document.createElement("option");
+      option.value = pais;
+      option.textContent = pais;
+      selectPais.appendChild(option);
+    });
 
     selectPais.disabled = false;
 
   } catch (error) {
-
     console.error(error);
-
-    mostrarMensajeNuevoModulo(
-      "mensajeLicencia",
-      "❌ No se pudieron cargar los países.",
-      "error"
-    );
+    selectPais.innerHTML = '<option value="">Error al cargar</option>';
   }
 }
 
-
-/************************************************************
- * CAMBIO DE PAÍS - LICENCIAS
- ************************************************************/
 
 async function cambioPaisLicencia() {
 
-  const foro =
-    document.getElementById("foroLicencia").value;
-
-  const pais =
-    document.getElementById("paisLicencia").value;
-
-  const delegado =
-    document.getElementById("delegadoLicencia");
+  const foro = document.getElementById("foroLicencia").value;
+  const pais = document.getElementById("paisLicencia").value;
+  const delegado = document.getElementById("delegadoLicencia");
 
   delegado.style.display = "none";
+  delegado.innerHTML = "";
 
   if (!foro || !pais) return;
 
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
+  const token = obtenerTokenAdminNuevoModulo();
   if (!token) return;
 
   try {
+    const resultado = await llamarAPINuevoModulo({
+      api: "obtenerDelegadoLicencia",
+      tokenAdmin: token,
+      foro: foro,
+      pais: pais
+    });
 
-    const resultado =
-      await llamarAPI({
-        api: "obtenerDelegadoLicencia",
-        tokenAdmin: token,
-        foro: foro,
-        pais: pais
-      });
-
-    if (!resultado.exito) {
-
-      mostrarMensajeNuevoModulo(
-        "delegadoLicencia",
-        resultado.mensaje,
-        "error"
-      );
-
+    if (resultado.exito && resultado.delegado) {
+      delegado.innerHTML =
+        '<strong>Delegado:</strong> ' + escapeHTML(resultado.delegado.nombre || "-") +
+        ' <span>• ' + escapeHTML(resultado.delegado.ci || "-") + '</span>';
       delegado.style.display = "block";
-
-      return;
     }
-
-    delegado.textContent =
-      "Delegado: " + resultado.delegado.nombre;
-
-    delegado.className =
-      "mensaje info";
-
-    delegado.style.display = "block";
-
   } catch (error) {
-
     console.error(error);
   }
 }
 
-
-/************************************************************
- * REGISTRAR LICENCIA
- ************************************************************/
 
 async function registrarLicenciaDesdeWeb() {
 
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
+  const token = obtenerTokenAdminNuevoModulo();
   if (!token) return;
 
-  const foro =
-    document.getElementById("foroLicencia").value;
+  const foro = document.getElementById("foroLicencia").value;
+  const pais = document.getElementById("paisLicencia").value;
+  const desde = document.getElementById("fechaDesdeLicencia").value;
+  const hasta = document.getElementById("fechaHastaLicencia").value;
+  const motivo = document.getElementById("motivoLicencia").value.trim();
 
-  const pais =
-    document.getElementById("paisLicencia").value;
-
-  const fechaDesde =
-    document.getElementById("fechaDesdeLicencia").value;
-
-  const fechaHasta =
-    document.getElementById("fechaHastaLicencia").value;
-
-  const motivo =
-    document.getElementById("motivoLicencia").value.trim();
-
-  if (
-    !foro ||
-    !pais ||
-    !fechaDesde ||
-    !fechaHasta ||
-    !motivo
-  ) {
-
-    mostrarMensajeNuevoModulo(
-      "mensajeLicencia",
-      "⚠️ Completa todos los campos.",
-      "error"
-    );
-
+  if (!foro || !pais || !desde || !hasta || !motivo) {
+    mostrarMensajeNuevoModulo("mensajeLicencia", "⚠️ Completa todos los campos.", "advertencia");
     return;
   }
 
-  if (fechaDesde > fechaHasta) {
-
-    mostrarMensajeNuevoModulo(
-      "mensajeLicencia",
-      "⚠️ La fecha DESDE no puede ser posterior a la fecha HASTA.",
-      "error"
-    );
-
+  if (hasta < desde) {
+    mostrarMensajeNuevoModulo("mensajeLicencia", "⚠️ La fecha Hasta no puede ser anterior a Desde.", "advertencia");
     return;
   }
 
   try {
 
-    const resultado =
-      await llamarAPI({
-        api: "registrarLicencia",
-        tokenAdmin: token,
-        foro: foro,
-        pais: pais,
-        fechaDesde: fechaDesde,
-        fechaHasta: fechaHasta,
-        motivo: motivo
-      });
-
-    if (!resultado.exito) {
-
-      mostrarMensajeNuevoModulo(
-        "mensajeLicencia",
-        resultado.mensaje,
-        "error"
-      );
-
-      return;
-    }
-
-    mostrarMensajeNuevoModulo(
-      "mensajeLicencia",
-      "✅ " + resultado.mensaje,
-      "ok"
-    );
-
-    document.getElementById("fechaDesdeLicencia").value = "";
-    document.getElementById("fechaHastaLicencia").value = "";
-    document.getElementById("motivoLicencia").value = "";
-
-    cargarTablaLicencias();
-
-  } catch (error) {
-
-    console.error(error);
-
-    mostrarMensajeNuevoModulo(
-      "mensajeLicencia",
-      "❌ Error de comunicación con el servidor.",
-      "error"
-    );
-  }
-}
-
-
-/************************************************************
- * TABLA DE ATRASOS
- ************************************************************/
-
-async function cargarTablaAtrasos() {
-
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
-  if (!token) return;
-
-  const foro =
-    document.getElementById("foroAtraso").value || "";
-
-  try {
-
-    const resultado =
-      await llamarAPI({
-        api: "listarAtrasos",
-        tokenAdmin: token,
-        foro: foro
-      });
-
-    if (!resultado.exito) return;
-
-    const cuerpo =
-      document.getElementById("cuerpoAtrasos");
-
-    cuerpo.innerHTML = "";
-
-    if (!(resultado.atrasos || []).length) {
-
-      cuerpo.innerHTML = `
-        <tr>
-          <td colspan="9">
-            No hay atrasos registrados.
-          </td>
-        </tr>
-      `;
-
-      return;
-    }
-
-    resultado.atrasos.forEach(function(a) {
-
-      const tr =
-        document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${escapeHTML(a.idAtraso)}</td>
-        <td class="nombre">${escapeHTML(a.nombre)}</td>
-        <td>${escapeHTML(a.pais)}</td>
-        <td>${escapeHTML(a.foro)}</td>
-        <td>${formatearFecha(a.fecha)}</td>
-        <td>${escapeHTML(a.horaLlegada)}</td>
-        <td>${escapeHTML(a.minutosAtraso)}</td>
-        <td>${escapeHTML(a.motivo || "-")}</td>
-        <td>${escapeHTML(a.estado)}</td>
-      `;
-
-      cuerpo.appendChild(tr);
+    const resultado = await llamarAPINuevoModulo({
+      api: "registrarLicencia",
+      tokenAdmin: token,
+      foro: foro,
+      pais: pais,
+      fechaDesde: desde,
+      fechaHasta: hasta,
+      motivo: motivo
     });
 
-  } catch (error) {
-
-    console.error(error);
-  }
-}
-
-
-/************************************************************
- * TABLA DE LICENCIAS
- ************************************************************/
-
-async function cargarTablaLicencias() {
-
-  const token =
-    obtenerTokenAdminNuevoModulo();
-
-  if (!token) return;
-
-  const foro =
-    document.getElementById("foroLicencia").value || "";
-
-  try {
-
-    const resultado =
-      await llamarAPI({
-        api: "listarLicencias",
-        tokenAdmin: token,
-        foro: foro
-      });
-
-    if (!resultado.exito) return;
-
-    const cuerpo =
-      document.getElementById("cuerpoLicencias");
-
-    cuerpo.innerHTML = "";
-
-    if (!(resultado.licencias || []).length) {
-
-      cuerpo.innerHTML = `
-        <tr>
-          <td colspan="8">
-            No hay licencias registradas.
-          </td>
-        </tr>
-      `;
-
-      return;
+    if (resultado.exito) {
+      mostrarMensajeNuevoModulo("mensajeLicencia", "✅ " + resultado.mensaje, "exito");
+      document.getElementById("fechaDesdeLicencia").value = "";
+      document.getElementById("fechaHastaLicencia").value = "";
+      document.getElementById("motivoLicencia").value = "";
+      cargarReporteSiCorresponde(foro);
+    } else {
+      mostrarMensajeNuevoModulo("mensajeLicencia", resultado.mensaje, "error");
     }
 
-    resultado.licencias.forEach(function(l) {
-
-      const tr =
-        document.createElement("tr");
-
-      tr.innerHTML = `
-        <td>${escapeHTML(l.idLicencia)}</td>
-        <td class="nombre">${escapeHTML(l.nombre)}</td>
-        <td>${escapeHTML(l.pais)}</td>
-        <td>${escapeHTML(l.foro)}</td>
-        <td>${formatearFecha(l.fechaDesde)}</td>
-        <td>${formatearFecha(l.fechaHasta)}</td>
-        <td>${escapeHTML(l.motivo)}</td>
-        <td>${escapeHTML(l.estado)}</td>
-      `;
-
-      cuerpo.appendChild(tr);
-    });
-
   } catch (error) {
-
     console.error(error);
+    mostrarMensajeNuevoModulo("mensajeLicencia", "❌ Error de comunicación con el servidor.", "error");
   }
 }
 
 
-/************************************************************
- * INICIALIZAR NUEVOS MÓDULOS
- ************************************************************/
-
-window.addEventListener(
-  "DOMContentLoaded",
-  function() {
-
-    cargarForosNuevosModulos();
-    cargarTablaAtrasos();
-    cargarTablaLicencias();
-
+async function cargarReporteSiCorresponde(foro) {
+  const foroReporte = document.getElementById("selectForoReporte").value;
+  if (foroReporte === foro) {
+    await cargarReporte();
   }
-);
+}
+
+
+function mostrarMensajeNuevoModulo(id, texto, tipo) {
+
+  const elemento = document.getElementById(id);
+  if (!elemento) return;
+
+  elemento.className = "mensaje " + tipo;
+  elemento.textContent = texto;
+}
+
+
+// Cargar listados de foros después de que el HTML exista.
+document.addEventListener("DOMContentLoaded", function() {
+
+  // El cargarForos original ya fue envuelto arriba.
+  // Solo aseguramos que los selectores secundarios reciban los mismos datos.
+  setTimeout(function() {
+    const selectPrincipal = document.getElementById("selectForo");
+    const foros = Array.from(selectPrincipal ? selectPrincipal.options : [])
+      .filter(function(o) { return o.value; })
+      .map(function(o) { return { nombreForo: o.value }; });
+    agregarForosAIncidencias(foros);
+  }, 200);
+
+});
 
 </script>
 
